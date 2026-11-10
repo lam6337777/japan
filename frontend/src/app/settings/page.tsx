@@ -49,7 +49,7 @@ export default function SettingsPage() {
         <h2 className="mb-4 font-semibold">Flashcard</h2>
         <label className="flex flex-col gap-2">
           <span className="flex items-center justify-between text-sm">
-            Số từ mới mỗi ngày
+            Số từ mới mỗi ngày (chế độ ôn tập ngắt quãng)
             <b className="text-primary">{settings.newPerDay} từ</b>
           </span>
           <input type="range" min={5} max={50} step={5} value={settings.newPerDay} onChange={(e) => update({ newPerDay: Number(e.target.value) })} className="accent-[var(--primary)]" />

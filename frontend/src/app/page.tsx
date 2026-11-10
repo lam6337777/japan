@@ -6,8 +6,10 @@ import { useLevel } from "@/components/AppShell";
 import { DailyPlan, Heatmap } from "@/components/Dashboard";
 import { Card, ProgressBar } from "@/components/ui";
 import { useStats, useVocab } from "@/lib/data";
-import { getDaily, loadSrs, newPerDay, statusOf, type SrsStore } from "@/lib/srs";
+import { loadSrs, newPerDay, type SrsStore } from "@/lib/srs";
 import { getStreak } from "@/lib/storage";
+import { getDailyActivity } from "@/lib/activity";
+import { loadSeen, useStars } from "@/lib/stars";
 import { GRAMMAR } from "@/lib/grammar";
 
 const greetings = ["おはよう！", "こんにちは！", "がんばって！", "今日も一緒に！"];
@@ -18,31 +20,33 @@ export default function Home() {
   const stats = useStats();
   const [srs, setSrs] = useState<SrsStore>({});
   const [streak, setStreak] = useState(0);
-  const [daily, setDaily] = useState({ newCount: 0, reviews: 0 });
   const [greet, setGreet] = useState(greetings[1]);
   const [now, setNow] = useState(0);
+  const [seen, setSeen] = useState<Set<string>>(new Set());
+  const stars = useStars();
+  const [activityReview, setActivityReview] = useState(0);
 
   useEffect(() => {
     const refresh = () => {
       setSrs(loadSrs());
       setStreak(getStreak());
+      setSeen(loadSeen());
     };
     window.addEventListener("nihongo:synced", refresh);
     setNow(Date.now());
     refresh();
-    setDaily(getDaily());
+    setActivityReview(getDailyActivity().review);
     const h = new Date().getHours();
     setGreet(h < 11 ? greetings[0] : greetings[1]);
     return () => window.removeEventListener("nihongo:synced", refresh);
   }, []);
 
-  const levelCards = vocab?.map((v) => srs[v.id]) ?? [];
-  const learned = levelCards.filter((c) => c && c.reps > 0).length;
-  const mastered = levelCards.filter((c) => statusOf(c) === "mastered").length;
-  const due = now ? levelCards.filter((c) => c && c.due <= now).length : 0;
-  const newLeft = now ? Math.max(0, newPerDay() - daily.newCount) : 0;
+  // "Đã học" = đã xem trong flashcard hoặc đã ôn bằng chế độ ngắt quãng
+  const learned = vocab?.filter((v) => seen.has(v.id) || (srs[v.id]?.reps ?? 0) > 0).length ?? 0;
+  const starredCount = vocab?.filter((v) => stars.has(v.id)).length ?? 0;
   const total = vocab?.length ?? stats?.vocab[level] ?? 0;
   const newPerDayValue = now ? newPerDay() : 10;
+  const newSeenToday = activityReview;
 
   return (
     <div className="flex flex-col gap-6">
@@ -55,11 +59,11 @@ export default function Home() {
         <h1 className="mt-1 text-2xl font-bold md:text-3xl">Hôm nay học gì nào?</h1>
         <p className="mt-2 max-w-md text-sm opacity-85">
           Trình độ hiện tại <b>{level.toUpperCase()}</b>
-          {due > 0 ? ` · ${due} từ cần ôn tập` : ""} · {newLeft} từ mới còn lại hôm nay
+          · Đã học {learned}/{total} từ{starredCount ? ` · ${starredCount} từ có sao` : ""}
         </p>
         <div className="mt-5 flex flex-wrap gap-2">
           <Link href="/vocab/study" className="rounded-xl bg-surface px-4 py-2.5 text-sm font-semibold text-primary shadow-sm transition hover:opacity-90">
-            {due > 0 ? `Ôn tập ${due} từ` : "Học từ mới"} →
+            Học flashcard →
           </Link>
           <Link href="/chat" className="rounded-xl border border-white/30 px-4 py-2.5 text-sm font-semibold transition hover:bg-white/10">
             Luyện nói với AI
@@ -74,8 +78,8 @@ export default function Home() {
         {[
           { label: "Chuỗi ngày học", value: streak, unit: "ngày", tone: "text-accent" },
           { label: "Đã học", value: learned, unit: `/ ${total} từ`, tone: "text-primary" },
-          { label: "Thành thạo", value: mastered, unit: "từ", tone: "text-success" },
-          { label: "Ôn hôm nay", value: daily.reviews, unit: "lượt", tone: "text-warn" },
+          { label: "Từ có sao", value: starredCount, unit: "từ", tone: "text-warn" },
+          { label: "Hôm nay", value: newSeenToday, unit: "thẻ", tone: "text-success" },
         ].map((s) => (
           <Card key={s.label} className="p-4">
             <p className="text-xs text-muted">{s.label}</p>

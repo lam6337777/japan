@@ -102,7 +102,36 @@ body {
   animation: draw-stroke 0.55s ease-out forwards;
 }
 
-/* Lật thẻ flashcard */
+/* Thẻ lật 3D (flashcard) */
+.flip-scene {
+  position: relative;
+  perspective: 1200px;
+}
+.flip-card {
+  position: relative;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+.flip-card.is-flipped {
+  transform: rotateY(180deg);
+}
+.flip-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.flip-back {
+  transform: rotateY(180deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .flip-card {
+    transition: none;
+  }
+}
+
+/* Hiệu ứng xuất hiện */
 @keyframes pop-in {
   from {
     opacity: 0;

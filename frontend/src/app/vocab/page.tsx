@@ -3,16 +3,17 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useLevel } from "@/components/AppShell";
-import { Loading, PageHeader, Pill, SpeakButton } from "@/components/ui";
+import { Loading, PageHeader, SpeakButton } from "@/components/ui";
 import { meaningOf, useVocab } from "@/lib/data";
 import { loadDecks, type Deck } from "@/lib/decks";
-import { loadSrs, statusOf, type SrsStore, type Status } from "@/lib/srs";
+import { loadSeen, toggleStar, useStars } from "@/lib/stars";
 
-const FILTERS: { key: "all" | Status; label: string }[] = [
+type Filter = "all" | "starred" | "seen" | "unseen";
+const FILTERS: { key: Filter; label: string }[] = [
   { key: "all", label: "Tất cả" },
-  { key: "new", label: "Chưa học" },
-  { key: "learning", label: "Đang học" },
-  { key: "mastered", label: "Thành thạo" },
+  { key: "starred", label: "★ Có sao" },
+  { key: "seen", label: "Đã xem" },
+  { key: "unseen", label: "Chưa xem" },
 ];
 
 const PAGE = 60;
@@ -20,56 +21,64 @@ const PAGE = 60;
 export default function VocabPage() {
   const { level } = useLevel();
   const levelVocab = useVocab(level);
+  const stars = useStars();
   const [decks, setDecks] = useState<Deck[]>([]);
   const [deckId, setDeckId] = useState<string | null>(null);
+  const [seen, setSeen] = useState<Set<string>>(new Set());
+  const [q, setQ] = useState("");
+  const [filter, setFilter] = useState<Filter>("all");
+  const [limit, setLimit] = useState(PAGE);
+
   useEffect(() => {
     const all = loadDecks();
     setDecks(all);
+    setSeen(loadSeen());
     const id = new URLSearchParams(window.location.search).get("deck");
     if (id && all.some((d) => d.id === id)) setDeckId(id);
   }, []);
+  useEffect(() => setLimit(PAGE), [level, q, filter, deckId]);
+
   const deck = deckId ? decks.find((d) => d.id === deckId) ?? null : null;
   const vocab = deck ? deck.cards : levelVocab;
   const selectDeck = (id: string | null) => {
     setDeckId(id);
     window.history.replaceState(null, "", id ? `/vocab?deck=${id}` : "/vocab");
   };
-  const [srs, setSrs] = useState<SrsStore>({});
-  const [q, setQ] = useState("");
-  const [filter, setFilter] = useState<"all" | Status>("all");
-  const [limit, setLimit] = useState(PAGE);
-
-  useEffect(() => {
-    const refresh = () => setSrs(loadSrs());
-    refresh();
-    window.addEventListener("nihongo:synced", refresh);
-    return () => window.removeEventListener("nihongo:synced", refresh);
-  }, []);
-  useEffect(() => setLimit(PAGE), [level, q, filter, deckId]);
 
   const list = useMemo(() => {
     if (!vocab) return [];
     const query = q.trim().toLowerCase();
     return vocab.filter((v) => {
-      if (filter !== "all" && statusOf(srs[v.id]) !== filter) return false;
+      if (filter === "starred" && !stars.has(v.id)) return false;
+      if (filter === "seen" && !seen.has(v.id)) return false;
+      if (filter === "unseen" && seen.has(v.id)) return false;
       if (!query) return true;
       return v.word.includes(query) || v.reading.includes(query) || v.meaning.toLowerCase().includes(query) || v.vi.toLowerCase().includes(query);
     });
-  }, [vocab, q, filter, srs]);
+  }, [vocab, q, filter, stars, seen]);
 
+  const starredCount = vocab?.filter((v) => stars.has(v.id)).length ?? 0;
+  const deckQuery = deck ? `deck=${deck.id}` : "";
   const hasVi = deck || vocab?.some((v) => v.vi);
 
   return (
     <div>
-      <PageHeader title={deck ? deck.name : `Từ vựng ${level.toUpperCase()}`} subtitle={vocab ? `${vocab.length} từ` : undefined}>
-        <Link href={deck ? `/vocab/study?deck=${deck.id}` : "/vocab/study"} className="rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-ink shadow-sm transition hover:opacity-90">
-          Học flashcard →
-        </Link>
+      <PageHeader title={deck ? deck.name : `Từ vựng ${level.toUpperCase()}`} subtitle={vocab ? `${vocab.length} từ · ${starredCount} từ có sao` : undefined}>
+        <div className="flex flex-wrap gap-2">
+          {starredCount > 0 && (
+            <Link href={`/vocab/study?${deckQuery ? deckQuery + "&" : ""}starred=1`} className="rounded-xl border-2 border-warn bg-warn-soft px-4 py-2 text-sm font-semibold text-warn transition hover:opacity-90">
+              ★ Ôn thẻ có sao ({starredCount})
+            </Link>
+          )}
+          <Link href={`/vocab/study${deckQuery ? "?" + deckQuery : ""}`} className="rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-ink shadow-sm transition hover:opacity-90">
+            Học flashcard →
+          </Link>
+        </div>
       </PageHeader>
 
       {vocab && !hasVi && (
         <p className="mb-4 rounded-xl bg-warn-soft px-4 py-3 text-sm text-warn">
-          Nghĩa đang hiển thị bằng tiếng Anh. Khi có API key DeepSeek, chạy <code className="font-mono">npm run data:vi</code> để dịch sang tiếng Việt.
+          Nghĩa đang hiển thị bằng tiếng Anh. Chạy <code className="font-mono">cd data &amp;&amp; npm run vi -- --level={level} --kind=vocab</code> để dịch sang tiếng Việt.
         </p>
       )}
 
@@ -106,9 +115,7 @@ export default function VocabPage() {
             <button
               key={f.key}
               onClick={() => setFilter(f.key)}
-              className={`whitespace-nowrap rounded-full px-3 py-1.5 text-sm transition-colors ${
-                filter === f.key ? "bg-ink text-bg" : "bg-surface text-muted hover:text-ink"
-              }`}
+              className={`whitespace-nowrap rounded-full px-3 py-1.5 text-sm transition-colors ${filter === f.key ? "bg-ink text-bg" : "bg-surface text-muted hover:text-ink"}`}
             >
               {f.label}
             </button>
@@ -119,22 +126,28 @@ export default function VocabPage() {
       {!vocab ? (
         <Loading />
       ) : list.length === 0 ? (
-        <p className="py-16 text-center text-sm text-muted">Không có từ nào phù hợp.</p>
+        <p className="py-16 text-center text-sm text-muted">
+          {filter === "starred" ? "Chưa có từ nào được đánh dấu sao. Bấm ☆ ở mỗi dòng hoặc trên thẻ flashcard để đánh dấu." : "Không có từ nào phù hợp."}
+        </p>
       ) : (
         <>
           <ul className="divide-y divide-line overflow-hidden rounded-2xl border border-line bg-surface">
             {list.slice(0, limit).map((v) => {
-              const st = statusOf(srs[v.id]);
+              const starred = stars.has(v.id);
               return (
-                <li key={v.id} className="flex items-center gap-3 px-4 py-3">
-                  <span
-                    className={`h-2 w-2 shrink-0 rounded-full ${st === "mastered" ? "bg-success" : st === "learning" ? "bg-warn" : "bg-line"}`}
-                    title={FILTERS.find((f) => f.key === st)?.label}
-                  />
+                <li key={v.id} className="flex items-center gap-2 px-3 py-3 sm:px-4">
+                  <button
+                    onClick={() => toggleStar(v.id)}
+                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-lg transition ${starred ? "text-warn" : "text-line hover:text-warn"}`}
+                    aria-label={starred ? "Bỏ đánh dấu sao" : "Đánh dấu sao"}
+                  >
+                    {starred ? "★" : "☆"}
+                  </button>
                   <div className="min-w-0 flex-1">
                     <p className="jp flex flex-wrap items-baseline gap-x-2">
                       <span className="text-lg font-medium">{v.word}</span>
                       {v.reading !== v.word && <span className="text-sm text-muted">{v.reading}</span>}
+                      {seen.has(v.id) && <span className="font-sans text-[11px] text-success">đã xem</span>}
                     </p>
                     <p className="truncate text-sm text-muted">{meaningOf(v)}</p>
                   </div>
@@ -150,10 +163,11 @@ export default function VocabPage() {
               </button>
             </div>
           )}
-          <p className="mt-4 flex flex-wrap gap-3 text-xs text-muted">
-            <Pill>● Chưa học</Pill>
-            <Pill tone="warn">● Đang học</Pill>
-            <Pill tone="success">● Thành thạo (ôn cách ≥ 21 ngày)</Pill>
+          <p className="mt-4 text-center text-xs text-muted">
+            Muốn máy tự nhắc ôn đúng lúc sắp quên?{" "}
+            <Link href={`/vocab/review${deckQuery ? "?" + deckQuery : ""}`} className="text-primary hover:underline">
+              Dùng chế độ ôn tập ngắt quãng
+            </Link>
           </p>
         </>
       )}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { getSettings } from "./settings";
 
 // ---------- Đọc to (TTS) bằng giọng có sẵn của trình duyệt ----------
 let jaVoice: SpeechSynthesisVoice | null = null;
@@ -24,7 +25,7 @@ export function speak(text: string, opts: { rate?: number; onEnd?: () => void } 
   const u = new SpeechSynthesisUtterance(text);
   u.lang = "ja-JP";
   if (jaVoice) u.voice = jaVoice;
-  u.rate = opts.rate ?? 0.9;
+  u.rate = opts.rate ?? getSettings().speechRate;
   if (opts.onEnd) u.onend = opts.onEnd;
   window.speechSynthesis.speak(u);
 }

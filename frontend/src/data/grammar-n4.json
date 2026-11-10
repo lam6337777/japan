@@ -1,0 +1,962 @@
+[
+  {
+    "id": "koto-ga-dekiru",
+    "pattern": "V (từ điển) ことができる",
+    "meaning": "có thể làm V",
+    "structure": "V (thể từ điển) + ことができる",
+    "explanation": "Diễn tả khả năng hoặc điều kiện cho phép làm việc gì đó. Thường dùng trong văn viết hoặc tình huống trang trọng hơn so với thể khả năng.",
+    "examples": [
+      {
+        "ja": "私は日本語を話すことができる。",
+        "kana": "わたしは にほんごを はなす ことが できる。",
+        "vi": "Tôi có thể nói tiếng Nhật."
+      },
+      {
+        "ja": "この図書館では本を借りることができる。",
+        "kana": "この としょかんでは ほんを かりる ことが できる。",
+        "vi": "Ở thư viện này có thể mượn sách."
+      },
+      {
+        "ja": "明日は早く起きることができる。",
+        "kana": "あしたは はやく おきる ことが できる。",
+        "vi": "Ngày mai tôi có thể dậy sớm."
+      }
+    ]
+  },
+  {
+    "id": "kanoukei",
+    "pattern": "Thể khả năng (V られる / V える)",
+    "meaning": "có thể làm V",
+    "structure": "Nhóm 1: V (bỏ う) + える (ví dụ: 書く→書ける). Nhóm 2: V (bỏ る) + られる (ví dụ: 食べる→食べられる). Nhóm 3: する→できる, 来る→来られる",
+    "explanation": "Diễn tả khả năng làm việc gì đó. Thường dùng trong hội thoại hàng ngày. Với động từ nhóm 2, dạng ngắn thường lược bỏ ら (食べれる).",
+    "examples": [
+      {
+        "ja": "私は漢字が書ける。",
+        "kana": "わたしは かんじが かける。",
+        "vi": "Tôi có thể viết chữ Hán."
+      },
+      {
+        "ja": "この店で日本料理が食べられる。",
+        "kana": "この みせで にほんりょうりが たべられる。",
+        "vi": "Có thể ăn món Nhật ở cửa hàng này."
+      },
+      {
+        "ja": "彼は英語が話せる。",
+        "kana": "かれは えいごが はなせる。",
+        "vi": "Anh ấy có thể nói tiếng Anh."
+      }
+    ]
+  },
+  {
+    "id": "ta-koto-ga-aru",
+    "pattern": "V た ことが ある",
+    "meaning": "đã từng làm V",
+    "structure": "V (thể quá khứ) + ことが ある",
+    "explanation": "Diễn tả kinh nghiệm đã từng trải qua việc gì đó trong quá khứ. Không dùng với việc vừa mới xảy ra hoặc còn tiếp diễn.",
+    "examples": [
+      {
+        "ja": "私は富士山に登ったことがある。",
+        "kana": "わたしは ふじさんに のぼった ことが ある。",
+        "vi": "Tôi đã từng leo núi Phú Sĩ."
+      },
+      {
+        "ja": "彼女は一度も海外へ行ったことがない。",
+        "kana": "かのじょは いちども かいがいへ いった ことが ない。",
+        "vi": "Cô ấy chưa từng đi nước ngoài lần nào."
+      },
+      {
+        "ja": "納豆を食べたことがありますか。",
+        "kana": "なっとうを たべた ことが ありますか。",
+        "vi": "Bạn đã từng ăn natto chưa?"
+      }
+    ]
+  },
+  {
+    "id": "tari-tari",
+    "pattern": "V たり V たり する",
+    "meaning": "lúc thì… lúc thì…, làm nào là… nào là…",
+    "structure": "V (thể quá khứ) + り + V (thể quá khứ) + り + する",
+    "explanation": "Liệt kê một số hành động tiêu biểu trong nhiều hành động, không theo thứ tự và không nhất thiết chỉ có hai. Thường dùng để mô tả các hoạt động thường ngày hoặc sở thích.",
+    "examples": [
+      {
+        "ja": "休みの日は本を読んだり、音楽を聞いたりします。",
+        "kana": "やすみの ひは ほんを よんだり、おんがくを きいたり します。",
+        "vi": "Ngày nghỉ tôi thì đọc sách, thì nghe nhạc."
+      },
+      {
+        "ja": "週末は友達と会ったり、買い物をしたりして過ごします。",
+        "kana": "しゅうまつは ともだちと あったり、かいものを したりして すごします。",
+        "vi": "Cuối tuần tôi thường gặp bạn bè, đi mua sắm, v.v."
+      },
+      {
+        "ja": "彼は怒ったり笑ったりして忙しい。",
+        "kana": "かれは おこったり わらったりして いそがしい。",
+        "vi": "Anh ấy lúc giận lúc cười, trông bận rộn."
+      }
+    ]
+  },
+  {
+    "id": "nagara",
+    "pattern": "V (bỏ ます) ながら",
+    "meaning": "vừa… vừa…",
+    "structure": "V (bỏ ます) + ながら",
+    "explanation": "Diễn tả hai hành động xảy ra đồng thời, thường thì hành động sau là chính, hành động trước là phụ. Chủ ngữ của hai hành động phải giống nhau.",
+    "examples": [
+      {
+        "ja": "音楽を聞きながら勉強します。",
+        "kana": "おんがくを ききながら べんきょうします。",
+        "vi": "Tôi vừa nghe nhạc vừa học bài."
+      },
+      {
+        "ja": "コーヒーを飲みながら話しましょう。",
+        "kana": "コーヒーを のみながら はなしましょう。",
+        "vi": "Chúng ta vừa uống cà phê vừa nói chuyện nhé."
+      },
+      {
+        "ja": "彼は歩きながらスマホを見ている。",
+        "kana": "かれは あるきながら スマホを みている。",
+        "vi": "Anh ấy vừa đi vừa xem điện thoại."
+      }
+    ]
+  },
+  {
+    "id": "te-shimau",
+    "pattern": "V て しまう",
+    "meaning": "lỡ làm, làm xong hết",
+    "structure": "V (thể て) + しまう",
+    "explanation": "Diễn tả một hành động đã hoàn thành (làm xong hết) hoặc vô tình/lỡ làm gì đó (thường kèm cảm giác tiếc nuối). Trong văn nói thân mật, thường được rút gọn thành ちゃう/じゃう.",
+    "examples": [
+      {
+        "ja": "ケーキを全部食べてしまいました。",
+        "kana": "けーきを ぜんぶ たべて しまいました。",
+        "vi": "Tôi đã lỡ ăn hết cả bánh rồi."
+      },
+      {
+        "ja": "宿題はもうやってしまった。",
+        "kana": "しゅくだいは もう やって しまった。",
+        "vi": "Bài tập về nhà thì tôi đã làm xong rồi."
+      },
+      {
+        "ja": "電車の中で財布を落としてしまった。",
+        "kana": "でんしゃの なかで さいふを おとして しまった。",
+        "vi": "Tôi đã lỡ đánh rơi ví trên tàu."
+      }
+    ]
+  },
+  {
+    "id": "te-oku",
+    "pattern": "V て おく",
+    "meaning": "làm sẵn, làm trước",
+    "structure": "V (thể て) + おく",
+    "explanation": "Diễn tả việc làm một hành động trước để chuẩn bị cho tình huống sau, hoặc giữ nguyên trạng thái nào đó. Thường dùng với các động từ như 準備する, 予約する, 買う, 開ける, 閉める,...",
+    "examples": [
+      {
+        "ja": "明日のパーティーのために、飲み物を買っておきます。",
+        "kana": "あしたの ぱーてぃーの ために、のみものを かって おきます。",
+        "vi": "Tôi sẽ mua đồ uống sẵn cho bữa tiệc ngày mai."
+      },
+      {
+        "ja": "出かける前に、窓を閉めておいてください。",
+        "kana": "でかける まえに、まどを しめて おいて ください。",
+        "vi": "Trước khi ra ngoài, hãy đóng cửa sổ lại nhé."
+      },
+      {
+        "ja": "会議の資料はもう準備しておきました。",
+        "kana": "かいぎの しりょうは もう じゅんびして おきました。",
+        "vi": "Tài liệu cuộc họp thì tôi đã chuẩn bị sẵn rồi."
+      }
+    ]
+  },
+  {
+    "id": "te-miru",
+    "pattern": "V て みる",
+    "meaning": "thử làm",
+    "structure": "V (thể て) + みる",
+    "explanation": "Diễn tả việc thử làm một hành động nào đó để xem kết quả thế nào. Thường dùng khi muốn thử nghiệm, trải nghiệm điều gì đó lần đầu.",
+    "examples": [
+      {
+        "ja": "この料理を食べてみてください。",
+        "kana": "この りょうりを たべて みて ください。",
+        "vi": "Hãy thử ăn món này xem."
+      },
+      {
+        "ja": "日本語で日記を書いてみました。",
+        "kana": "にほんごで にっきを かいて みました。",
+        "vi": "Tôi đã thử viết nhật ký bằng tiếng Nhật."
+      },
+      {
+        "ja": "新しいゲームをやってみたいです。",
+        "kana": "あたらしい げーむを やって みたいです。",
+        "vi": "Tôi muốn thử chơi trò chơi mới."
+      }
+    ]
+  },
+  {
+    "id": "te-aru",
+    "pattern": "V (tha động từ) て ある",
+    "meaning": "đã được làm sẵn (trạng thái)",
+    "structure": "V (tha động từ, thể て) + ある",
+    "explanation": "Diễn tả trạng thái của một vật đã được ai đó làm sẵn và kết quả vẫn còn tồn tại. Chủ ngữ thường là đồ vật, không phải người. Động từ phải là tha động từ (động từ cần tân ngữ).",
+    "examples": [
+      {
+        "ja": "机の上に辞書が置いてあります。",
+        "kana": "つくえの うえに じしょが おいて あります。",
+        "vi": "Trên bàn có cuốn từ điển được để sẵn."
+      },
+      {
+        "ja": "窓が開けてあります。",
+        "kana": "まどが あけて あります。",
+        "vi": "Cửa sổ đã được mở sẵn."
+      },
+      {
+        "ja": "パーティーのために、部屋がきれいに掃除してあります。",
+        "kana": "ぱーてぃーの ために、へやが きれいに そうじして あります。",
+        "vi": "Phòng đã được dọn dẹp sạch sẽ sẵn cho bữa tiệc."
+      }
+    ]
+  },
+  {
+    "id": "you-to-omou",
+    "pattern": "V (ý chí) よう と思う",
+    "meaning": "định làm",
+    "structure": "V (thể ý chí) + と思う",
+    "explanation": "Diễn tả ý định của người nói sẽ làm gì đó. Thể ý chí của động từ nhóm 1 là đuôi おう/こう/そう/とう/のう/ぼう/もう/ろう, nhóm 2 là よう, nhóm 3 là しよう/こよう. Thường dùng để nói về dự định cá nhân.",
+    "examples": [
+      {
+        "ja": "来年、日本へ留学しようと思っています。",
+        "kana": "らいねん、にほんへ りゅうがく しようと おもって います。",
+        "vi": "Tôi định năm sau sẽ đi du học Nhật Bản."
+      },
+      {
+        "ja": "週末は家でゆっくり休もうと思います。",
+        "kana": "しゅうまつは いえで ゆっくり やすもうと おもいます。",
+        "vi": "Cuối tuần tôi định ở nhà nghỉ ngơi thoải mái."
+      },
+      {
+        "ja": "明日から毎朝ジョギングをしようと思っています。",
+        "kana": "あしたから まいあさ じょぎんぐを しようと おもって います。",
+        "vi": "Từ ngày mai tôi định sẽ chạy bộ mỗi sáng."
+      }
+    ]
+  },
+  {
+    "id": "yotei",
+    "pattern": "V (từ điển) / N の 予定です",
+    "meaning": "dự định, theo kế hoạch",
+    "structure": "V (thể từ điển) + 予定です / N + の + 予定です",
+    "explanation": "Mẫu câu diễn tả một dự định, kế hoạch đã được định sẵn. Thường dùng để nói về kế hoạch cá nhân hoặc lịch trình. Không dùng cho hành động bất ngờ. Có thể dùng với danh từ chỉ sự kiện.",
+    "examples": [
+      {
+        "ja": "来週、友達と映画を見る予定です。",
+        "kana": "らいしゅう、ともだちと えいがを みる よていです。",
+        "vi": "Tuần sau, tôi dự định đi xem phim với bạn."
+      },
+      {
+        "ja": "会議は3時からの予定です。",
+        "kana": "かいぎは さんじから の よていです。",
+        "vi": "Cuộc họp dự định bắt đầu từ 3 giờ."
+      },
+      {
+        "ja": "来年、日本へ留学する予定です。",
+        "kana": "らいねん、にほんへ りゅうがくする よていです。",
+        "vi": "Năm sau, tôi dự định đi du học Nhật Bản."
+      }
+    ]
+  },
+  {
+    "id": "nakereba-naranai",
+    "pattern": "V なければ ならない",
+    "meaning": "phải làm",
+    "structure": "V (thể ない bỏ ない) + なければならない",
+    "explanation": "Diễn tả nghĩa vụ, bổn phận phải làm gì đó. Thường dùng trong văn viết hoặc tình huống trang trọng. Dạng lịch sự là なければなりません.",
+    "examples": [
+      {
+        "ja": "毎日、薬を飲まなければならない。",
+        "kana": "まいにち、くすりを のまなければ ならない。",
+        "vi": "Hằng ngày, tôi phải uống thuốc."
+      },
+      {
+        "ja": "明日までに宿題を出さなければならない。",
+        "kana": "あしたまでに しゅくだいを ださなければ ならない。",
+        "vi": "Tôi phải nộp bài tập trước ngày mai."
+      },
+      {
+        "ja": "約束を守らなければならない。",
+        "kana": "やくそくを まもらなければ ならない。",
+        "vi": "Phải giữ lời hứa."
+      }
+    ]
+  },
+  {
+    "id": "nakute-mo-ii",
+    "pattern": "V なくても いい",
+    "meaning": "không làm cũng được",
+    "structure": "V (thể ない bỏ ない) + なくてもいい",
+    "explanation": "Diễn tả sự không cần thiết phải làm gì đó, có thể không làm. Dùng để cho phép hoặc nói rằng không bắt buộc. Dạng lịch sự là なくてもいいです.",
+    "examples": [
+      {
+        "ja": "明日は来なくてもいいです。",
+        "kana": "あしたは こなくても いいです。",
+        "vi": "Ngày mai không đến cũng được."
+      },
+      {
+        "ja": "この薬は飲まなくてもいいです。",
+        "kana": "この くすりは のまなくても いいです。",
+        "vi": "Thuốc này không uống cũng được."
+      },
+      {
+        "ja": "急がなくてもいいですよ。",
+        "kana": "いそがなくても いいですよ。",
+        "vi": "Không cần gấp đâu."
+      }
+    ]
+  },
+  {
+    "id": "tara",
+    "pattern": "〜たら",
+    "meaning": "nếu, khi (điều kiện)",
+    "structure": "V (thể た) + ら / A (thể た) + ら / N + だったら",
+    "explanation": "Diễn tả điều kiện: nếu A thì B, hoặc sau khi A xảy ra thì B (dùng được cho cả giả định và việc chắc chắn sẽ xảy ra). Khi vế sau ở quá khứ, 〜たら mang nghĩa \"khi… thì (phát hiện ra)…\", ví dụ: 家に帰ったら、手紙が来ていた (Về đến nhà thì thấy có thư).",
+    "examples": [
+      {
+        "ja": "雨が降ったら、試合は中止です。",
+        "kana": "あめが ふったら、しあいは ちゅうしです。",
+        "vi": "Nếu trời mưa thì trận đấu sẽ bị hủy."
+      },
+      {
+        "ja": "時間があったら、映画を見に行きましょう。",
+        "kana": "じかんが あったら、えいがを みに いきましょう。",
+        "vi": "Nếu có thời gian, chúng ta đi xem phim nhé."
+      },
+      {
+        "ja": "学生だったら、このチケットは安いです。",
+        "kana": "がくせいだったら、この チケットは やすいです。",
+        "vi": "Nếu là học sinh thì vé này rẻ."
+      }
+    ]
+  },
+  {
+    "id": "ba",
+    "pattern": "〜ば",
+    "meaning": "nếu (điều kiện)",
+    "structure": "V (thể ば) / A (thể ば) / N + なら",
+    "explanation": "Diễn tả điều kiện giả định: nếu A thì B. Thường dùng trong câu điều kiện mang tính quy luật, hoặc lời khuyên. Không dùng khi A là hành động của người nói muốn người khác làm.",
+    "examples": [
+      {
+        "ja": "お金があれば、旅行に行きます。",
+        "kana": "おかねが あれば、りょこうに いきます。",
+        "vi": "Nếu có tiền, tôi sẽ đi du lịch."
+      },
+      {
+        "ja": "ボタンを押せば、ドアが開きます。",
+        "kana": "ボタンを おせば、ドアが あきます。",
+        "vi": "Nếu bấm nút thì cửa sẽ mở."
+      },
+      {
+        "ja": "安ければ、買います。",
+        "kana": "やすければ、かいます。",
+        "vi": "Nếu rẻ thì tôi sẽ mua."
+      }
+    ]
+  },
+  {
+    "id": "to-joken",
+    "pattern": "V (từ điển) と",
+    "meaning": "hễ… thì… (kết quả tất yếu)",
+    "structure": "V (thể từ điển) + と",
+    "explanation": "Diễn tả một kết quả tự nhiên, tất yếu xảy ra khi có một hành động hoặc sự việc nào đó. Thường dùng cho các quy luật tự nhiên, thói quen, hoặc hướng dẫn. Không dùng với ý chí, mệnh lệnh, hay rủ rê trong mệnh đề sau.",
+    "examples": [
+      {
+        "ja": "春になると、桜が咲きます。",
+        "kana": "はるに なる と、 さくらが さきます。",
+        "vi": "Hễ mùa xuân đến thì hoa anh đào nở."
+      },
+      {
+        "ja": "このボタンを押すと、電気がつきます。",
+        "kana": "この ボタンを おす と、 でんきが つきます。",
+        "vi": "Hễ bấm nút này thì đèn sẽ sáng."
+      },
+      {
+        "ja": "私はお酒を飲むと、顔が赤くなります。",
+        "kana": "わたしは おさけを のむ と、 かおが あかく なります。",
+        "vi": "Tôi hễ uống rượu là mặt đỏ."
+      }
+    ]
+  },
+  {
+    "id": "nara",
+    "pattern": "〜なら",
+    "meaning": "nếu là…, nếu vậy thì…",
+    "structure": "N + なら / V (thể từ điển) + なら / A + なら",
+    "explanation": "Dùng để đưa ra một giả định hoặc điều kiện, thường dựa trên thông tin đã biết. Có thể dùng để đưa ra lời khuyên, yêu cầu trong mệnh đề sau. Khác với 'と', 'なら' có thể dùng với ý chí, mệnh lệnh.",
+    "examples": [
+      {
+        "ja": "あなたが行くなら、私も行きます。",
+        "kana": "あなたが いく なら、 わたしも いきます。",
+        "vi": "Nếu bạn đi thì tôi cũng đi."
+      },
+      {
+        "ja": "日本なら、どこでも日本語が通じます。",
+        "kana": "にほん なら、 どこでも にほんごが つうじます。",
+        "vi": "Nếu là ở Nhật thì ở đâu cũng có thể dùng tiếng Nhật."
+      },
+      {
+        "ja": "安いなら、買います。",
+        "kana": "やすい なら、 かいます。",
+        "vi": "Nếu rẻ thì tôi sẽ mua."
+      }
+    ]
+  },
+  {
+    "id": "te-mo",
+    "pattern": "〜ても",
+    "meaning": "dù… cũng…",
+    "structure": "V (thể て) + も / A (bỏ い) + くても / N + でも",
+    "explanation": "Diễn tả ý 'cho dù điều kiện như thế nào thì kết quả vẫn không thay đổi'. Thường đi với các từ để hỏi như どんなに, いくら, たとえ để nhấn mạnh.",
+    "examples": [
+      {
+        "ja": "雨が降っても、試合は行われます。",
+        "kana": "あめが ふって も、 しあいは おこなわれます。",
+        "vi": "Dù trời mưa thì trận đấu vẫn diễn ra."
+      },
+      {
+        "ja": "この問題は難しくても、頑張れば解けます。",
+        "kana": "この もんだいは むずかしくて も、 がんばれば とけます。",
+        "vi": "Bài toán này dù khó nhưng nếu cố gắng thì sẽ giải được."
+      },
+      {
+        "ja": "日曜日でも、仕事をしなければなりません。",
+        "kana": "にちようび でも、 しごとを しなければ なりません。",
+        "vi": "Dù là chủ nhật thì tôi vẫn phải làm việc."
+      }
+    ]
+  },
+  {
+    "id": "noni",
+    "pattern": "〜のに",
+    "meaning": "vậy mà, mặc dù",
+    "structure": "V (thể thông thường) + のに / A + のに / N + な + のに",
+    "explanation": "Diễn tả sự trái ngược với mong đợi, thường mang cảm xúc ngạc nhiên, thất vọng, hoặc bất mãn. Khác với 'ても', 'のに' nhấn mạnh vào cảm xúc của người nói.",
+    "examples": [
+      {
+        "ja": "一生懸命勉強したのに、試験に落ちました。",
+        "kana": "いっしょうけんめい べんきょうした のに、 しけんに おちました。",
+        "vi": "Tôi đã học hành chăm chỉ vậy mà vẫn trượt kỳ thi."
+      },
+      {
+        "ja": "この部屋は狭いのに、家賃が高いです。",
+        "kana": "この へやは せまい のに、 やちんが たかいです。",
+        "vi": "Căn phòng này chật vậy mà tiền thuê nhà lại cao."
+      },
+      {
+        "ja": "彼は学生なのに、あまり勉強しません。",
+        "kana": "かれは がくせい な のに、 あまり べんきょうしません。",
+        "vi": "Anh ấy là sinh viên vậy mà không học hành gì cả."
+      }
+    ]
+  },
+  {
+    "id": "node",
+    "pattern": "〜ので",
+    "meaning": "vì… (lý do khách quan, lịch sự)",
+    "structure": "V (thể thông thường) + ので / A + ので / N + な + ので",
+    "explanation": "Dùng để nêu lý do một cách khách quan, lịch sự, thường dùng trong giao tiếp hàng ngày hoặc khi giải thích. Khác với 'から', 'ので' mang tính nhẹ nhàng hơn và ít khi dùng với mệnh lệnh, ý chí mạnh.",
+    "examples": [
+      {
+        "ja": "今日は雨が降っているので、出かけません。",
+        "kana": "きょうは あめが ふっている ので、 でかけません。",
+        "vi": "Hôm nay vì trời mưa nên tôi không ra ngoài."
+      },
+      {
+        "ja": "この店は安いので、いつもお客さんが多いです。",
+        "kana": "この みせは やすい ので、 いつも おきゃくさんが おおいです。",
+        "vi": "Cửa hàng này vì rẻ nên lúc nào cũng đông khách."
+      },
+      {
+        "ja": "明日は試験なので、今夜は早く寝ます。",
+        "kana": "あしたは しけん な ので、 こんやは はやく ねます。",
+        "vi": "Vì ngày mai có kỳ thi nên tối nay tôi sẽ đi ngủ sớm."
+      }
+    ]
+  },
+  {
+    "id": "sou-da-yousou",
+    "pattern": "V (bỏ ます) / A (bỏ い/な) そうだ",
+    "meaning": "trông có vẻ (phỏng đoán qua quan sát)",
+    "structure": "V: bỏ ます + そうだ; Aい: bỏ い + そうだ; Aな: bỏ な + そうだ",
+    "explanation": "Dùng để phỏng đoán dựa trên những gì mình nhìn thấy, cảm nhận được. Không dùng với tính từ chỉ màu sắc như 赤い, 青い. Với いい và ない có dạng đặc biệt: よさそう, なさそう.",
+    "examples": [
+      {
+        "ja": "このケーキはとてもおいしそうです。",
+        "kana": "この ケーキは とても おいしそうです。",
+        "vi": "Cái bánh này trông rất ngon."
+      },
+      {
+        "ja": "雨が降りそうですね。",
+        "kana": "あめが ふりそうですね。",
+        "vi": "Trời có vẻ sắp mưa nhỉ."
+      },
+      {
+        "ja": "彼女は元気そうでした。",
+        "kana": "かのじょは げんきそうでした。",
+        "vi": "Cô ấy trông có vẻ khỏe mạnh."
+      }
+    ]
+  },
+  {
+    "id": "sou-da-denbun",
+    "pattern": "Thể thường + そうだ",
+    "meaning": "nghe nói là",
+    "structure": "V/A/N + 普通形 + そうだ (Aな và N giữ nguyên, không thêm だ)",
+    "explanation": "Dùng để truyền đạt thông tin mình nghe được từ người khác hoặc nguồn tin. Không dùng khi thông tin đến từ chính mình. Thường đi với 〜によると〜そうです.",
+    "examples": [
+      {
+        "ja": "天気予報によると、明日は晴れるそうです。",
+        "kana": "てんきよほうに よると、あしたは はれるそうです。",
+        "vi": "Theo dự báo thời tiết, nghe nói ngày mai trời sẽ nắng."
+      },
+      {
+        "ja": "田中さんは来月結婚するそうです。",
+        "kana": "たなかさんは らいげつ けっこんするそうです。",
+        "vi": "Nghe nói anh Tanaka tháng sau sẽ kết hôn."
+      },
+      {
+        "ja": "この店の料理はおいしいそうですよ。",
+        "kana": "この みせの りょうりは おいしいそうですよ。",
+        "vi": "Nghe nói món ăn ở quán này ngon lắm đấy."
+      }
+    ]
+  },
+  {
+    "id": "you-da",
+    "pattern": "〜ようだ / 〜みたいだ",
+    "meaning": "hình như, có vẻ như",
+    "structure": "V/A/N + 普通形 + ようだ (Aな và N + の + ようだ); みたいだ dùng như thể thường: V/A/N + 普通形 + みたいだ (Aな và N giữ nguyên, không thêm だ)",
+    "explanation": "Dùng để phỏng đoán dựa trên quan sát hoặc cảm giác của người nói. ようだ trang trọng hơn, みたいだ dùng trong hội thoại thân mật. Có thể dùng để so sánh ví von.",
+    "examples": [
+      {
+        "ja": "外は雨が降っているようだ。",
+        "kana": "そとは あめが ふっているようだ。",
+        "vi": "Bên ngoài hình như đang mưa."
+      },
+      {
+        "ja": "この部屋は誰もいないみたいだ。",
+        "kana": "この へやは だれも いないみたいだ。",
+        "vi": "Căn phòng này có vẻ như không có ai."
+      },
+      {
+        "ja": "彼は子どものように無邪気だ。",
+        "kana": "かれは こどもの ように むじゃきだ。",
+        "vi": "Anh ấy hồn nhiên như trẻ con."
+      }
+    ]
+  },
+  {
+    "id": "rashii",
+    "pattern": "〜らしい",
+    "meaning": "nghe nói, có vẻ; đúng kiểu, ra dáng",
+    "structure": "V/A/N + 普通形 + らしい (Aな và N giữ nguyên, không thêm だ)",
+    "explanation": "Dùng để diễn tả phỏng đoán dựa trên thông tin nghe được hoặc dấu hiệu khách quan. Ngoài ra còn dùng với nghĩa 'đúng là, ra dáng' khi đi với danh từ.",
+    "examples": [
+      {
+        "ja": "ニュースによると、台風が来るらしいです。",
+        "kana": "ニュースに よると、たいふうが くるらしいです。",
+        "vi": "Theo tin tức, nghe nói có bão đến."
+      },
+      {
+        "ja": "彼は本当に男らしい人だ。",
+        "kana": "かれは ほんとうに おとこらしい ひとだ。",
+        "vi": "Anh ấy đúng là người đàn ông nam tính."
+      },
+      {
+        "ja": "あの店はいつも込んでいるらしい。",
+        "kana": "あの みせは いつも こんでいるらしい。",
+        "vi": "Nghe nói quán đó lúc nào cũng đông."
+      }
+    ]
+  },
+  {
+    "id": "kamoshirenai",
+    "pattern": "〜かもしれない",
+    "meaning": "có lẽ, không chừng",
+    "structure": "V/A/N + 普通形 + かもしれない (Aな và N giữ nguyên, không thêm だ)",
+    "explanation": "Dùng để diễn tả khả năng có thể xảy ra, nhưng mức độ chắc chắn thấp hơn でしょう. Thường dùng trong câu phỏng đoán, nghi vấn. Trong văn nói lịch sự dùng かもしれません.",
+    "examples": [
+      {
+        "ja": "明日は雨が降るかもしれない。",
+        "kana": "あしたは あめが ふるかもしれない。",
+        "vi": "Ngày mai có lẽ trời sẽ mưa."
+      },
+      {
+        "ja": "彼はもう家に帰ったかもしれません。",
+        "kana": "かれは もう いえに かえったかもしれません。",
+        "vi": "Anh ấy có lẽ đã về nhà rồi."
+      },
+      {
+        "ja": "この問題は難しいかもしれないが、頑張ろう。",
+        "kana": "この もんだいは むずかしいかもしれないが、がんばろう。",
+        "vi": "Bài toán này có thể khó, nhưng hãy cố gắng nhé."
+      }
+    ]
+  },
+  {
+    "id": "deshou",
+    "pattern": "〜でしょう / 〜だろう",
+    "meaning": "chắc là, có lẽ",
+    "structure": "V/Adj/N + でしょう (lịch sự) / だろう (thông thường)",
+    "explanation": "Dùng để diễn tả phỏng đoán của người nói về một sự việc có khả năng cao, hoặc để hỏi ý kiến một cách lịch sự. Với danh từ và tính từ な, dùng でしょう/だろう trực tiếp; với động từ và tính từ い, giữ nguyên thể từ điển hoặc thể た. Lưu ý: không dùng để diễn tả ý chí của bản thân.",
+    "examples": [
+      {
+        "ja": "明日は雨が降るでしょう。",
+        "kana": "あしたは あめが ふるでしょう。",
+        "vi": "Ngày mai trời có lẽ sẽ mưa."
+      },
+      {
+        "ja": "このケーキはおいしいでしょう。",
+        "kana": "この ケーキは おいしいでしょう。",
+        "vi": "Cái bánh này chắc là ngon nhỉ."
+      },
+      {
+        "ja": "彼は学生だろう。",
+        "kana": "かれは がくせいだろう。",
+        "vi": "Anh ấy chắc là học sinh."
+      }
+    ]
+  },
+  {
+    "id": "ukemi",
+    "pattern": "Thể bị động (V られる)",
+    "meaning": "bị, được (làm gì)",
+    "structure": "Nhóm I: u → a + れる (ví dụ: 書く→書かれる); Nhóm II: る → られる (ví dụ: 食べる→食べられる); Nhóm III: する→される, 来る→来られる",
+    "explanation": "Thể bị động dùng khi chịu tác động từ người khác, thường mang ý nghĩa tiêu cực 'bị'. Cũng dùng để diễn tả sự kính trọng hoặc khả năng. Trợ từ に đánh dấu người thực hiện hành động.",
+    "examples": [
+      {
+        "ja": "私は先生にほめられました。",
+        "kana": "わたしは せんせいに ほめられました。",
+        "vi": "Tôi được thầy giáo khen."
+      },
+      {
+        "ja": "弟にケーキを食べられました。",
+        "kana": "おとうとに ケーキを たべられました。",
+        "vi": "Tôi bị em trai ăn mất cái bánh."
+      },
+      {
+        "ja": "この漢字は読まれますか。",
+        "kana": "この かんじは よまれますか。",
+        "vi": "Chữ Hán này có đọc được không?"
+      }
+    ]
+  },
+  {
+    "id": "shieki",
+    "pattern": "Thể sai khiến (V させる)",
+    "meaning": "bắt, cho phép (ai) làm",
+    "structure": "Nhóm I: u → a + せる (ví dụ: 行く→行かせる); Nhóm II: る → させる (ví dụ: 食べる→食べさせる); Nhóm III: する→させる, 来る→来させる",
+    "explanation": "Thể sai khiến diễn tả việc bắt buộc hoặc cho phép ai đó làm gì. Tùy ngữ cảnh, có thể mang nghĩa 'bắt' (khi dùng với を) hoặc 'cho phép' (khi dùng với に). Thường dùng trong giao tiếp hàng ngày.",
+    "examples": [
+      {
+        "ja": "先生は学生に作文を書かせました。",
+        "kana": "せんせいは がくせいに さくぶんを かかせました。",
+        "vi": "Giáo viên bắt học sinh viết bài văn."
+      },
+      {
+        "ja": "母は子供を外で遊ばせました。",
+        "kana": "ははは こどもを そとで あそばせました。",
+        "vi": "Mẹ cho phép đứa trẻ chơi ở ngoài."
+      },
+      {
+        "ja": "私は弟に部屋を掃除させました。",
+        "kana": "わたしは おとうとに へやを そうじさせました。",
+        "vi": "Tôi bắt em trai dọn phòng."
+      }
+    ]
+  },
+  {
+    "id": "jujudoushi",
+    "pattern": "V て あげる / くれる / もらう",
+    "meaning": "làm cho ai / ai làm cho mình / nhờ ai làm",
+    "structure": "V-て + あげる (làm cho ai); V-て + くれる (ai đó làm cho mình); V-て + もらう (nhận được việc ai làm cho mình)",
+    "explanation": "Đây là các động từ chỉ sự cho nhận hành động. あげる: mình làm cho người khác; くれる: người khác làm cho mình; もらう: mình nhận được hành động từ ai. Cần chú ý đến quan hệ trên dưới và ngôi thứ.",
+    "examples": [
+      {
+        "ja": "私は友達に本を貸してあげました。",
+        "kana": "わたしは ともだちに ほんを かしてあげました。",
+        "vi": "Tôi đã cho bạn mượn sách."
+      },
+      {
+        "ja": "友達が私を手伝ってくれました。",
+        "kana": "ともだちが わたしを てつだってくれました。",
+        "vi": "Bạn đã giúp đỡ tôi."
+      },
+      {
+        "ja": "私は先生に日本語を教えてもらいました。",
+        "kana": "わたしは せんせいに にほんごを おしえてもらいました。",
+        "vi": "Tôi đã được thầy giáo dạy tiếng Nhật."
+      }
+    ]
+  },
+  {
+    "id": "sugiru",
+    "pattern": "〜すぎる",
+    "meaning": "quá…",
+    "structure": "V (bỏ ます) + すぎる; Adj い (bỏ い) + すぎる; Adj な (bỏ な) + すぎる",
+    "explanation": "Diễn tả mức độ quá mức của một tính chất hoặc hành động, thường mang ý nghĩa tiêu cực. Với động từ, dùng dạng bỏ ます; với tính từ い, bỏ い; với tính từ な, bỏ な.",
+    "examples": [
+      {
+        "ja": "この料理は辛すぎます。",
+        "kana": "この りょうりは からすぎます。",
+        "vi": "Món ăn này quá cay."
+      },
+      {
+        "ja": "昨日、お酒を飲みすぎました。",
+        "kana": "きのう、おさけを のみすぎました。",
+        "vi": "Hôm qua tôi đã uống quá nhiều rượu."
+      },
+      {
+        "ja": "この問題は難しすぎて、わかりません。",
+        "kana": "この もんだいは むずかしすぎて、わかりません。",
+        "vi": "Bài toán này quá khó nên tôi không hiểu."
+      }
+    ]
+  },
+  {
+    "id": "yasui-nikui",
+    "pattern": "V (bỏ ます) やすい / にくい",
+    "meaning": "dễ… / khó…",
+    "structure": "V (bỏ ます) + やすい / にくい",
+    "explanation": "Diễn tả mức độ dễ hay khó khi thực hiện hành động nào đó. Thường dùng với động từ chỉ hành động vô ý thức hoặc có chủ ý. Lưu ý: không dùng với động từ chỉ khả năng như 見える, 聞こえる.",
+    "examples": [
+      {
+        "ja": "この本は字が大きくて読みやすいです。",
+        "kana": "この ほんは じが おおきくて よみやすいです。",
+        "vi": "Quyển sách này chữ to nên dễ đọc."
+      },
+      {
+        "ja": "この道は暗くて歩きにくいです。",
+        "kana": "この みちは くらくて あるきにくいです。",
+        "vi": "Con đường này tối nên khó đi."
+      },
+      {
+        "ja": "このペンはとても書きやすいですね。",
+        "kana": "この ぺんは とても かきやすいですね。",
+        "vi": "Cây bút này viết rất dễ nhỉ."
+      }
+    ]
+  },
+  {
+    "id": "tame-ni",
+    "pattern": "〜ために",
+    "meaning": "để (mục đích); vì (nguyên nhân)",
+    "structure": "V (thể từ điển) + ために / N + の + ために",
+    "explanation": "Biểu thị mục đích (để làm gì) hoặc nguyên nhân (vì cái gì). Với mục đích, thường dùng với động từ chỉ ý chí. Với nguyên nhân, có thể dùng với danh từ hoặc mệnh đề.",
+    "examples": [
+      {
+        "ja": "日本へ留学するために、日本語を勉強しています。",
+        "kana": "にほんへ りゅうがくする ために、にほんごを べんきょうしています。",
+        "vi": "Tôi đang học tiếng Nhật để du học Nhật Bản."
+      },
+      {
+        "ja": "家族のために、毎日働いています。",
+        "kana": "かぞくの ために、まいにち はたらいています。",
+        "vi": "Tôi làm việc mỗi ngày vì gia đình."
+      },
+      {
+        "ja": "事故のために、電車が遅れました。",
+        "kana": "じこの ために、でんしゃが おくれました。",
+        "vi": "Vì tai nạn nên tàu điện đã bị trễ."
+      }
+    ]
+  },
+  {
+    "id": "you-ni",
+    "pattern": "V (từ điển/ない) ように",
+    "meaning": "để (mục tiêu, trạng thái mong muốn)",
+    "structure": "V (thể từ điển) + ように / V (thể ない) + ように",
+    "explanation": "Diễn tả mục đích sao cho một trạng thái nào đó xảy ra, thường dùng với động từ không biểu thị ý chí như なる, できる, わかる, hoặc động từ ở thể khả năng. Khác với ために, ように không dùng với động từ chỉ ý chí mạnh.",
+    "examples": [
+      {
+        "ja": "忘れないように、メモをします。",
+        "kana": "わすれない ように、めもを します。",
+        "vi": "Tôi ghi chú để không quên."
+      },
+      {
+        "ja": "日本語が話せるように、毎日練習しています。",
+        "kana": "にほんごが はなせる ように、まいにち れんしゅうしています。",
+        "vi": "Tôi luyện tập mỗi ngày để có thể nói tiếng Nhật."
+      },
+      {
+        "ja": "風邪をひかないように、気をつけてください。",
+        "kana": "かぜを ひかない ように、きを つけてください。",
+        "vi": "Hãy cẩn thận để không bị cảm."
+      }
+    ]
+  },
+  {
+    "id": "you-ni-naru",
+    "pattern": "V (từ điển) ように なる",
+    "meaning": "trở nên có thể, bắt đầu (thay đổi thói quen)",
+    "structure": "V (thể từ điển) + ように なる",
+    "explanation": "Diễn tả sự thay đổi từ trạng thái không thể sang có thể, hoặc bắt đầu có thói quen mới. Thường dùng với động từ ở thể khả năng hoặc động từ chỉ trạng thái.",
+    "examples": [
+      {
+        "ja": "毎日練習して、泳げるようになりました。",
+        "kana": "まいにち れんしゅうして、およげる ように なりました。",
+        "vi": "Tôi luyện tập mỗi ngày và đã có thể bơi được."
+      },
+      {
+        "ja": "最近、早く起きるようになりました。",
+        "kana": "さいきん、はやく おきる ように なりました。",
+        "vi": "Gần đây, tôi đã bắt đầu dậy sớm."
+      },
+      {
+        "ja": "日本語がわかるようになりました。",
+        "kana": "にほんごが わかる ように なりました。",
+        "vi": "Tôi đã trở nên hiểu tiếng Nhật."
+      }
+    ]
+  },
+  {
+    "id": "koto-ni-suru",
+    "pattern": "V ことに する / ことに なる",
+    "meaning": "quyết định làm / được quyết định là",
+    "structure": "V (thể từ điển/ない) + ことに する / ことに なる",
+    "explanation": "ことに する diễn tả quyết định của bản thân. ことに なる diễn tả quyết định của người khác hoặc hoàn cảnh, thường dùng để thông báo. Cả hai đều dùng với động từ chỉ ý chí.",
+    "examples": [
+      {
+        "ja": "来月からタバコをやめることにしました。",
+        "kana": "らいげつから たばこを やめる ことに しました。",
+        "vi": "Tôi đã quyết định bỏ thuốc lá từ tháng sau."
+      },
+      {
+        "ja": "会議は来週の月曜日にすることになりました。",
+        "kana": "かいぎは らいしゅうの げつようびに する ことに なりました。",
+        "vi": "Cuộc họp đã được quyết định là vào thứ Hai tuần sau."
+      },
+      {
+        "ja": "国へ帰ることにしました。",
+        "kana": "くにへ かえる ことに しました。",
+        "vi": "Tôi đã quyết định về nước."
+      }
+    ]
+  },
+  {
+    "id": "baai-wa",
+    "pattern": "〜場合は",
+    "meaning": "trong trường hợp",
+    "structure": "N + の + 場合は / V (thể từ điển, ない形, た形) + 場合は / A (い) + 場合は / A (な) + な + 場合は",
+    "explanation": "Dùng để nêu một tình huống giả định hoặc có thể xảy ra, sau đó đưa ra hành động hoặc lời khuyên tương ứng. Tương tự 〜たら nhưng trang trọng hơn, thường dùng trong văn viết hoặc hướng dẫn.",
+    "examples": [
+      {
+        "ja": "雨が降る場合は、試合は中止です。",
+        "kana": "あめが ふる ばあいは、しあいは ちゅうしです。",
+        "vi": "Trong trường hợp trời mưa thì trận đấu sẽ bị hủy."
+      },
+      {
+        "ja": "わからない場合は、先生に聞いてください。",
+        "kana": "わからない ばあいは、せんせいに きいてください。",
+        "vi": "Nếu không hiểu thì hãy hỏi giáo viên."
+      },
+      {
+        "ja": "学生の場合は、入場料が無料です。",
+        "kana": "がくせいの ばあいは、にゅうじょうりょうが むりょうです。",
+        "vi": "Trong trường hợp là học sinh thì vé vào cửa miễn phí."
+      }
+    ]
+  },
+  {
+    "id": "ka-douka",
+    "pattern": "〜かどうか",
+    "meaning": "có… hay không",
+    "structure": "V (thể thông thường) + かどうか / A (い) + かどうか / A (な) + かどうか / N + かどうか",
+    "explanation": "Dùng để diễn tả sự không chắc chắn về việc gì đó có xảy ra hay không, hoặc để hỏi/kiểm tra. Không dùng với từ để hỏi như 何, 誰 (khi đó dùng 〜か).",
+    "examples": [
+      {
+        "ja": "明日、雨が降るかどうかわかりません。",
+        "kana": "あした、あめが ふるかどうか わかりません。",
+        "vi": "Ngày mai trời có mưa hay không thì tôi không biết."
+      },
+      {
+        "ja": "彼が来るかどうか、電話で聞いてみます。",
+        "kana": "かれが くるかどうか、でんわで きいてみます。",
+        "vi": "Anh ấy có đến hay không, tôi sẽ thử hỏi qua điện thoại."
+      },
+      {
+        "ja": "この料理が辛いかどうか、食べてみてください。",
+        "kana": "この りょうりが からいかどうか、たべてみてください。",
+        "vi": "Món này có cay hay không, bạn hãy ăn thử xem."
+      }
+    ]
+  },
+  {
+    "id": "aida-ni",
+    "pattern": "〜間 / 〜間に",
+    "meaning": "trong suốt khi / trong lúc (xảy ra một việc)",
+    "structure": "V (thể từ điển) + 間 / 間に / N + の間 / の間に",
+    "explanation": "〜間 chỉ một khoảng thời gian kéo dài, hành động diễn ra liên tục trong suốt khoảng đó. 〜間に chỉ một thời điểm trong khoảng thời gian đó, hành động xảy ra một lần hoặc ngắn.",
+    "examples": [
+      {
+        "ja": "夏休みの間、ずっと国に帰っていました。",
+        "kana": "なつやすみの あいだ、ずっと くにに かえっていました。",
+        "vi": "Trong suốt kỳ nghỉ hè, tôi đã về nước."
+      },
+      {
+        "ja": "電車に乗っている間に、本を読みました。",
+        "kana": "でんしゃに のっている あいだに、ほんを よみました。",
+        "vi": "Trong lúc đang đi tàu, tôi đã đọc sách."
+      },
+      {
+        "ja": "留守の間に、友達が訪ねてきました。",
+        "kana": "るすの あいだに、ともだちが たずねてきました。",
+        "vi": "Trong lúc tôi vắng nhà, bạn tôi đã đến thăm."
+      }
+    ]
+  },
+  {
+    "id": "keigo",
+    "pattern": "尊敬語・謙譲語 cơ bản (いらっしゃる, 召し上がる, 参る, いたす…)",
+    "meaning": "kính ngữ và khiêm nhường ngữ",
+    "structure": "尊敬語: お + Vます (bỏ ます) + になる / ご + N + になる / 特殊動詞 (いらっしゃる, 召し上がる, ご覧になる…). 謙譲語: お + Vます + する / ご + N + する / 特殊動詞 (参る, いたす, 拝見する…)",
+    "explanation": "尊敬語 dùng để nói về hành động của người trên (khách, thầy cô, sếp). 謙譲語 dùng để nói về hành động của mình hoặc người trong nhóm mình, nhằm hạ thấp mình. Cần chú ý không dùng lẫn lộn.",
+    "examples": [
+      {
+        "ja": "先生はもう召し上がりましたか。",
+        "kana": "せんせいは もう めしあがりましたか。",
+        "vi": "Thầy đã ăn chưa ạ?"
+      },
+      {
+        "ja": "明日、私が参ります。",
+        "kana": "あした、わたしが まいります。",
+        "vi": "Ngày mai tôi sẽ đến ạ."
+      },
+      {
+        "ja": "どうぞ、お入りください。",
+        "kana": "どうぞ、おはいりください。",
+        "vi": "Xin mời vào ạ."
+      }
+    ]
+  },
+  {
+    "id": "bakari",
+    "pattern": "V た ばかり / N ばかり",
+    "meaning": "vừa mới làm / toàn là",
+    "structure": "V (thể た) + ばかり / N + ばかり",
+    "explanation": "Vたばかり: diễn tả việc gì đó vừa mới xảy ra, nhấn mạnh vào thời gian ngắn sau khi hoàn thành. Khác với たった今 (vừa mới xảy ra ngay lập tức). Nばかり: nghĩa là 'toàn là', 'chỉ toàn', thường mang ý phê phán hoặc nhấn mạnh số lượng nhiều.",
+    "examples": [
+      {
+        "ja": "さっき昼ご飯を食べたばかりです。",
+        "kana": "さっき ひるごはんを たべたばかりです。",
+        "vi": "Tôi vừa mới ăn cơm trưa xong."
+      },
+      {
+        "ja": "この店は肉ばかりで、野菜がありません。",
+        "kana": "この みせは にくばかりで、やさいが ありません。",
+        "vi": "Cửa hàng này toàn là thịt, không có rau."
+      },
+      {
+        "ja": "弟はゲームばかりしています。",
+        "kana": "おとうとは ゲームばかり しています。",
+        "vi": "Em trai tôi suốt ngày chỉ chơi game."
+      }
+    ]
+  }
+]

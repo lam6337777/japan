@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useLevel } from "@/components/AppShell";
 import { Loading, PageHeader, Pill, SpeakButton } from "@/components/ui";
 import { meaningOf, useVocab } from "@/lib/data";
+import { loadDecks, type Deck } from "@/lib/decks";
 import { loadSrs, statusOf, type SrsStore, type Status } from "@/lib/srs";
 
 const FILTERS: { key: "all" | Status; label: string }[] = [
@@ -18,7 +19,21 @@ const PAGE = 60;
 
 export default function VocabPage() {
   const { level } = useLevel();
-  const vocab = useVocab(level);
+  const levelVocab = useVocab(level);
+  const [decks, setDecks] = useState<Deck[]>([]);
+  const [deckId, setDeckId] = useState<string | null>(null);
+  useEffect(() => {
+    const all = loadDecks();
+    setDecks(all);
+    const id = new URLSearchParams(window.location.search).get("deck");
+    if (id && all.some((d) => d.id === id)) setDeckId(id);
+  }, []);
+  const deck = deckId ? decks.find((d) => d.id === deckId) ?? null : null;
+  const vocab = deck ? deck.cards : levelVocab;
+  const selectDeck = (id: string | null) => {
+    setDeckId(id);
+    window.history.replaceState(null, "", id ? `/vocab?deck=${id}` : "/vocab");
+  };
   const [srs, setSrs] = useState<SrsStore>({});
   const [q, setQ] = useState("");
   const [filter, setFilter] = useState<"all" | Status>("all");
@@ -30,7 +45,7 @@ export default function VocabPage() {
     window.addEventListener("nihongo:synced", refresh);
     return () => window.removeEventListener("nihongo:synced", refresh);
   }, []);
-  useEffect(() => setLimit(PAGE), [level, q, filter]);
+  useEffect(() => setLimit(PAGE), [level, q, filter, deckId]);
 
   const list = useMemo(() => {
     if (!vocab) return [];
@@ -42,12 +57,12 @@ export default function VocabPage() {
     });
   }, [vocab, q, filter, srs]);
 
-  const hasVi = vocab?.some((v) => v.vi);
+  const hasVi = deck || vocab?.some((v) => v.vi);
 
   return (
     <div>
-      <PageHeader title={`Từ vựng ${level.toUpperCase()}`} subtitle={vocab ? `${vocab.length} từ` : undefined}>
-        <Link href="/vocab/study" className="rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-ink shadow-sm transition hover:opacity-90">
+      <PageHeader title={deck ? deck.name : `Từ vựng ${level.toUpperCase()}`} subtitle={vocab ? `${vocab.length} từ` : undefined}>
+        <Link href={deck ? `/vocab/study?deck=${deck.id}` : "/vocab/study"} className="rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-ink shadow-sm transition hover:opacity-90">
           Học flashcard →
         </Link>
       </PageHeader>
@@ -57,6 +72,27 @@ export default function VocabPage() {
           Nghĩa đang hiển thị bằng tiếng Anh. Khi có API key DeepSeek, chạy <code className="font-mono">npm run data:vi</code> để dịch sang tiếng Việt.
         </p>
       )}
+
+      <div className="mb-4 flex gap-2 overflow-x-auto pb-1">
+        <button
+          onClick={() => selectDeck(null)}
+          className={`whitespace-nowrap rounded-xl border px-3 py-1.5 text-sm font-medium ${!deck ? "border-primary bg-primary-soft text-primary" : "border-line bg-surface text-muted hover:text-ink"}`}
+        >
+          JLPT {level.toUpperCase()}
+        </button>
+        {decks.map((d) => (
+          <button
+            key={d.id}
+            onClick={() => selectDeck(d.id)}
+            className={`whitespace-nowrap rounded-xl border px-3 py-1.5 text-sm font-medium ${deck?.id === d.id ? "border-primary bg-primary-soft text-primary" : "border-line bg-surface text-muted hover:text-ink"}`}
+          >
+            {d.name}
+          </button>
+        ))}
+        <Link href="/settings" className="whitespace-nowrap rounded-xl border border-dashed border-line px-3 py-1.5 text-sm text-muted hover:text-ink">
+          + Nhập từ CSV
+        </Link>
+      </div>
 
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center">
         <input

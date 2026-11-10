@@ -19,12 +19,17 @@ export default function GrammarPage() {
     <div>
       <PageHeader title={`Ngữ pháp ${level.toUpperCase()}`} subtitle={list.length ? `${list.length} mẫu câu` : undefined}>
         {list.length > 0 && (
+          <div className="flex w-full gap-2 sm:w-auto">
+          <Link href="/grammar/quiz" className="whitespace-nowrap rounded-xl bg-success px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90">
+            Làm bài tập
+          </Link>
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Tìm mẫu câu hoặc nghĩa..."
             className="w-full rounded-xl border border-line bg-surface px-4 py-2.5 text-sm outline-none placeholder:text-muted focus:border-primary sm:w-64"
           />
+          </div>
         )}
       </PageHeader>
 
@@ -32,7 +37,7 @@ export default function GrammarPage() {
         <div className="rounded-2xl border border-dashed border-line bg-surface px-6 py-14 text-center">
           <p className="jp text-4xl">準備中</p>
           <p className="mt-3 text-sm text-muted">
-            Ngữ pháp {level.toUpperCase()} đang được bổ sung. Hiện tại đã có đầy đủ phần N5. Bạn vẫn có thể luyện hội thoại {level.toUpperCase()} với AI.
+            Ngữ pháp {level.toUpperCase()} đang được bổ sung. Hiện đã có N5 và N4. Bạn vẫn có thể luyện hội thoại {level.toUpperCase()} với AI.
           </p>
         </div>
       ) : (

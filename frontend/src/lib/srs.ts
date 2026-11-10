@@ -1,5 +1,6 @@
 "use client";
 
+import { getSettings } from "./settings";
 import { load, save, todayKey } from "./storage";
 import { flushCards, queueCard, recordStudyDay } from "./sync";
 
@@ -18,7 +19,7 @@ export type Grade = 0 | 1 | 2 | 3; // Quên · Khó · Nhớ · Dễ
 const SRS_KEY = "nihongo.srs.v1";
 const DAILY_KEY = "nihongo.daily";
 const DAY = 86_400_000;
-export const NEW_PER_DAY = 10;
+export const newPerDay = () => getSettings().newPerDay;
 
 export type SrsStore = Record<string, CardState>;
 

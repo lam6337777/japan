@@ -5,7 +5,9 @@ import { useCallback, useEffect, useState } from "react";
 import { useLevel } from "@/components/AppShell";
 import { Card, Loading, ProgressBar, SpeakButton } from "@/components/ui";
 import { meaningOf, useVocab, type Vocab } from "@/lib/data";
-import { describeInterval, getDaily, loadSrs, NEW_PER_DAY, review, type Grade, type SrsStore } from "@/lib/srs";
+import { describeInterval, getDaily, loadSrs, newPerDay, review, type Grade, type SrsStore } from "@/lib/srs";
+import { getDeck } from "@/lib/decks";
+import { getSettings } from "@/lib/settings";
 import { speak } from "@/lib/speech";
 
 const GRADES: { grade: Grade; label: string; key: string; cls: string }[] = [
@@ -19,13 +21,20 @@ type QItem = { v: Vocab; isNew: boolean };
 
 export default function StudyPage() {
   const { level } = useLevel();
-  const vocab = useVocab(level);
+  const levelVocab = useVocab(level);
+  const [autoSpeak, setAutoSpeak] = useState(true);
+  const [deck, setDeck] = useState<{ id: string; name: string; cards: Vocab[] } | null | undefined>(undefined);
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get("deck");
+    setDeck(id ? getDeck(id) : null);
+    setAutoSpeak(getSettings().autoSpeakCard);
+  }, []);
+  const vocab = deck === undefined ? null : deck ? deck.cards : levelVocab;
   const [queue, setQueue] = useState<QItem[] | null>(null);
   const [srs, setSrs] = useState<SrsStore>({});
   const [revealed, setRevealed] = useState(false);
   const [done, setDone] = useState(0);
   const [total, setTotal] = useState(0);
-  const [autoSpeak, setAutoSpeak] = useState(true);
 
   // Tạo hàng đợi: từ đến hạn ôn + từ mới (giới hạn mỗi ngày)
   useEffect(() => {
@@ -33,7 +42,7 @@ export default function StudyPage() {
     const store = loadSrs();
     const now = Date.now();
     const dueItems = vocab.filter((v) => store[v.id] && store[v.id].due <= now).map((v) => ({ v, isNew: false }));
-    const newLeft = Math.max(0, NEW_PER_DAY - getDaily().newCount);
+    const newLeft = Math.max(0, newPerDay() - getDaily().newCount);
     // Trộn thứ tự từ mới cố định (tránh học theo bảng chữ cái: ああ, あう, あお...)
     const hash = (s: string) => [...s].reduce((h, ch) => (h * 31 + ch.charCodeAt(0)) >>> 0, 7);
     const newItems = vocab
@@ -109,7 +118,7 @@ export default function StudyPage() {
   return (
     <div className="mx-auto flex max-w-xl flex-col gap-5">
       <div className="flex items-center gap-3">
-        <Link href="/vocab" className="text-sm text-muted hover:text-ink" aria-label="Thoát">✕</Link>
+        <Link href={deck ? `/vocab?deck=${deck.id}` : "/vocab"} className="text-sm text-muted hover:text-ink" aria-label="Thoát">✕</Link>
         <ProgressBar value={done} max={total} color="bg-success" />
         <span className="whitespace-nowrap text-sm text-muted">{done}/{total}</span>
       </div>

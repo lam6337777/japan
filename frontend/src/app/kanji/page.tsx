@@ -28,12 +28,17 @@ export default function KanjiPage() {
   return (
     <div>
       <PageHeader title={`Kanji ${level.toUpperCase()}`} subtitle={kanji ? `${kanji.length} chữ · sắp xếp theo độ thông dụng` : undefined}>
+        <div className="flex w-full gap-2 sm:w-auto">
+        <Link href="/kanji/quiz" className="whitespace-nowrap rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90">
+          Kiểm tra
+        </Link>
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Tìm theo Hán Việt, nghĩa, cách đọc..."
           className="w-full rounded-xl border border-line bg-surface px-4 py-2.5 text-sm outline-none placeholder:text-muted focus:border-primary sm:w-72"
         />
+        </div>
       </PageHeader>
 
       {!kanji ? (

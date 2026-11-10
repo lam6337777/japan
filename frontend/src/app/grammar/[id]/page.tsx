@@ -64,6 +64,17 @@ async function GrammarDetail({ params }: { params: Promise<{ id: string }> }) {
       </Card>
 
       <Link
+        href={`/grammar/quiz?id=${g.id}`}
+        className="flex items-center justify-between rounded-2xl border-2 border-success bg-success-soft px-5 py-4 text-success transition hover:opacity-90"
+      >
+        <span>
+          <span className="block font-semibold">Làm bài tập mẫu câu này</span>
+          <span className="block text-sm opacity-80">Trắc nghiệm điền vào chỗ trống, có giải thích đáp án</span>
+        </span>
+        <span className="text-xl">→</span>
+      </Link>
+
+      <Link
         href={`/chat?grammar=${g.id}`}
         className="flex items-center justify-between rounded-2xl bg-primary px-5 py-4 text-primary-ink transition hover:opacity-95"
       >

@@ -5,6 +5,7 @@
   "scripts": {
     "fetch": "node scripts/fetch-data.mjs",
     "build": "node scripts/build-data.mjs",
-    "vi": "node scripts/translate-vi.mjs"
+    "vi": "node scripts/translate-vi.mjs",
+    "grammar": "node scripts/gen-grammar.mjs"
   }
 }

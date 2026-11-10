@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 import { useLevel } from "@/components/AppShell";
 import { Card, ProgressBar } from "@/components/ui";
 import { useStats, useVocab } from "@/lib/data";
-import { getDaily, loadSrs, NEW_PER_DAY, statusOf, type SrsStore } from "@/lib/srs";
+import { getDaily, loadSrs, newPerDay, statusOf, type SrsStore } from "@/lib/srs";
 import { getStreak } from "@/lib/storage";
-import grammar from "@/data/grammar-n5.json";
+import { GRAMMAR } from "@/lib/grammar";
 
 const greetings = ["おはよう！", "こんにちは！", "がんばって！", "今日も一緒に！"];
 
@@ -39,7 +39,7 @@ export default function Home() {
   const learned = levelCards.filter((c) => c && c.reps > 0).length;
   const mastered = levelCards.filter((c) => statusOf(c) === "mastered").length;
   const due = now ? levelCards.filter((c) => c && c.due <= now).length : 0;
-  const newLeft = Math.max(0, NEW_PER_DAY - daily.newCount);
+  const newLeft = now ? Math.max(0, newPerDay() - daily.newCount) : 0;
   const total = vocab?.length ?? stats?.vocab[level] ?? 0;
 
   return (
@@ -96,7 +96,7 @@ export default function Home() {
         {[
           { href: "/vocab", icon: "語", title: "Từ vựng", desc: `${stats?.vocab[level] ?? "…"} từ · flashcard & ôn tập ngắt quãng`, color: "bg-primary-soft text-primary" },
           { href: "/kanji", icon: "字", title: "Kanji", desc: `${stats?.kanji[level] ?? "…"} chữ · âm Hán Việt, thứ tự nét`, color: "bg-accent-soft text-accent" },
-          { href: "/grammar", icon: "文", title: "Ngữ pháp", desc: level === "n5" ? `${grammar.length} mẫu câu · giải thích tiếng Việt` : "Đang bổ sung cho cấp này", color: "bg-success-soft text-success" },
+          { href: "/grammar", icon: "文", title: "Ngữ pháp", desc: GRAMMAR[level] ? `${GRAMMAR[level].length} mẫu câu · bài tập trắc nghiệm` : "Đang bổ sung cho cấp này", color: "bg-success-soft text-success" },
           { href: "/chat", icon: "話", title: "Hội thoại AI", desc: "Nói chuyện bằng giọng nói, AI sửa lỗi", color: "bg-warn-soft text-warn" },
         ].map((m) => (
           <Link key={m.href} href={m.href} className="group flex items-center gap-4 rounded-2xl border border-line bg-surface p-5 transition hover:-translate-y-0.5 hover:shadow-md">

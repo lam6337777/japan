@@ -1,6 +1,6 @@
 // Dịch nghĩa tiếng Việt cho từ vựng / bổ sung Hán Việt cho kanji bằng DeepSeek
 // Chạy: npm run data:vi -- --level=n5 --kind=vocab     (kind: vocab | kanji)
-// Kết quả lưu ở data/vi/<kind>-<level>.json (có thể sửa tay), sau đó chạy lại: npm run data:build
+// Kết quả lưu ở data/vi/<kind>-<level>.json (có thể sửa tay), sau đó chạy lại: npm run build (trong thư mục data)
 import { readFile, writeFile, mkdir, access } from "node:fs/promises";
 import path from "node:path";
 
@@ -74,4 +74,4 @@ for (let i = 0; i < items.length; i += BATCH) {
   console.log(`  ✓ ${Math.min(i + BATCH, items.length)}/${items.length}`);
 }
 
-console.log(`\nĐã lưu ${outFile}\nChạy tiếp: npm run data:build`);
+console.log(`\nĐã lưu ${outFile}\nChạy tiếp: npm run build (trong thư mục data)`);

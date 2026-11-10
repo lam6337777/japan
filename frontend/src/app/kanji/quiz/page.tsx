@@ -119,6 +119,8 @@ export default function KanjiQuizPage() {
       backHref="/kanji"
       backLabel="Về trang Kanji"
       onRestart={() => setRound((r) => r + 1)}
+      mistakeKind="kanji"
+      activity="kanjiQuiz"
     />
   );
 }

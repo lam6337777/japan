@@ -12,7 +12,7 @@ from pydantic import ValidationError
 from .config import settings
 from .llm import AIConfigError, AIUpstreamError, chat_json
 from .prompts import START_MESSAGE, TOPICS, build_system_prompt
-from .schemas import ChatReply, ChatRequest
+from .schemas import ChatReply, ChatRequest, LookupReply, LookupRequest
 
 app = FastAPI(title="Nihongo AI — Chatbot", version="0.1.0")
 
@@ -65,3 +65,24 @@ async def chat(req: ChatRequest) -> ChatReply:
     if not reply.reply:
         raise HTTPException(status_code=502, detail="AI trả về câu trả lời rỗng")
     return reply
+
+
+LOOKUP_SYSTEM = """Bạn là từ điển Nhật–Việt cho người Việt học tiếng Nhật.
+Cho một từ (có thể đang ở dạng chia) và câu chứa nó, trả về JSON:
+{"word": "<từ như trong câu>", "reading": "<cách đọc hiragana>", "dictionary_form": "<thể từ điển, ví dụ 食べました → 食べる>",
+ "meaning_vi": "<nghĩa tiếng Việt ngắn gọn, đúng với ngữ cảnh câu>", "note": "<1 câu giải thích dạng chia/ngữ pháp nếu có, ngược lại để trống>"}"""
+
+
+@app.post("/lookup", response_model=LookupReply, dependencies=[Depends(require_internal_key)])
+async def lookup(req: LookupRequest) -> LookupReply:
+    try:
+        raw = await chat_json(LOOKUP_SYSTEM, [{"role": "user", "content": json.dumps({"word": req.word, "context": req.context}, ensure_ascii=False)}])
+    except AIConfigError as e:
+        raise HTTPException(status_code=400, detail=str(e)) from e
+    except AIUpstreamError as e:
+        raise HTTPException(status_code=502, detail=str(e)) from e
+    raw.setdefault("word", req.word)
+    try:
+        return LookupReply.model_validate(raw)
+    except ValidationError as e:
+        raise HTTPException(status_code=502, detail="AI trả về thiếu dữ liệu") from e

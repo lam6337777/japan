@@ -2,7 +2,8 @@
 
 import { getSettings } from "./settings";
 import { load, save, todayKey } from "./storage";
-import { flushCards, queueCard, recordStudyDay } from "./sync";
+import { bumpActivity } from "./activity";
+import { flushCards, queueCard } from "./sync";
 
 // Thuật toán lặp lại ngắt quãng (biến thể đơn giản của SM-2)
 export type CardState = {
@@ -60,7 +61,7 @@ export function review(id: string, grade: Grade, isNew: boolean) {
   save(SRS_KEY, store);
   const daily = getDaily();
   save(DAILY_KEY, { ...daily, reviews: daily.reviews + 1, newCount: daily.newCount + (isNew ? 1 : 0) });
-  recordStudyDay();
+  bumpActivity("review");
   queueCard(id);
   flushCards();
 }

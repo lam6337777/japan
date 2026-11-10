@@ -60,6 +60,11 @@ const NAV = [
   { href: "/grammar", icon: "文", label: "Ngữ pháp" },
   { href: "/chat", icon: "話", label: "Hội thoại AI" },
 ];
+// Chỉ hiện ở thanh bên (máy tính); trên điện thoại vào qua trang chủ
+const NAV_EXTRA = [
+  { href: "/listen", icon: "聴", label: "Nghe & Nói" },
+  { href: "/mistakes", icon: "帳", label: "Sổ lỗi sai" },
+];
 
 function isActive(pathname: string, href: string) {
   return href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -155,7 +160,7 @@ function WithPath({ render }: { render: (pathname: string) => React.ReactNode })
 function SideNav({ pathname }: { pathname: string }) {
   return (
     <nav className="flex flex-col gap-1">
-      {NAV.map((n) => {
+      {[...NAV, ...NAV_EXTRA].map((n) => {
         const active = isActive(pathname, n.href);
         return (
           <Link

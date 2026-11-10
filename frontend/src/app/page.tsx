@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useLevel } from "@/components/AppShell";
+import { DailyPlan, Heatmap } from "@/components/Dashboard";
 import { Card, ProgressBar } from "@/components/ui";
 import { useStats, useVocab } from "@/lib/data";
 import { getDaily, loadSrs, newPerDay, statusOf, type SrsStore } from "@/lib/srs";
@@ -41,6 +42,7 @@ export default function Home() {
   const due = now ? levelCards.filter((c) => c && c.due <= now).length : 0;
   const newLeft = now ? Math.max(0, newPerDay() - daily.newCount) : 0;
   const total = vocab?.length ?? stats?.vocab[level] ?? 0;
+  const newPerDayValue = now ? newPerDay() : 10;
 
   return (
     <div className="flex flex-col gap-6">
@@ -64,6 +66,8 @@ export default function Home() {
           </Link>
         </div>
       </section>
+
+      <DailyPlan flashcardTarget={Math.max(10, newPerDayValue)} />
 
       {/* Thống kê */}
       <section className="grid grid-cols-2 gap-3 md:grid-cols-4">
@@ -91,6 +95,8 @@ export default function Home() {
         <ProgressBar value={learned} max={total} />
       </Card>
 
+      <Heatmap />
+
       {/* Module học */}
       <section className="grid gap-3 sm:grid-cols-2">
         {[
@@ -98,6 +104,8 @@ export default function Home() {
           { href: "/kanji", icon: "字", title: "Kanji", desc: `${stats?.kanji[level] ?? "…"} chữ · âm Hán Việt, thứ tự nét`, color: "bg-accent-soft text-accent" },
           { href: "/grammar", icon: "文", title: "Ngữ pháp", desc: GRAMMAR[level] ? `${GRAMMAR[level].length} mẫu câu · bài tập trắc nghiệm` : "Đang bổ sung cho cấp này", color: "bg-success-soft text-success" },
           { href: "/chat", icon: "話", title: "Hội thoại AI", desc: "Nói chuyện bằng giọng nói, AI sửa lỗi", color: "bg-warn-soft text-warn" },
+          { href: "/listen", icon: "聴", title: "Nghe & Nói", desc: "Shadowing và chép chính tả, chấm điểm", color: "bg-primary-soft text-primary" },
+          { href: "/mistakes", icon: "帳", title: "Sổ lỗi sai", desc: "Ôn lại câu sai trong bài tập và khi chat", color: "bg-accent-soft text-accent" },
         ].map((m) => (
           <Link key={m.href} href={m.href} className="group flex items-center gap-4 rounded-2xl border border-line bg-surface p-5 transition hover:-translate-y-0.5 hover:shadow-md">
             <span className={`jp flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-xl font-bold ${m.color}`}>{m.icon}</span>

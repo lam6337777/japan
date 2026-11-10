@@ -51,6 +51,8 @@ export default function GrammarQuizPage() {
       backHref={found ? `/grammar/${found.point.id}` : "/grammar"}
       backLabel={found ? "Xem lại mẫu câu" : "Về trang Ngữ pháp"}
       onRestart={() => setRound((r) => r + 1)}
+      mistakeKind="grammar"
+      activity="grammarQuiz"
     />
   );
 }

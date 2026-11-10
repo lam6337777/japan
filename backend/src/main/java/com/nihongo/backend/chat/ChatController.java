@@ -45,6 +45,10 @@ public class ChatController {
 
     public record SessionDetail(SessionDto session, List<MessageDto> messages) {}
 
+    public record MistakeDto(String id, Long sessionId, String sentence, String original, String corrected, String explanation, Instant createdAt) {}
+
+    public record LookupRequest(@jakarta.validation.constraints.NotBlank @Size(max = 40) String word, @Size(max = 300) String context) {}
+
     private static final int HISTORY = 16;
 
     private final ChatSessionRepository sessions;
@@ -108,6 +112,26 @@ public class ChatController {
                 userMsg == null ? null : toDto(userMsg),
                 toDto(aiMsg),
                 reply.suggestions() == null ? List.of() : reply.suggestions());
+    }
+
+    /** Sổ lỗi sai: các lỗi (không tính gợi ý) mà AI đã sửa trong mọi cuộc hội thoại */
+    @GetMapping("/mistakes")
+    List<MistakeDto> mistakes(@AuthenticationPrincipal Jwt jwt) {
+        return messages.findWithCorrections(userId(jwt), PageRequest.of(0, 300)).stream()
+                .flatMap(m -> {
+                    List<Correction> list = toDto(m).corrections();
+                    return java.util.stream.IntStream.range(0, list == null ? 0 : list.size())
+                            .filter(i -> !"tip".equals(list.get(i).type()))
+                            .mapToObj(i -> new MistakeDto(m.getId() + "-" + i, m.getSessionId(), m.getContent(),
+                                    list.get(i).original(), list.get(i).corrected(), list.get(i).explanation(), m.getCreatedAt()));
+                })
+                .toList();
+    }
+
+    /** Tra nghĩa 1 từ trong ngữ cảnh câu (gọi chatbot) */
+    @PostMapping("/lookup")
+    ChatbotClient.LookupReply lookup(@Valid @RequestBody LookupRequest req) {
+        return chatbot.lookup(new ChatbotClient.LookupRequest(req.word().trim(), req.context() == null ? "" : req.context()));
     }
 
     @GetMapping("/sessions")

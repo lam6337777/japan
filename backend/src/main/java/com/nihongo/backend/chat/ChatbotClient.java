@@ -36,6 +36,13 @@ public class ChatbotClient {
                         List<Correction> corrections,
                         List<Suggestion> suggestions) {}
 
+    public record LookupRequest(String word, String context) {}
+
+    public record LookupReply(String word, String reading,
+                              @JsonProperty("dictionary_form") String dictionaryForm,
+                              @JsonProperty("meaning_vi") String meaningVi,
+                              String note) {}
+
     private final RestClient http;
     private final JsonMapper json;
 
@@ -58,9 +65,17 @@ public class ChatbotClient {
     }
 
     public Reply chat(Request request) {
+        return post("/chat", request, Reply.class);
+    }
+
+    public LookupReply lookup(LookupRequest request) {
+        return post("/lookup", request, LookupReply.class);
+    }
+
+    private <T> T post(String uri, Object request, Class<T> type) {
         try {
             return http.post()
-                    .uri("/chat")
+                    .uri(uri)
                     .body(request)
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, (req, res) -> {
@@ -74,7 +89,7 @@ public class ChatbotClient {
                         HttpStatus status = res.getStatusCode().value() == 400 ? HttpStatus.BAD_REQUEST : HttpStatus.BAD_GATEWAY;
                         throw new ApiException(status, detail);
                     })
-                    .body(Reply.class);
+                    .body(type);
         } catch (ResourceAccessException e) {
             throw new ApiException(HttpStatus.SERVICE_UNAVAILABLE, "Chatbot service chưa chạy (cổng 8000). Hãy khởi động thư mục chatbot.");
         }

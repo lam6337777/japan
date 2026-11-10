@@ -26,6 +26,23 @@ export function saveDeck(name: string, rows: { word: string; reading: string; me
   return deck;
 }
 
+/** Bộ "Từ đã lưu" — gom các từ bấm lưu khi chat */
+export const SAVED_DECK_ID = "saved";
+
+export function addToSavedDeck(word: string, reading: string, meaning: string): "added" | "exists" {
+  const decks = loadDecks();
+  let deck = decks.find((d) => d.id === SAVED_DECK_ID);
+  if (!deck) {
+    deck = { id: SAVED_DECK_ID, name: "Từ đã lưu", createdAt: Date.now(), cards: [] };
+    decks.unshift(deck);
+  }
+  const id = `deck-${SAVED_DECK_ID}-${word}-${reading}`;
+  if (deck.cards.some((c) => c.id === id)) return "exists";
+  deck.cards.push({ id, word, reading: reading || word, meaning: "", vi: meaning });
+  save(KEY, decks);
+  return "added";
+}
+
 export function deleteDeck(id: string) {
   save(KEY, loadDecks().filter((d) => d.id !== id));
 }

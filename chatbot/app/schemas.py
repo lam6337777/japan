@@ -40,3 +40,16 @@ class ChatReply(BaseModel):
     reply_vi: str = ""
     corrections: list[Correction] = []
     suggestions: list[Suggestion] = []
+
+
+class LookupRequest(BaseModel):
+    word: str = Field(min_length=1, max_length=40)
+    context: str = Field(default="", max_length=300)
+
+
+class LookupReply(BaseModel):
+    word: str
+    reading: str = ""
+    dictionary_form: str = ""
+    meaning_vi: str = ""
+    note: str = ""

@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Card, ProgressBar, SpeakButton } from "@/components/ui";
-import { recordStudyDay } from "@/lib/sync";
+import { bumpActivity, type ActivityKind } from "@/lib/activity";
+import { addQuizMistake } from "@/lib/mistakes";
 
 export type QuizQuestion = {
   prompt: string; // câu hỏi chính (thường là tiếng Nhật)
@@ -37,12 +38,18 @@ export default function Quiz({
   backHref,
   backLabel,
   onRestart,
+  mistakeKind,
+  activity,
+  onAnswer,
 }: {
   title: string;
   questions: QuizQuestion[];
   backHref: string;
   backLabel: string;
   onRestart?: () => void;
+  mistakeKind?: "grammar" | "kanji"; // ghi câu sai vào sổ lỗi
+  activity?: ActivityKind; // tính vào kế hoạch học khi làm xong
+  onAnswer?: (q: QuizQuestion, correct: boolean) => void;
 }) {
   const qs = useMemo(() => questions.map(shuffleChoices), [questions]);
   const [index, setIndex] = useState(0);
@@ -63,21 +70,25 @@ export default function Quiz({
     (i: number) => {
       if (picked !== null || !q) return;
       setPicked(i);
-      if (i !== q.answer) setWrong((w) => [...w, { q, picked: i }]);
+      if (i !== q.answer) {
+        setWrong((w) => [...w, { q, picked: i }]);
+        if (mistakeKind) addQuizMistake(mistakeKind, q);
+      }
+      onAnswer?.(q, i === q.answer);
     },
-    [picked, q],
+    [picked, q, mistakeKind, onAnswer],
   );
 
   const next = useCallback(() => {
     if (picked === null) return;
     if (index + 1 >= qs.length) {
       setDone(true);
-      recordStudyDay();
+      if (activity) bumpActivity(activity);
     } else {
       setIndex(index + 1);
       setPicked(null);
     }
-  }, [picked, index, qs.length]);
+  }, [picked, index, qs.length, activity]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

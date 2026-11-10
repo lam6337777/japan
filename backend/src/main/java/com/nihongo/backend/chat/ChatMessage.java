@@ -52,4 +52,5 @@ public class ChatMessage {
     public void setVi(String vi) { this.vi = vi; }
     public String getCorrections() { return corrections; }
     public void setCorrections(String corrections) { this.corrections = corrections; }
+    public Instant getCreatedAt() { return createdAt; }
 }

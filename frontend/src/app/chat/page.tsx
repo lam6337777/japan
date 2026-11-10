@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth, useLevel } from "@/components/AppShell";
+import TappableText from "@/components/TappableText";
 import { SpeakButton } from "@/components/ui";
 import { api } from "@/lib/api";
 import { findGrammar } from "@/lib/grammar";
 import { speak, stopSpeaking, useSpeechRecognition } from "@/lib/speech";
 import { load, save } from "@/lib/storage";
-import { recordStudyDay } from "@/lib/sync";
+import { bumpActivity } from "@/lib/activity";
 import { TOPICS } from "@/lib/topics";
 
 type Correction = { type?: "error" | "tip"; original: string; corrected: string; explanation: string };
@@ -80,7 +81,7 @@ export default function ChatPage() {
         setSuggestions(res.suggestions);
         setHistory(null); // tải lại danh sách khi mở lịch sử
         if (settings.autoSpeak) speak(res.assistantMessage.content);
-        if (content) recordStudyDay();
+        if (content) bumpActivity("chat");
       } catch (e) {
         setError(e instanceof Error ? e.message : "Có lỗi xảy ra");
         if (content) setInput(content); // trả lại nội dung để gửi lại
@@ -256,7 +257,7 @@ export default function ChatPage() {
             <div>
               <p className="font-semibold">Sakura-sensei</p>
               <p className="mt-1 max-w-sm text-sm text-muted">
-                Cô sẽ trò chuyện với bạn bằng tiếng Nhật trình độ {level.toUpperCase()}, sửa lỗi và gợi ý câu trả lời. Bạn có thể gõ phím hoặc bấm micro để nói.
+                Cô sẽ trò chuyện với bạn bằng tiếng Nhật trình độ {level.toUpperCase()}, sửa lỗi và gợi ý câu trả lời. Bạn có thể gõ phím hoặc bấm micro để nói. Bấm vào bất kỳ từ nào trong câu của cô để xem nghĩa.
               </p>
             </div>
             <button onClick={() => send(null)} className="rounded-xl bg-primary px-5 py-2.5 font-semibold text-primary-ink shadow-sm transition hover:opacity-90">
@@ -270,7 +271,7 @@ export default function ChatPage() {
             <div key={m.id} className="pop-in flex max-w-[90%] items-start gap-3">
               <span className="jp flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent">桜</span>
               <div className="rounded-2xl rounded-tl-sm bg-surface-2 px-4 py-3">
-                <p className="jp text-lg leading-relaxed">{m.content}</p>
+                <TappableText text={m.content} className="text-lg leading-relaxed" />
                 {settings.showKana && m.kana && m.kana !== m.content && <p className="jp mt-1 text-sm text-muted">{m.kana}</p>}
                 {(settings.showVi || revealedVi.has(m.id)) && m.vi && <p className="mt-2 border-t border-line pt-2 text-sm">{m.vi}</p>}
                 <div className="mt-1 flex items-center gap-1">

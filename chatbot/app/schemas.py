@@ -23,6 +23,7 @@ class ChatRequest(BaseModel):
 
 
 class Correction(BaseModel):
+    type: Literal["error", "tip"] = "error"
     original: str = ""
     corrected: str
     explanation: str = ""

@@ -3,6 +3,7 @@
 Chạy: .venv\\Scripts\\python -m uvicorn app.main:app --port 8000 --reload
 """
 
+import json
 import secrets
 
 from fastapi import Depends, FastAPI, Header, HTTPException
@@ -34,7 +35,12 @@ def topics():
 @app.post("/chat", response_model=ChatReply, dependencies=[Depends(require_internal_key)])
 async def chat(req: ChatRequest) -> ChatReply:
     system = build_system_prompt(req.level, req.topic, req.grammar)
-    history = [m.model_dump() for m in req.messages][-settings.max_history :]
+    # Tin cũ của AI phải ở dạng JSON giống đầu ra; nếu để chữ thường, DeepSeek (chế độ JSON)
+    # dễ bị lệch định dạng và trả về chuỗi rỗng.
+    history = [
+        {"role": m.role, "content": json.dumps({"reply": m.content}, ensure_ascii=False) if m.role == "assistant" else m.content}
+        for m in req.messages
+    ][-settings.max_history :]
     if not history:
         history = [{"role": "user", "content": START_MESSAGE}]
 
@@ -46,7 +52,11 @@ async def chat(req: ChatRequest) -> ChatReply:
         raise HTTPException(status_code=502, detail=str(e)) from e
 
     # Lọc bỏ mục thiếu dữ liệu thay vì làm hỏng cả câu trả lời
-    raw["corrections"] = [c for c in raw.get("corrections") or [] if isinstance(c, dict) and c.get("corrected")]
+    raw["corrections"] = [
+        {**c, "type": c.get("type") if c.get("type") in ("error", "tip") else "error"}
+        for c in raw.get("corrections") or []
+        if isinstance(c, dict) and c.get("corrected")
+    ]
     raw["suggestions"] = [s for s in raw.get("suggestions") or [] if isinstance(s, dict) and s.get("ja")][:3]
     try:
         reply = ChatReply.model_validate(raw)

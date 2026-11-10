@@ -11,7 +11,7 @@ import { load, save } from "@/lib/storage";
 import { recordStudyDay } from "@/lib/sync";
 import { TOPICS } from "@/lib/topics";
 
-type Correction = { original: string; corrected: string; explanation: string };
+type Correction = { type?: "error" | "tip"; original: string; corrected: string; explanation: string };
 type Suggestion = { ja: string; vi: string };
 type Msg = { id: number; role: "user" | "assistant"; content: string; kana?: string | null; vi?: string | null; corrections?: Correction[] | null };
 type SendResponse = { sessionId: number; userMessage: Msg | null; assistantMessage: Msg; suggestions: Suggestion[] };
@@ -368,25 +368,33 @@ export default function ChatPage() {
 }
 
 function UserBubble({ msg }: { msg: Msg }) {
+  const errors = msg.corrections?.filter((c) => c.type !== "tip") ?? [];
+  const tips = msg.corrections?.filter((c) => c.type === "tip") ?? [];
   return (
     <div className="pop-in flex flex-col items-end gap-2">
       <p className={`jp max-w-[85%] rounded-2xl rounded-tr-sm bg-primary px-4 py-2.5 text-primary-ink ${msg.id < 0 ? "opacity-70" : ""}`}>{msg.content}</p>
-      {msg.corrections && msg.corrections.length > 0 && (
-        <div className="max-w-[85%] rounded-xl border border-warn/40 bg-warn-soft px-4 py-3 text-sm">
-          <p className="mb-1 font-semibold text-warn">Gợi ý sửa</p>
-          {msg.corrections.map((c, i) => (
-            <div key={i} className="mt-1.5">
-              <p className="jp">
-                {c.original && <span className="text-muted line-through">{c.original}</span>}
-                {c.original && " → "}
-                <span className="font-semibold">{c.corrected}</span>
-              </p>
-              <p className="text-muted">{c.explanation}</p>
-            </div>
-          ))}
+      {errors.length > 0 && <FeedbackBox title="Cần sửa" items={errors} tone="warn" />}
+      {msg.corrections && errors.length === 0 && <p className="text-xs font-medium text-success">✓ Câu đúng rồi!</p>}
+      {tips.length > 0 && <FeedbackBox title="Gợi ý nói tự nhiên hơn" items={tips} tone="primary" />}
+    </div>
+  );
+}
+
+function FeedbackBox({ title, items, tone }: { title: string; items: Correction[]; tone: "warn" | "primary" }) {
+  const box = tone === "warn" ? "border-warn/40 bg-warn-soft" : "border-primary/30 bg-primary-soft";
+  return (
+    <div className={`max-w-[85%] rounded-xl border px-4 py-3 text-sm ${box}`}>
+      <p className={`mb-1 font-semibold ${tone === "warn" ? "text-warn" : "text-primary"}`}>{title}</p>
+      {items.map((c, i) => (
+        <div key={i} className="mt-1.5">
+          <p className="jp">
+            {c.original && <span className={tone === "warn" ? "text-muted line-through" : "text-muted"}>{c.original}</span>}
+            {c.original && " → "}
+            <span className="font-semibold">{c.corrected}</span>
+          </p>
+          <p className="text-muted">{c.explanation}</p>
         </div>
-      )}
-      {msg.corrections && msg.corrections.length === 0 && <p className="text-xs text-success">✓ Câu đúng rồi!</p>}
+      ))}
     </div>
   );
 }

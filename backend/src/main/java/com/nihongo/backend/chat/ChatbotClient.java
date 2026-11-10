@@ -25,7 +25,8 @@ public class ChatbotClient {
 
     public record Request(String level, String topic, GrammarFocus grammar, List<Msg> messages) {}
 
-    public record Correction(String original, String corrected, String explanation) {}
+    /** type: "error" (lỗi sai) hoặc "tip" (câu đúng, gợi ý cách nói tự nhiên hơn) */
+    public record Correction(String type, String original, String corrected, String explanation) {}
 
     public record Suggestion(String ja, String vi) {}
 

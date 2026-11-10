@@ -1,10 +1,13 @@
 """Lớp gọi mô hình AI — đổi nhà cung cấp bằng AI_PROVIDER"""
 
 import json
+import logging
 
 import httpx
 
 from .config import settings
+
+log = logging.getLogger("uvicorn.error")
 
 
 class AIConfigError(Exception):
@@ -18,10 +21,19 @@ class AIUpstreamError(Exception):
 _client = httpx.AsyncClient(timeout=60)
 
 
+MAX_ATTEMPTS = 3
+
+
 async def chat_json(system: str, messages: list[dict]) -> dict:
-    if settings.ai_provider == "deepseek":
-        return await _deepseek(system, messages)
-    raise AIConfigError(f'AI_PROVIDER "{settings.ai_provider}" chưa được hỗ trợ.')
+    if settings.ai_provider != "deepseek":
+        raise AIConfigError(f'AI_PROVIDER "{settings.ai_provider}" chưa được hỗ trợ.')
+    # Thỉnh thoảng mô hình trả JSON hỏng → gọi lại (tối đa 3 lần)
+    for attempt in range(1, MAX_ATTEMPTS + 1):
+        try:
+            return await _deepseek(system, messages)
+        except _BadJSON:
+            log.info("Thử lại lần %d/%d", attempt, MAX_ATTEMPTS)
+    raise AIUpstreamError("AI tạm thời trả lời lỗi, bạn gửi lại tin nhắn nhé.")
 
 
 async def _deepseek(system: str, messages: list[dict]) -> dict:
@@ -44,8 +56,25 @@ async def _deepseek(system: str, messages: list[dict]) -> dict:
         raise AIConfigError("Tài khoản DeepSeek hết tiền, hãy nạp thêm.")
     if res.status_code >= 400:
         raise AIUpstreamError(f"DeepSeek lỗi HTTP {res.status_code}: {res.text[:200]}")
-    content = res.json()["choices"][0]["message"]["content"] or "{}"
-    try:
-        return json.loads(content)
-    except json.JSONDecodeError as e:
-        raise AIUpstreamError("AI trả về dữ liệu không đúng định dạng JSON") from e
+    content = res.json()["choices"][0]["message"]["content"] or ""
+    parsed = _parse_json(content)
+    if parsed is None:
+        log.warning("AI trả JSON không hợp lệ: %s", content[:500])
+        raise _BadJSON()
+    return parsed
+
+
+class _BadJSON(Exception):
+    pass
+
+
+def _parse_json(content: str) -> dict | None:
+    """Đọc JSON; nếu AI chèn thêm chữ/```json thì cắt lấy phần {...}"""
+    for candidate in (content, content[content.find("{") : content.rfind("}") + 1]):
+        try:
+            data = json.loads(candidate)
+            if isinstance(data, dict):
+                return data
+        except (json.JSONDecodeError, ValueError):
+            continue
+    return None

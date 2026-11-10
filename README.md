@@ -23,7 +23,13 @@ Trình duyệt ──► frontend (Next.js) ──/api/*──► backend (Sprin
 - **backend** xử lý đăng nhập (JWT), lưu tiến độ học, lịch sử chat; là nơi duy nhất gọi chatbot.
 - **chatbot** giữ API key AI, xây prompt theo trình độ, trả JSON (câu trả lời, kana, bản dịch, sửa lỗi, gợi ý). Chỉ nhận request có `X-Internal-Key` đúng.
 
-## Chạy dự án (4 cửa sổ terminal)
+## Chạy nhanh (Windows)
+
+1. Mở **Docker Desktop** và đợi nó khởi động xong.
+2. Nhấp đúp **`start.bat`**. File này tự bật database, chatbot, backend, frontend (mỗi service một cửa sổ), cài đặt những gì còn thiếu ở lần chạy đầu, rồi mở trình duyệt tại http://localhost:3100.
+3. Tắt toàn bộ: nhấp đúp **`stop.bat`**. Dữ liệu trong database vẫn được giữ.
+
+## Chạy thủ công (4 cửa sổ terminal)
 
 **1. Database**
 ```bash

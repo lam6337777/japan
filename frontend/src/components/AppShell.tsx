@@ -183,7 +183,7 @@ function SideNav({ pathname }: { pathname: string }) {
 
 function BottomNav({ pathname }: { pathname: string }) {
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-20 grid grid-cols-5 border-t border-line bg-surface/95 backdrop-blur md:hidden">
+    <nav className="fixed inset-x-0 bottom-0 z-20 grid grid-cols-5 border-t border-line bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden">
       {NAV.map((n) => {
         const active = isActive(pathname, n.href);
         return (

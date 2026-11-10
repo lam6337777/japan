@@ -76,7 +76,7 @@ export default function ListenPage() {
       <div className="grid grid-cols-2 gap-1 rounded-xl bg-surface-2 p-1">
         {(
           [
-            ["shadow", "🎤 Shadowing (nói theo)"],
+            ["shadow", "🎤 Nói theo"],
             ["dictation", "✍️ Chép chính tả"],
           ] as const
         ).map(([k, label]) => (

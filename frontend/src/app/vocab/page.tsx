@@ -138,7 +138,7 @@ export default function VocabPage() {
                 <li key={v.id} className="flex items-center gap-2 px-3 py-3 sm:px-4">
                   <button
                     onClick={() => toggleStar(v.id)}
-                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-lg transition ${starred ? "text-warn" : "text-line hover:text-warn"}`}
+                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-lg transition ${starred ? "text-warn" : "text-muted/60 hover:text-warn"}`}
                     aria-label={starred ? "Bỏ đánh dấu sao" : "Đánh dấu sao"}
                   >
                     {starred ? "★" : "☆"}

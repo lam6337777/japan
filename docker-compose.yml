@@ -1,0 +1,17 @@
+# PostgreSQL riêng cho dự án (cổng 5433 để không đụng PostgreSQL đã cài sẵn trên máy)
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: nihongo-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: nihongo
+      POSTGRES_USER: nihongo
+      POSTGRES_PASSWORD: nihongo_dev
+    ports:
+      - "5433:5432"
+    volumes:
+      - nihongo-db:/var/lib/postgresql/data
+
+volumes:
+  nihongo-db:

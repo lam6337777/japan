@@ -1,0 +1,304 @@
+[
+  {
+    "id": "desu",
+    "pattern": "N は N です",
+    "meaning": "N là N",
+    "structure": "Danh từ 1 + は + Danh từ 2 + です",
+    "explanation": "Câu khẳng định cơ bản nhất. は (đọc là \"wa\") đánh dấu chủ đề của câu, です làm câu trở nên lịch sự.",
+    "examples": [
+      { "ja": "私は学生です。", "kana": "わたしは がくせいです。", "vi": "Tôi là học sinh." },
+      { "ja": "これは本です。", "kana": "これは ほんです。", "vi": "Đây là quyển sách." }
+    ]
+  },
+  {
+    "id": "dewa-arimasen",
+    "pattern": "N じゃありません / ではありません",
+    "meaning": "không phải là N",
+    "structure": "Danh từ + じゃありません (văn nói) / ではありません (trang trọng)",
+    "explanation": "Dạng phủ định của です.",
+    "examples": [
+      { "ja": "私は先生じゃありません。", "kana": "わたしは せんせいじゃ ありません。", "vi": "Tôi không phải là giáo viên." },
+      { "ja": "ここは駅ではありません。", "kana": "ここは えきでは ありません。", "vi": "Đây không phải là nhà ga." }
+    ]
+  },
+  {
+    "id": "ka-question",
+    "pattern": "〜か",
+    "meaning": "…không? (câu hỏi)",
+    "structure": "Câu lịch sự + か",
+    "explanation": "Thêm か vào cuối câu để biến thành câu hỏi. Lên giọng ở cuối câu.",
+    "examples": [
+      { "ja": "田中さんは会社員ですか。", "kana": "たなかさんは かいしゃいんですか。", "vi": "Anh Tanaka là nhân viên công ty phải không?" },
+      { "ja": "これは何ですか。", "kana": "これは なんですか。", "vi": "Đây là cái gì?" }
+    ]
+  },
+  {
+    "id": "mo",
+    "pattern": "N も",
+    "meaning": "N cũng…",
+    "structure": "Danh từ + も (thay cho は / が / を)",
+    "explanation": "Diễn tả sự tương đồng: \"cũng\" như điều vừa nói trước đó.",
+    "examples": [
+      { "ja": "私も学生です。", "kana": "わたしも がくせいです。", "vi": "Tôi cũng là học sinh." },
+      { "ja": "コーヒーも飲みます。", "kana": "コーヒーも のみます。", "vi": "Tôi cũng uống cà phê." }
+    ]
+  },
+  {
+    "id": "no-possessive",
+    "pattern": "N の N",
+    "meaning": "N của N",
+    "structure": "Danh từ 1 + の + Danh từ 2",
+    "explanation": "の nối hai danh từ, chỉ sở hữu hoặc thuộc tính. Lưu ý thứ tự ngược với tiếng Việt: 私の本 = sách của tôi.",
+    "examples": [
+      { "ja": "これは私の傘です。", "kana": "これは わたしの かさです。", "vi": "Đây là cái ô của tôi." },
+      { "ja": "日本語の本", "kana": "にほんごの ほん", "vi": "sách tiếng Nhật" }
+    ]
+  },
+  {
+    "id": "kosoado",
+    "pattern": "これ / それ / あれ / どれ",
+    "meaning": "cái này / cái đó / cái kia / cái nào",
+    "structure": "これ (gần người nói) · それ (gần người nghe) · あれ (xa cả hai) · どれ (hỏi)",
+    "explanation": "Đại từ chỉ định. Tương tự: ここ/そこ/あそこ/どこ (chỗ này/đó/kia/đâu), この/その/あの/どの + danh từ.",
+    "examples": [
+      { "ja": "それは何ですか。", "kana": "それは なんですか。", "vi": "Cái đó là cái gì?" },
+      { "ja": "トイレはどこですか。", "kana": "トイレは どこですか。", "vi": "Nhà vệ sinh ở đâu?" }
+    ]
+  },
+  {
+    "id": "masu",
+    "pattern": "V ます / ません",
+    "meaning": "làm V / không làm V (lịch sự)",
+    "structure": "Động từ thể ます · phủ định: ません",
+    "explanation": "Thể lịch sự của động từ, dùng cho hiện tại thói quen hoặc tương lai.",
+    "examples": [
+      { "ja": "毎朝パンを食べます。", "kana": "まいあさ パンを たべます。", "vi": "Mỗi sáng tôi ăn bánh mì." },
+      { "ja": "お酒を飲みません。", "kana": "おさけを のみません。", "vi": "Tôi không uống rượu." }
+    ]
+  },
+  {
+    "id": "mashita",
+    "pattern": "V ました / ませんでした",
+    "meaning": "đã làm V / đã không làm V",
+    "structure": "Động từ bỏ ます + ました · ませんでした",
+    "explanation": "Thì quá khứ lịch sự của động từ.",
+    "examples": [
+      { "ja": "昨日映画を見ました。", "kana": "きのう えいがを みました。", "vi": "Hôm qua tôi đã xem phim." },
+      { "ja": "朝ご飯を食べませんでした。", "kana": "あさごはんを たべませんでした。", "vi": "Tôi đã không ăn sáng." }
+    ]
+  },
+  {
+    "id": "wo",
+    "pattern": "N を V",
+    "meaning": "làm (gì đó) với N",
+    "structure": "Danh từ (tân ngữ) + を + Động từ",
+    "explanation": "を (đọc là \"o\") đánh dấu tân ngữ trực tiếp của động từ.",
+    "examples": [
+      { "ja": "水を飲みます。", "kana": "みずを のみます。", "vi": "Tôi uống nước." },
+      { "ja": "日本語を勉強します。", "kana": "にほんごを べんきょうします。", "vi": "Tôi học tiếng Nhật." }
+    ]
+  },
+  {
+    "id": "ni-time",
+    "pattern": "Thời gian + に",
+    "meaning": "vào lúc…",
+    "structure": "Thời điểm cụ thể (giờ, ngày, tháng) + に",
+    "explanation": "Chỉ thời điểm hành động xảy ra. Không dùng に với 今日, 明日, 毎日, 今…",
+    "examples": [
+      { "ja": "７時に起きます。", "kana": "しちじに おきます。", "vi": "Tôi dậy lúc 7 giờ." },
+      { "ja": "日曜日に友達に会います。", "kana": "にちようびに ともだちに あいます。", "vi": "Chủ nhật tôi gặp bạn." }
+    ]
+  },
+  {
+    "id": "e-direction",
+    "pattern": "Nơi chốn + へ / に 行きます",
+    "meaning": "đi đến…",
+    "structure": "Địa điểm + へ (đọc \"e\") / に + 行きます・来ます・帰ります",
+    "explanation": "Chỉ hướng di chuyển với các động từ đi, đến, về.",
+    "examples": [
+      { "ja": "学校へ行きます。", "kana": "がっこうへ いきます。", "vi": "Tôi đi đến trường." },
+      { "ja": "来年日本に来ます。", "kana": "らいねん にほんに きます。", "vi": "Năm sau tôi đến Nhật." }
+    ]
+  },
+  {
+    "id": "de-place",
+    "pattern": "Nơi chốn + で V",
+    "meaning": "làm V tại…",
+    "structure": "Địa điểm + で + Động từ hành động",
+    "explanation": "Chỉ nơi diễn ra hành động. で còn chỉ phương tiện: バスで (bằng xe buýt).",
+    "examples": [
+      { "ja": "図書館で勉強します。", "kana": "としょかんで べんきょうします。", "vi": "Tôi học ở thư viện." },
+      { "ja": "電車で会社へ行きます。", "kana": "でんしゃで かいしゃへ いきます。", "vi": "Tôi đi làm bằng tàu điện." }
+    ]
+  },
+  {
+    "id": "arimasu-imasu",
+    "pattern": "N が あります / います",
+    "meaning": "có N",
+    "structure": "Đồ vật + が あります · Người/động vật + が います",
+    "explanation": "あります dùng cho vật vô tri, います dùng cho người và động vật.",
+    "examples": [
+      { "ja": "机の上に本があります。", "kana": "つくえの うえに ほんが あります。", "vi": "Trên bàn có quyển sách." },
+      { "ja": "公園に子供がいます。", "kana": "こうえんに こどもが います。", "vi": "Ở công viên có trẻ con." }
+    ]
+  },
+  {
+    "id": "i-adjective",
+    "pattern": "Tính từ い",
+    "meaning": "tính từ đuôi い",
+    "structure": "Aい + です · phủ định: A (bỏ い) + くないです · quá khứ: A (bỏ い) + かったです",
+    "explanation": "Tính từ kết thúc bằng い. Ngoại lệ: いい → よくない / よかった.",
+    "examples": [
+      { "ja": "このラーメンはおいしいです。", "kana": "この ラーメンは おいしいです。", "vi": "Món ramen này ngon." },
+      { "ja": "昨日は寒くなかったです。", "kana": "きのうは さむくなかったです。", "vi": "Hôm qua trời không lạnh." }
+    ]
+  },
+  {
+    "id": "na-adjective",
+    "pattern": "Tính từ な",
+    "meaning": "tính từ đuôi な",
+    "structure": "Aな + です · phủ định: A + じゃありません · bổ nghĩa: A + な + N",
+    "explanation": "Khi đứng trước danh từ cần thêm な: 静かな町 (thị trấn yên tĩnh).",
+    "examples": [
+      { "ja": "この町は静かです。", "kana": "この まちは しずかです。", "vi": "Thị trấn này yên tĩnh." },
+      { "ja": "ハノイはにぎやかな町です。", "kana": "ハノイは にぎやかな まちです。", "vi": "Hà Nội là thành phố nhộn nhịp." }
+    ]
+  },
+  {
+    "id": "suki",
+    "pattern": "N が 好きです / 上手です",
+    "meaning": "thích N / giỏi N",
+    "structure": "Danh từ + が + 好き・嫌い・上手・下手 + です",
+    "explanation": "Đối tượng của cảm xúc, khả năng được đánh dấu bằng が, không phải を.",
+    "examples": [
+      { "ja": "私は音楽が好きです。", "kana": "わたしは おんがくが すきです。", "vi": "Tôi thích âm nhạc." },
+      { "ja": "マイさんは料理が上手です。", "kana": "マイさんは りょうりが じょうずです。", "vi": "Chị Mai nấu ăn giỏi." }
+    ]
+  },
+  {
+    "id": "tai",
+    "pattern": "V たいです",
+    "meaning": "muốn làm V",
+    "structure": "Động từ bỏ ます + たいです",
+    "explanation": "Diễn tả mong muốn của bản thân người nói. Chia như tính từ い: たくないです, たかったです.",
+    "examples": [
+      { "ja": "日本へ行きたいです。", "kana": "にほんへ いきたいです。", "vi": "Tôi muốn đi Nhật." },
+      { "ja": "何を食べたいですか。", "kana": "なにを たべたいですか。", "vi": "Bạn muốn ăn gì?" }
+    ]
+  },
+  {
+    "id": "mashou",
+    "pattern": "V ましょう / ませんか",
+    "meaning": "cùng làm V nhé / làm V không?",
+    "structure": "Động từ bỏ ます + ましょう · ませんか",
+    "explanation": "ましょう: rủ rê, đề nghị cùng làm. ませんか: mời một cách lịch sự, nhẹ nhàng hơn.",
+    "examples": [
+      { "ja": "一緒に昼ご飯を食べませんか。", "kana": "いっしょに ひるごはんを たべませんか。", "vi": "Cùng ăn trưa không?" },
+      { "ja": "ええ、食べましょう。", "kana": "ええ、たべましょう。", "vi": "Ừ, cùng ăn nào." }
+    ]
+  },
+  {
+    "id": "te-kudasai",
+    "pattern": "V て ください",
+    "meaning": "hãy làm V",
+    "structure": "Động từ thể て + ください",
+    "explanation": "Nhờ vả, yêu cầu lịch sự.",
+    "examples": [
+      { "ja": "ちょっと待ってください。", "kana": "ちょっと まってください。", "vi": "Xin hãy chờ một chút." },
+      { "ja": "ゆっくり話してください。", "kana": "ゆっくり はなしてください。", "vi": "Xin hãy nói chậm." }
+    ]
+  },
+  {
+    "id": "te-imasu",
+    "pattern": "V て います",
+    "meaning": "đang làm V",
+    "structure": "Động từ thể て + います",
+    "explanation": "Diễn tả hành động đang diễn ra, hoặc trạng thái kéo dài (結婚しています: đã kết hôn).",
+    "examples": [
+      { "ja": "今、雨が降っています。", "kana": "いま、あめが ふっています。", "vi": "Bây giờ trời đang mưa." },
+      { "ja": "東京に住んでいます。", "kana": "とうきょうに すんでいます。", "vi": "Tôi đang sống ở Tokyo." }
+    ]
+  },
+  {
+    "id": "te-mo-ii",
+    "pattern": "V ても いいです",
+    "meaning": "làm V cũng được",
+    "structure": "Động từ thể て + も いいです(か)",
+    "explanation": "Cho phép hoặc xin phép.",
+    "examples": [
+      { "ja": "写真を撮ってもいいですか。", "kana": "しゃしんを とっても いいですか。", "vi": "Tôi chụp ảnh được không?" },
+      { "ja": "ここに座ってもいいです。", "kana": "ここに すわっても いいです。", "vi": "Bạn ngồi đây cũng được." }
+    ]
+  },
+  {
+    "id": "te-wa-ikenai",
+    "pattern": "V ては いけません",
+    "meaning": "không được làm V",
+    "structure": "Động từ thể て + は いけません",
+    "explanation": "Cấm đoán.",
+    "examples": [
+      { "ja": "ここでたばこを吸ってはいけません。", "kana": "ここで たばこを すっては いけません。", "vi": "Không được hút thuốc ở đây." }
+    ]
+  },
+  {
+    "id": "nai-de-kudasai",
+    "pattern": "V ないで ください",
+    "meaning": "xin đừng làm V",
+    "structure": "Động từ thể ない + で ください",
+    "explanation": "Yêu cầu lịch sự người khác không làm gì đó.",
+    "examples": [
+      { "ja": "ここに車を止めないでください。", "kana": "ここに くるまを とめないでください。", "vi": "Xin đừng đỗ xe ở đây." }
+    ]
+  },
+  {
+    "id": "kara-reason",
+    "pattern": "〜から",
+    "meaning": "vì…",
+    "structure": "Câu (lý do) + から、Câu (kết quả)",
+    "explanation": "Nêu lý do. Lưu ý: から còn có nghĩa \"từ\" khi đi sau danh từ thời gian/nơi chốn (9時から: từ 9 giờ).",
+    "examples": [
+      { "ja": "時間がありませんから、タクシーで行きます。", "kana": "じかんが ありませんから、タクシーで いきます。", "vi": "Vì không có thời gian nên tôi đi taxi." }
+    ]
+  },
+  {
+    "id": "tsumori",
+    "pattern": "V (từ điển) つもりです",
+    "meaning": "định làm V",
+    "structure": "Động từ thể từ điển + つもりです",
+    "explanation": "Diễn tả dự định đã quyết từ trước.",
+    "examples": [
+      { "ja": "来年、日本語能力試験を受けるつもりです。", "kana": "らいねん、にほんご のうりょく しけんを うける つもりです。", "vi": "Năm sau tôi định thi năng lực tiếng Nhật." }
+    ]
+  },
+  {
+    "id": "hou-ga-ii",
+    "pattern": "V た ほうが いいです",
+    "meaning": "nên làm V",
+    "structure": "Động từ thể た + ほうが いいです",
+    "explanation": "Khuyên nhủ. Phủ định: V ない ほうが いいです (không nên).",
+    "examples": [
+      { "ja": "早く寝たほうがいいですよ。", "kana": "はやく ねた ほうが いいですよ。", "vi": "Bạn nên ngủ sớm đấy." }
+    ]
+  },
+  {
+    "id": "mada-mou",
+    "pattern": "もう / まだ",
+    "meaning": "đã rồi / vẫn chưa",
+    "structure": "もう + V ました · まだ + V ていません",
+    "explanation": "もう: hành động đã hoàn thành. まだ: chưa xảy ra (hoặc vẫn còn).",
+    "examples": [
+      { "ja": "もう昼ご飯を食べましたか。", "kana": "もう ひるごはんを たべましたか。", "vi": "Bạn đã ăn trưa chưa?" },
+      { "ja": "いいえ、まだです。", "kana": "いいえ、まだです。", "vi": "Chưa, vẫn chưa ăn." }
+    ]
+  },
+  {
+    "id": "toki",
+    "pattern": "〜とき",
+    "meaning": "khi…",
+    "structure": "V (thể thường) / Aい / Aな / N の + とき",
+    "explanation": "Diễn tả thời điểm xảy ra sự việc.",
+    "examples": [
+      { "ja": "子供のとき、よく川で泳ぎました。", "kana": "こどもの とき、よく かわで およぎました。", "vi": "Hồi nhỏ tôi hay bơi ở sông." }
+    ]
+  }
+]

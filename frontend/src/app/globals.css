@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+/* Bảng màu lấy cảm hứng từ Nhật Bản:
+   washi (giấy), ai 藍 (chàm), sakura 桜 (hồng), matcha 抹茶 (xanh trà), kincha 金茶 (vàng) */
+:root {
+  --bg: #f7f4ee;
+  --surface: #ffffff;
+  --surface-2: #f1ede4;
+  --ink: #1f2433;
+  --muted: #6b7080;
+  --line: #e6e0d4;
+  --primary: #3d5a98;
+  --primary-ink: #ffffff;
+  --primary-soft: #e8edf7;
+  --accent: #d9577a;
+  --accent-soft: #fbe9ee;
+  --success: #4f8a52;
+  --success-soft: #e6f1e4;
+  --warn: #c98a2b;
+  --warn-soft: #f8eedb;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14161d;
+    --surface: #1c1f29;
+    --surface-2: #242835;
+    --ink: #e9e7e2;
+    --muted: #9a9eab;
+    --line: #2e3240;
+    --primary: #8aa4e0;
+    --primary-ink: #10131b;
+    --primary-soft: #232b40;
+    --accent: #f08aa3;
+    --accent-soft: #3a2430;
+    --success: #8cc08a;
+    --success-soft: #1f3020;
+    --warn: #e2b062;
+    --warn-soft: #3a2f1c;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #14161d;
+  --surface: #1c1f29;
+  --surface-2: #242835;
+  --ink: #e9e7e2;
+  --muted: #9a9eab;
+  --line: #2e3240;
+  --primary: #8aa4e0;
+  --primary-ink: #10131b;
+  --primary-soft: #232b40;
+  --accent: #f08aa3;
+  --accent-soft: #3a2430;
+  --success: #8cc08a;
+  --success-soft: #1f3020;
+  --warn: #e2b062;
+  --warn-soft: #3a2f1c;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-primary: var(--primary);
+  --color-primary-ink: var(--primary-ink);
+  --color-primary-soft: var(--primary-soft);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --font-sans: var(--font-be-vn), var(--font-noto-jp), system-ui, sans-serif;
+  --font-jp: var(--font-noto-jp), var(--font-be-vn), sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.jp {
+  font-family: var(--font-noto-jp), var(--font-be-vn), sans-serif;
+}
+
+/* Hiệu ứng vẽ nét kanji */
+@keyframes draw-stroke {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.kanji-stroke {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw-stroke 0.55s ease-out forwards;
+}
+
+/* Lật thẻ flashcard */
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.pop-in {
+  animation: pop-in 0.25s ease-out;
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}

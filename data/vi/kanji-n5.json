@@ -1,0 +1,22 @@
+{
+  "日": ["NHẬT", "ngày, mặt trời"], "一": ["NHẤT", "một"], "国": ["QUỐC", "đất nước"], "人": ["NHÂN", "người"],
+  "年": ["NIÊN", "năm"], "大": ["ĐẠI", "to, lớn"], "十": ["THẬP", "mười"], "二": ["NHỊ", "hai"],
+  "本": ["BẢN", "sách; gốc"], "中": ["TRUNG", "giữa, bên trong"], "長": ["TRƯỜNG", "dài; người đứng đầu"], "出": ["XUẤT", "ra, xuất"],
+  "三": ["TAM", "ba"], "時": ["THỜI", "thời gian, giờ"], "行": ["HÀNH", "đi"], "見": ["KIẾN", "nhìn, xem"],
+  "月": ["NGUYỆT", "mặt trăng, tháng"], "後": ["HẬU", "sau"], "前": ["TIỀN", "trước"], "生": ["SINH", "sống, sinh ra"],
+  "五": ["NGŨ", "năm (số 5)"], "間": ["GIAN", "khoảng, giữa"], "上": ["THƯỢNG", "trên"], "東": ["ĐÔNG", "phía đông"],
+  "四": ["TỨ", "bốn"], "今": ["KIM", "bây giờ"], "金": ["KIM", "vàng, tiền"], "九": ["CỬU", "chín"],
+  "入": ["NHẬP", "vào"], "学": ["HỌC", "học"], "高": ["CAO", "cao, đắt"], "円": ["VIÊN", "yên (tiền); tròn"],
+  "子": ["TỬ", "con, trẻ em"], "外": ["NGOẠI", "bên ngoài"], "八": ["BÁT", "tám"], "六": ["LỤC", "sáu"],
+  "下": ["HẠ", "dưới"], "来": ["LAI", "đến"], "気": ["KHÍ", "khí, tinh thần"], "小": ["TIỂU", "nhỏ"],
+  "七": ["THẤT", "bảy"], "山": ["SƠN", "núi"], "話": ["THOẠI", "nói chuyện"], "女": ["NỮ", "phụ nữ"],
+  "北": ["BẮC", "phía bắc"], "午": ["NGỌ", "buổi trưa"], "百": ["BÁCH", "một trăm"], "書": ["THƯ", "viết; sách"],
+  "先": ["TIÊN", "trước, tiên"], "名": ["DANH", "tên"], "川": ["XUYÊN", "sông"], "千": ["THIÊN", "một nghìn"],
+  "水": ["THỦY", "nước"], "半": ["BÁN", "một nửa"], "男": ["NAM", "đàn ông"], "西": ["TÂY", "phía tây"],
+  "電": ["ĐIỆN", "điện"], "校": ["HIỆU", "trường học"], "語": ["NGỮ", "ngôn ngữ"], "土": ["THỔ", "đất"],
+  "木": ["MỘC", "cây, gỗ"], "聞": ["VĂN", "nghe"], "食": ["THỰC", "ăn"], "車": ["XA", "xe"],
+  "何": ["HÀ", "cái gì"], "南": ["NAM", "phía nam"], "万": ["VẠN", "mười nghìn"], "毎": ["MỖI", "mỗi"],
+  "白": ["BẠCH", "trắng"], "天": ["THIÊN", "trời"], "母": ["MẪU", "mẹ"], "火": ["HỎA", "lửa"],
+  "右": ["HỮU", "bên phải"], "読": ["ĐỘC", "đọc"], "友": ["HỮU", "bạn bè"], "左": ["TẢ", "bên trái"],
+  "休": ["HƯU", "nghỉ ngơi"], "父": ["PHỤ", "bố"], "雨": ["VŨ", "mưa"]
+}

@@ -6,6 +6,7 @@
     "fetch": "node scripts/fetch-data.mjs",
     "build": "node scripts/build-data.mjs",
     "vi": "node scripts/translate-vi.mjs",
-    "grammar": "node scripts/gen-grammar.mjs"
+    "grammar": "node scripts/gen-grammar.mjs",
+    "lessons": "node scripts/gen-lessons.mjs"
   }
 }

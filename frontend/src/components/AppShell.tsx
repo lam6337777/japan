@@ -34,7 +34,7 @@ function UserBadge({ compact = false }: { compact?: boolean }) {
       <Link
         href="/login"
         className={compact
-          ? "rounded-lg bg-primary px-2.5 py-1.5 text-xs font-semibold text-primary-ink"
+          ? "whitespace-nowrap rounded-lg bg-primary px-2.5 py-1.5 text-xs font-semibold text-primary-ink"
           : "flex items-center justify-center rounded-xl bg-primary px-3 py-2.5 text-sm font-semibold text-primary-ink transition hover:opacity-90"}
       >
         Đăng nhập
@@ -298,7 +298,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           <header className="sticky top-0 z-20 flex items-center justify-between gap-2 border-b border-line bg-surface/90 px-4 py-2.5 backdrop-blur md:hidden">
             <Link href="/" className="flex items-center gap-2">
               <span className="jp flex h-8 w-8 items-center justify-center rounded-lg bg-accent font-bold text-white">日</span>
-              <span className="font-bold">Nihongo AI</span>
+              <span className="hidden whitespace-nowrap font-bold min-[400px]:inline">Nihongo AI</span>
             </Link>
             <div className="flex items-center gap-1">
               <LevelPicker compact />

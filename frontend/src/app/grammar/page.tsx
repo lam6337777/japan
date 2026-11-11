@@ -16,7 +16,7 @@ export default function GrammarPage() {
 
   return (
     <div>
-      <PageHeader title={`Ngữ pháp ${level.toUpperCase()}`} subtitle={list.length ? `${list.length} mẫu câu · bấm vào mẫu để xem bài học` : undefined}>
+      <PageHeader title={`Ngữ pháp ${level.toUpperCase()}`} subtitle={list.length ? `${list.length} mẫu câu, xếp theo thứ tự bài của giáo trình Minna no Nihongo` : undefined}>
         {list.length > 0 && (
           <div className="flex w-full gap-2 sm:w-auto">
             <Link href="/grammar/quiz" className="whitespace-nowrap rounded-xl bg-success px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90">

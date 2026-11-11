@@ -12,8 +12,8 @@ export type GrammarPoint = {
   structure: string;
   explanation: string;
   examples: Example[];
-  // Các phần của bài học đầy đủ (N5 mới có; N4 sẽ bổ sung dần)
-  group?: string;
+  group?: string; // "Bài X" theo giáo trình Minna no Nihongo
+  lesson?: number; // 0 = mẫu bổ sung
   summary?: string;
   when?: string[];
   notWhen?: string[];

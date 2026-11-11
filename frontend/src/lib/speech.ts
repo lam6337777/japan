@@ -38,10 +38,20 @@ export function stopSpeaking() {
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Recognition = any;
 
+const MIC_ERRORS: Record<string, string> = {
+  "not-allowed": "Trình duyệt đang chặn micro. Bấm biểu tượng ổ khóa cạnh thanh địa chỉ → Micro → Cho phép, rồi tải lại trang.",
+  "service-not-allowed": "Trình duyệt này không cho dùng nhận dạng giọng nói. Hãy mở bằng Chrome hoặc Edge.",
+  "audio-capture": "Không tìm thấy micro. Kiểm tra micro đã cắm / bật chưa, hoặc có ứng dụng khác đang dùng micro không.",
+  "no-speech": "Chưa nghe thấy gì. Bấm micro rồi nói ngay, nói to và rõ hơn một chút.",
+  network: "Không kết nối được dịch vụ nhận dạng giọng nói. Trình duyệt này (Cốc Cốc, Brave, Opera…) có thể không hỗ trợ — hãy dùng Chrome hoặc Edge.",
+  "language-not-supported": "Trình duyệt chưa hỗ trợ nhận dạng tiếng Nhật. Hãy dùng Chrome hoặc Edge.",
+};
+
 export function useSpeechRecognition(onFinal: (text: string) => void) {
   const [supported, setSupported] = useState(false);
   const [listening, setListening] = useState(false);
   const [interim, setInterim] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const recRef = useRef<Recognition>(null);
   const onFinalRef = useRef(onFinal);
   useEffect(() => {
@@ -72,7 +82,11 @@ export function useSpeechRecognition(onFinal: (text: string) => void) {
       setListening(false);
       setInterim("");
     };
-    rec.onerror = () => setListening(false);
+    rec.onerror = (e: any) => {
+      setListening(false);
+      if (e?.error === "aborted") return; // tự dừng, không phải lỗi
+      setError(MIC_ERRORS[e?.error] ?? `Không nhận được giọng nói (${e?.error ?? "lỗi lạ"}). Hãy thử lại.`);
+    };
     recRef.current = rec;
     return () => rec.abort();
   }, []);
@@ -80,6 +94,7 @@ export function useSpeechRecognition(onFinal: (text: string) => void) {
   const start = useCallback(() => {
     if (!recRef.current) return;
     stopSpeaking();
+    setError(null);
     try {
       recRef.current.start();
       setListening(true);
@@ -90,5 +105,5 @@ export function useSpeechRecognition(onFinal: (text: string) => void) {
 
   const stop = useCallback(() => recRef.current?.stop(), []);
 
-  return { supported, listening, interim, start, stop };
+  return { supported, listening, interim, error, start, stop };
 }

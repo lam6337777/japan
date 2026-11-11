@@ -327,6 +327,11 @@ export default function ChatPage() {
           }}
           className="sticky bottom-[68px] mt-3 flex items-end gap-2 rounded-2xl border border-line bg-surface p-2 shadow-sm md:bottom-4"
         >
+          {mic.supported && mic.error && !mic.listening && (
+            <p role="alert" className="absolute inset-x-0 bottom-full mb-2 rounded-xl border border-accent/30 bg-accent-soft px-3 py-2 text-center text-xs text-accent shadow-sm">
+              🎤 {mic.error}
+            </p>
+          )}
           {mic.supported && (
             <button
               type="button"

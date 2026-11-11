@@ -10,3 +10,6 @@ __pycache__/
 
 # file của extension VS Code (Java upgrade)
 .github/modernize/
+
+# cài đặt cá nhân của editor
+.vscode/

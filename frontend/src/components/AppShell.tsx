@@ -201,11 +201,15 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const [level, setLevelState] = useState<Level>("n5");
   const [user, setUser] = useState<User | null>(null);
   const [ready, setReady] = useState(false);
+  const [waking, setWaking] = useState(false);
 
   useEffect(() => {
     setLevelState(load<Level>("nihongo.level", "n5"));
     setUser(getStoredUser());
     setReady(true);
+    const onWaking = (e: Event) => setWaking((e as CustomEvent<boolean>).detail);
+    window.addEventListener("nihongo:waking", onWaking);
+    api("/health").catch(() => {}); // đánh thức backend (và chatbot) ngay khi mở app
     if (getToken()) {
       // Làm mới thông tin tài khoản + đồng bộ tiến độ mỗi lần mở app
       api<User>("/me")
@@ -218,7 +222,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     }
     const onLogout = () => setUser(null);
     window.addEventListener("nihongo:logout", onLogout);
-    return () => window.removeEventListener("nihongo:logout", onLogout);
+    return () => {
+      window.removeEventListener("nihongo:logout", onLogout);
+      window.removeEventListener("nihongo:waking", onWaking);
+    };
   }, []);
 
   const setLevel = (l: Level) => {
@@ -296,6 +303,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             </div>
           </header>
 
+          {waking && (
+            <div className="sticky top-[57px] z-10 flex items-center justify-center gap-2 bg-warn-soft px-4 py-2 text-center text-sm text-warn md:top-0">
+              <span className="h-3.5 w-3.5 shrink-0 animate-spin rounded-full border-2 border-warn/30 border-t-warn" />
+              Máy chủ miễn phí đang khởi động sau thời gian nghỉ, vui lòng đợi 2–3 phút…
+            </div>
+          )}
           <main className="mx-auto w-full max-w-5xl flex-1 px-4 pb-24 pt-6 md:px-8 md:pb-10 md:pt-8">{children}</main>
         </div>
 

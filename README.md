@@ -59,6 +59,22 @@ npm install        # lần đầu
 npm run dev        # mở http://localhost:3100
 ```
 
+## Đưa lên mạng (miễn phí)
+
+| Phần | Dịch vụ | Ghi chú |
+|---|---|---|
+| Database | [Neon](https://neon.com) Free | PostgreSQL |
+| Backend + Chatbot | [Render](https://render.com) Free | Tự "ngủ" sau 15 phút không dùng; mở lại lần đầu chờ ~2–3 phút (đo thử với 0,1 CPU / 512MB) |
+| Frontend | [Vercel](https://vercel.com) Hobby | |
+
+1. **Neon** → tạo project → *Connect* → chọn **Java (JDBC)**. Ghi lại: URL dạng `jdbc:postgresql://<host>/<db>?sslmode=require`, user, password.
+2. **Render** → *New* → *Blueprint* → chọn repo này (đọc `render.yaml`). Điền:
+   - `DEEPSEEK_API_KEY` (chatbot)
+   - `DB_URL`, `DB_USER`, `DB_PASSWORD` (từ Neon)
+   - `CHATBOT_URL` = địa chỉ của service `nihongo-chatbot` (ví dụ `https://nihongo-chatbot.onrender.com`; nếu chưa biết, điền tạm rồi sửa sau trong *Environment*)
+   `JWT_SECRET` và `CHATBOT_INTERNAL_KEY` được Render tự sinh.
+3. **Vercel** → *Add New Project* → chọn repo → **Root Directory: `frontend`** → thêm biến `BACKEND_URL` = địa chỉ `nihongo-backend` trên Render → *Deploy*.
+
 ## API backend
 
 | Method | Đường dẫn | Mô tả |

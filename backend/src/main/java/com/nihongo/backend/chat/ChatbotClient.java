@@ -64,6 +64,15 @@ public class ChatbotClient {
                 .build();
     }
 
+    /** Gọi /health để đánh thức chatbot (bỏ qua mọi lỗi) */
+    public void wake() {
+        try {
+            http.get().uri("/health").retrieve().toBodilessEntity();
+        } catch (Exception ignored) {
+            // chatbot chưa sẵn sàng cũng không sao
+        }
+    }
+
     public Reply chat(Request request) {
         return post("/chat", request, Reply.class);
     }

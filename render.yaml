@@ -1,0 +1,45 @@
+# Cấu hình triển khai lên Render (gói Free): backend Spring Boot + chatbot Python
+# Render → New → Blueprint → chọn repo này. Các biến "sync: false" sẽ được hỏi khi tạo.
+services:
+  - type: web
+    name: nihongo-chatbot
+    runtime: docker
+    plan: free
+    rootDir: chatbot
+    healthCheckPath: /health
+    envVars:
+      - key: DEEPSEEK_API_KEY
+        sync: false
+      - key: AI_PROVIDER
+        value: deepseek
+      - key: CHATBOT_INTERNAL_KEY
+        generateValue: true
+
+  - type: web
+    name: nihongo-backend
+    runtime: docker
+    plan: free
+    rootDir: backend
+    healthCheckPath: /api/health
+    envVars:
+      # Lấy từ Neon (xem README phần "Đưa lên mạng")
+      - key: DB_URL
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      # Địa chỉ chatbot, ví dụ https://nihongo-chatbot.onrender.com
+      - key: CHATBOT_URL
+        sync: false
+      - key: CHATBOT_INTERNAL_KEY
+        fromService:
+          type: web
+          name: nihongo-chatbot
+          envVarKey: CHATBOT_INTERNAL_KEY
+      - key: JWT_SECRET
+        generateValue: true
+      - key: LAZY_INIT
+        value: "true"
+      - key: DB_POOL
+        value: "3"

@@ -4,28 +4,64 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { getSettings } from "./settings";
 
 // ---------- Đọc to (TTS) bằng giọng có sẵn của trình duyệt ----------
-let jaVoice: SpeechSynthesisVoice | null = null;
+const hasTTS = () => typeof window !== "undefined" && "speechSynthesis" in window;
 
-function pickVoice() {
-  if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-  const voices = window.speechSynthesis.getVoices().filter((v) => v.lang.toLowerCase().startsWith("ja"));
-  // Ưu tiên giọng chất lượng cao (Google / Microsoft Online / Natural)
-  jaVoice =
-    voices.find((v) => /natural|online|google/i.test(v.name)) ?? voices[0] ?? null;
+/** 3 = giọng AI tự nhiên (Edge "Online (Natural)"), 2 = Google / giọng mạng, 1 = giọng cài sẵn của máy */
+export function voiceRank(v: SpeechSynthesisVoice): number {
+  if (/natural/i.test(v.name)) return 3;
+  if (/google|online|enhanced|premium|siri/i.test(v.name) || !v.localService) return 2;
+  return 1;
 }
 
-if (typeof window !== "undefined" && "speechSynthesis" in window) {
-  pickVoice();
-  window.speechSynthesis.addEventListener?.("voiceschanged", pickVoice);
+/** Giọng tiếng Nhật trình duyệt có, giọng tốt xếp trước */
+export function getJaVoices(): SpeechSynthesisVoice[] {
+  if (!hasTTS()) return [];
+  return window.speechSynthesis
+    .getVoices()
+    .filter((v) => v.lang.toLowerCase().replace("_", "-").startsWith("ja"))
+    .sort((a, b) => voiceRank(b) - voiceRank(a));
 }
 
-export function speak(text: string, opts: { rate?: number; onEnd?: () => void } = {}) {
-  if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+/** Tên ngắn gọn: "Microsoft Nanami Online (Natural) - Japanese (Japan)" → "Nanami" */
+export function voiceLabel(v: SpeechSynthesisVoice): string {
+  const name = v.name
+    .replace(/^Microsoft\s+/i, "")
+    .replace(/\s*-\s*Japanese.*$/i, "")
+    .replace(/\s*Online\s*\(Natural\)/i, "")
+    .replace(/\s*\(.*?\)\s*$/, "")
+    .trim();
+  return name || v.name;
+}
+
+function currentVoice(): SpeechSynthesisVoice | null {
+  const voices = getJaVoices();
+  const chosen = getSettings().voiceURI;
+  return (chosen && voices.find((v) => v.voiceURI === chosen)) || voices[0] || null;
+}
+
+/** Danh sách giọng, tự cập nhật khi trình duyệt nạp xong giọng (Chrome nạp trễ) */
+export function useJaVoices(): SpeechSynthesisVoice[] {
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
+  useEffect(() => {
+    if (!hasTTS()) return;
+    const update = () => setVoices(getJaVoices());
+    update();
+    window.speechSynthesis.addEventListener?.("voiceschanged", update);
+    return () => window.speechSynthesis.removeEventListener?.("voiceschanged", update);
+  }, []);
+  return voices;
+}
+
+export function speak(text: string, opts: { rate?: number; voice?: SpeechSynthesisVoice | null; onEnd?: () => void } = {}) {
+  if (!hasTTS()) return;
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
   u.lang = "ja-JP";
-  if (jaVoice) u.voice = jaVoice;
-  u.rate = opts.rate ?? getSettings().speechRate;
+  const voice = opts.voice ?? currentVoice();
+  if (voice) u.voice = voice;
+  const s = getSettings();
+  u.rate = opts.rate ?? s.speechRate;
+  u.pitch = s.pitch;
   if (opts.onEnd) u.onend = opts.onEnd;
   window.speechSynthesis.speak(u);
 }

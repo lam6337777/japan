@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Card, PageHeader } from "@/components/ui";
 import { deleteDeck, loadDecks, parseVocabCSV, saveDeck, type Deck } from "@/lib/decks";
 import { DEFAULT_SETTINGS, getSettings, saveSettings, type Settings } from "@/lib/settings";
-import { speak } from "@/lib/speech";
+import { speak, useJaVoices, voiceLabel, voiceRank } from "@/lib/speech";
 
 const SAMPLE = `食べる,たべる,ăn
 飲む,のむ,uống
@@ -17,6 +17,8 @@ export default function SettingsPage() {
   const [csv, setCsv] = useState("");
   const [deckName, setDeckName] = useState("");
   const [message, setMessage] = useState<string | null>(null);
+  const voices = useJaVoices();
+  const activeVoice = voices.find((v) => v.voiceURI === settings.voiceURI) ?? voices[0];
 
   useEffect(() => {
     setSettings(getSettings());
@@ -62,7 +64,52 @@ export default function SettingsPage() {
       </Card>
 
       <Card>
-        <h2 className="mb-4 font-semibold">Giọng đọc</h2>
+        <h2 className="mb-1 font-semibold">Giọng đọc</h2>
+        <p className="mb-4 text-sm text-muted">Dùng cho chat AI, flashcard và luyện nghe. Danh sách giọng tùy trình duyệt và thiết bị của bạn.</p>
+
+        {voices.length === 0 ? (
+          <p className="mb-4 rounded-xl bg-surface-2 px-4 py-3 text-sm text-muted">Trình duyệt này chưa có giọng tiếng Nhật. Hãy dùng Edge hoặc Chrome trên máy tính, hoặc cài giọng tiếng Nhật trong cài đặt điện thoại.</p>
+        ) : (
+          <ul className="mb-4 flex flex-col gap-2" role="radiogroup" aria-label="Chọn giọng đọc">
+            {voices.map((v) => {
+              const active = v.voiceURI === activeVoice?.voiceURI;
+              const rank = voiceRank(v);
+              return (
+                <li key={v.voiceURI}>
+                  <div className={`flex items-center gap-2 rounded-xl border px-3 py-2.5 transition ${active ? "border-primary bg-primary-soft" : "border-line bg-surface"}`}>
+                    <button
+                      role="radio"
+                      aria-checked={active}
+                      onClick={() => {
+                        update({ voiceURI: v.voiceURI });
+                        speak("こんにちは。よろしくおねがいします。", { voice: v });
+                      }}
+                      className="flex min-w-0 flex-1 items-center gap-3 text-left"
+                    >
+                      <span className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 ${active ? "border-primary" : "border-line"}`}>
+                        {active && <span className="h-2 w-2 rounded-full bg-primary" />}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-sm font-medium">{voiceLabel(v)}</span>
+                        <span className="block truncate text-xs text-muted">{v.name}</span>
+                      </span>
+                      {rank === 3 && <span className="shrink-0 rounded-full bg-success-soft px-2 py-0.5 text-xs font-medium text-success">Tự nhiên</span>}
+                      {rank === 2 && <span className="shrink-0 rounded-full bg-surface-2 px-2 py-0.5 text-xs font-medium text-muted">Khá</span>}
+                    </button>
+                    <button
+                      onClick={() => speak("こんにちは。よろしくおねがいします。", { voice: v })}
+                      aria-label={`Nghe thử giọng ${voiceLabel(v)}`}
+                      className="shrink-0 rounded-lg px-2 py-1 text-sm text-primary hover:bg-surface-2"
+                    >
+                      ▶
+                    </button>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+
         <label className="flex flex-col gap-2">
           <span className="flex items-center justify-between text-sm">
             Tốc độ đọc
@@ -70,9 +117,19 @@ export default function SettingsPage() {
           </span>
           <input type="range" min={0.6} max={1.2} step={0.1} value={settings.speechRate} onChange={(e) => update({ speechRate: Number(e.target.value) })} className="accent-[var(--primary)]" />
         </label>
+        <label className="mt-4 flex flex-col gap-2">
+          <span className="flex items-center justify-between text-sm">
+            Độ cao giọng
+            <b className="text-primary">{settings.pitch === 1 ? "Mặc định" : settings.pitch < 1 ? "Trầm hơn" : "Cao hơn"}</b>
+          </span>
+          <input type="range" min={0.7} max={1.3} step={0.1} value={settings.pitch} onChange={(e) => update({ pitch: Number(e.target.value) })} className="accent-[var(--primary)]" />
+        </label>
         <button onClick={() => speak("こんにちは。日本語の勉強をがんばりましょう。")} className="mt-3 rounded-xl border border-line bg-surface px-3 py-2 text-sm text-muted hover:text-ink">
           ▶ Nghe thử
         </button>
+        {voices.length > 0 && !voices.some((v) => voiceRank(v) === 3) && (
+          <p className="mt-3 text-xs text-muted">Mẹo: trình duyệt Microsoft Edge trên máy tính có sẵn nhiều giọng tiếng Nhật rất tự nhiên (Nanami, Keita…), miễn phí.</p>
+        )}
       </Card>
 
       <Card>

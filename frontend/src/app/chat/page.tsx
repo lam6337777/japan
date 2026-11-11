@@ -327,11 +327,7 @@ export default function ChatPage() {
           }}
           className="sticky bottom-[68px] mt-3 flex items-end gap-2 rounded-2xl border border-line bg-surface p-2 shadow-sm md:bottom-4"
         >
-          {mic.supported && mic.error && !mic.listening && (
-            <p role="alert" className="absolute inset-x-0 bottom-full mb-2 rounded-xl border border-accent/30 bg-accent-soft px-3 py-2 text-center text-xs text-accent shadow-sm">
-              🎤 {mic.error}
-            </p>
-          )}
+          <MicStatus mic={mic} />
           {mic.supported && (
             <button
               type="button"
@@ -348,7 +344,7 @@ export default function ChatPage() {
             </button>
           )}
           <textarea
-            value={mic.listening && mic.interim ? input + mic.interim : input}
+            value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
@@ -358,7 +354,7 @@ export default function ChatPage() {
             }}
             rows={1}
             maxLength={1000}
-            placeholder={mic.listening ? "Đang nghe... hãy nói tiếng Nhật" : "Nhập câu trả lời bằng tiếng Nhật (Enter để gửi)"}
+            placeholder={mic.listening ? "" : "Nhập câu trả lời bằng tiếng Nhật (Enter để gửi)"}
             className="jp max-h-32 min-h-11 flex-1 resize-none bg-transparent px-2 py-2.5 outline-none placeholder:font-sans placeholder:text-muted"
           />
           <button type="submit" disabled={!input.trim() || loading} className="h-11 shrink-0 rounded-xl bg-primary px-4 font-semibold text-primary-ink transition hover:opacity-90 disabled:opacity-40">
@@ -371,6 +367,54 @@ export default function ChatPage() {
       )}
     </div>
   );
+}
+
+const MIC_TEXT = {
+  starting: "Đang bật micro…",
+  ready: "Micro đã sẵn sàng — hãy nói tiếng Nhật",
+  hearing: "Đang nghe…",
+} as const;
+
+// Khung trạng thái micro, nổi ngay trên ô nhập
+function MicStatus({ mic }: { mic: ReturnType<typeof useSpeechRecognition> }) {
+  if (!mic.supported) return null;
+  const box = "absolute inset-x-0 bottom-full mb-2 rounded-2xl border px-3 py-2.5 shadow-md";
+  if (mic.listening) {
+    return (
+      <div role="status" aria-live="polite" className={`${box} pop-in border-accent/40 bg-surface`}>
+        <div className="flex items-center gap-3">
+          <div className="mic-bars flex h-6 shrink-0 items-center gap-[3px] text-accent" data-phase={mic.phase}>
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
+          <p className={`min-w-0 flex-1 text-sm font-medium ${mic.phase === "hearing" ? "text-accent" : "text-muted"}`}>{MIC_TEXT[mic.phase as keyof typeof MIC_TEXT]}</p>
+          <button type="button" onClick={mic.stop} className="shrink-0 rounded-lg bg-surface-2 px-2.5 py-1 text-xs font-semibold text-muted hover:text-ink">
+            Dừng
+          </button>
+        </div>
+        {mic.interim && <p className="jp mt-1.5 break-words text-base leading-snug">{mic.interim}</p>}
+      </div>
+    );
+  }
+  if (mic.captured) {
+    return (
+      <div role="status" aria-live="polite" className={`${box} pop-in border-success/40 bg-success-soft text-success`}>
+        <p className="text-xs font-semibold">✓ Đã ghi lại câu của bạn</p>
+        <p className="jp mt-0.5 break-words text-base leading-snug text-ink">{mic.captured.text}</p>
+      </div>
+    );
+  }
+  if (mic.error) {
+    return (
+      <p role="alert" className={`${box} border-accent/30 bg-accent-soft text-center text-xs text-accent`}>
+        🎤 {mic.error}
+      </p>
+    );
+  }
+  return null;
 }
 
 function UserBubble({ msg }: { msg: Msg }) {

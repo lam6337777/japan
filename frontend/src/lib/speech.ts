@@ -47,11 +47,14 @@ const MIC_ERRORS: Record<string, string> = {
   "language-not-supported": "Trình duyệt chưa hỗ trợ nhận dạng tiếng Nhật. Hãy dùng Chrome hoặc Edge.",
 };
 
+export type MicPhase = "idle" | "starting" | "ready" | "hearing";
+
 export function useSpeechRecognition(onFinal: (text: string) => void) {
   const [supported, setSupported] = useState(false);
-  const [listening, setListening] = useState(false);
+  const [phase, setPhase] = useState<MicPhase>("idle");
   const [interim, setInterim] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [captured, setCaptured] = useState<{ text: string; at: number } | null>(null);
   const recRef = useRef<Recognition>(null);
   const onFinalRef = useRef(onFinal);
   useEffect(() => {
@@ -67,6 +70,10 @@ export function useSpeechRecognition(onFinal: (text: string) => void) {
     rec.lang = "ja-JP";
     rec.interimResults = true;
     rec.continuous = false;
+    // starting → (micro mở) ready → (nghe thấy tiếng) hearing → kết thúc
+    rec.onaudiostart = () => setPhase((p) => (p === "starting" ? "ready" : p));
+    rec.onsoundstart = () => setPhase((p) => (p === "idle" ? p : "hearing"));
+    rec.onspeechstart = () => setPhase((p) => (p === "idle" ? p : "hearing"));
     rec.onresult = (e: any) => {
       let finalText = "";
       let interimText = "";
@@ -75,15 +82,19 @@ export function useSpeechRecognition(onFinal: (text: string) => void) {
         if (r.isFinal) finalText += r[0].transcript;
         else interimText += r[0].transcript;
       }
+      setPhase((p) => (p === "idle" ? p : "hearing"));
       setInterim(interimText);
-      if (finalText) onFinalRef.current(finalText);
+      if (finalText) {
+        setCaptured({ text: finalText, at: Date.now() });
+        onFinalRef.current(finalText);
+      }
     };
     rec.onend = () => {
-      setListening(false);
+      setPhase("idle");
       setInterim("");
     };
     rec.onerror = (e: any) => {
-      setListening(false);
+      setPhase("idle");
       if (e?.error === "aborted") return; // tự dừng, không phải lỗi
       setError(MIC_ERRORS[e?.error] ?? `Không nhận được giọng nói (${e?.error ?? "lỗi lạ"}). Hãy thử lại.`);
     };
@@ -91,13 +102,21 @@ export function useSpeechRecognition(onFinal: (text: string) => void) {
     return () => rec.abort();
   }, []);
 
+  // Ẩn dòng "Đã ghi lại" sau vài giây
+  useEffect(() => {
+    if (!captured) return;
+    const t = setTimeout(() => setCaptured(null), 2500);
+    return () => clearTimeout(t);
+  }, [captured]);
+
   const start = useCallback(() => {
     if (!recRef.current) return;
     stopSpeaking();
     setError(null);
+    setCaptured(null);
     try {
       recRef.current.start();
-      setListening(true);
+      setPhase("starting");
     } catch {
       /* đã đang nghe */
     }
@@ -105,5 +124,5 @@ export function useSpeechRecognition(onFinal: (text: string) => void) {
 
   const stop = useCallback(() => recRef.current?.stop(), []);
 
-  return { supported, listening, interim, error, start, stop };
+  return { supported, listening: phase !== "idle", phase, interim, error, captured, start, stop };
 }

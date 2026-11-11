@@ -146,6 +146,43 @@ body {
   animation: pop-in 0.25s ease-out;
 }
 
+/* Sóng âm khi micro đang nghe: .mic-bars[data-phase=ready|hearing] > span */
+@keyframes mic-bar {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+.mic-bars span {
+  display: block;
+  width: 4px;
+  height: 22px;
+  border-radius: 9999px;
+  background: currentColor;
+  transform: scaleY(0.3);
+  transform-origin: center;
+}
+.mic-bars[data-phase="ready"] span {
+  animation: mic-bar 1.6s ease-in-out infinite;
+  opacity: 0.6;
+}
+.mic-bars[data-phase="hearing"] span {
+  animation: mic-bar 0.55s ease-in-out infinite;
+}
+.mic-bars span:nth-child(2) { animation-delay: -0.15s; }
+.mic-bars span:nth-child(3) { animation-delay: -0.3s; }
+.mic-bars span:nth-child(4) { animation-delay: -0.45s; }
+.mic-bars span:nth-child(5) { animation-delay: -0.1s; }
+@media (prefers-reduced-motion: reduce) {
+  .mic-bars span {
+    animation: none !important;
+    transform: scaleY(0.6);
+  }
+}
+
 :focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;

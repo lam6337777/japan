@@ -6,7 +6,10 @@ Chạy: .venv\\Scripts\\python -m uvicorn app.main:app --port 8000 --reload
 import json
 import secrets
 
-from fastapi import Depends, FastAPI, Header, HTTPException
+import logging
+
+from fastapi import Depends, FastAPI, Header, HTTPException, Request
+from fastapi.responses import JSONResponse
 from pydantic import ValidationError
 
 from .config import settings
@@ -15,6 +18,14 @@ from .prompts import START_MESSAGE, TOPICS, build_system_prompt
 from .schemas import ChatReply, ChatRequest, LookupReply, LookupRequest
 
 app = FastAPI(title="Nihongo AI — Chatbot", version="0.1.0")
+log = logging.getLogger("uvicorn.error")
+
+
+@app.exception_handler(Exception)
+async def unexpected_error(_: Request, exc: Exception):
+    # Lỗi không lường trước: vẫn trả JSON có "detail" để backend hiện thông báo rõ ràng
+    log.exception("Lỗi không mong muốn: %s", exc)
+    return JSONResponse(status_code=502, content={"detail": "Chatbot gặp sự cố tạm thời, bạn gửi lại tin nhắn nhé."})
 
 
 def require_internal_key(x_internal_key: str = Header(default="")):

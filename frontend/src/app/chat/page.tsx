@@ -46,6 +46,19 @@ export default function ChatPage() {
     if (g && findGrammar(g)) setGrammarId(g);
   }, []);
 
+  // Máy chủ miễn phí "ngủ" sau ~15 phút không dùng → đánh thức chatbot ngay khi mở trang
+  // và giữ nó thức trong lúc trang chat đang mở (chỉ khi tab đang hiện)
+  useEffect(() => {
+    const ping = () => document.visibilityState === "visible" && api("/health").catch(() => {});
+    ping();
+    const t = setInterval(ping, 5 * 60_000);
+    document.addEventListener("visibilitychange", ping);
+    return () => {
+      clearInterval(t);
+      document.removeEventListener("visibilitychange", ping);
+    };
+  }, []);
+
   const updateSettings = (patch: Partial<Settings>) => {
     const next = { ...settings, ...patch };
     setSettings(next);

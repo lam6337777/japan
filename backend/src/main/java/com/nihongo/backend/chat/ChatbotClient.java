@@ -56,7 +56,7 @@ public class ChatbotClient {
                 .connectTimeout(Duration.ofSeconds(5))
                 .build();
         JdkClientHttpRequestFactory factory = new JdkClientHttpRequestFactory(client);
-        factory.setReadTimeout(Duration.ofSeconds(90));
+        factory.setReadTimeout(Duration.ofSeconds(110));
         this.http = RestClient.builder()
                 .requestFactory(factory)
                 .baseUrl(baseUrl)
@@ -81,26 +81,54 @@ public class ChatbotClient {
         return post("/lookup", request, LookupReply.class);
     }
 
-    private <T> T post(String uri, Object request, Class<T> type) {
-        try {
-            return http.post()
-                    .uri(uri)
-                    .body(request)
-                    .retrieve()
-                    .onStatus(HttpStatusCode::isError, (req, res) -> {
-                        String detail = "Chatbot gặp lỗi";
-                        try {
-                            Object d = json.readValue(res.getBody(), Map.class).get("detail");
-                            if (d instanceof String s) detail = s;
-                        } catch (Exception ignored) {
-                            // giữ thông báo mặc định
-                        }
-                        HttpStatus status = res.getStatusCode().value() == 400 ? HttpStatus.BAD_REQUEST : HttpStatus.BAD_GATEWAY;
-                        throw new ApiException(status, detail);
-                    })
-                    .body(type);
-        } catch (ResourceAccessException e) {
-            throw new ApiException(HttpStatus.SERVICE_UNAVAILABLE, "Chatbot service chưa chạy (cổng 8000). Hãy khởi động thư mục chatbot.");
+    /** Chatbot đang ngủ / đang khởi động (gói miễn phí): lỗi cổng không kèm "detail" hoặc chưa kết nối được */
+    private static final class Waking extends RuntimeException {
+        Waking() {
+            super(null, null, false, false);
         }
+    }
+
+    /** Tổng thời gian chờ chatbot thức dậy trước khi báo lỗi */
+    private static final long WAKE_BUDGET_MS = 75_000;
+
+    private <T> T post(String uri, Object request, Class<T> type) {
+        long deadline = System.currentTimeMillis() + WAKE_BUDGET_MS;
+        for (int attempt = 1; ; attempt++) {
+            try {
+                return postOnce(uri, request, type);
+            } catch (Waking | ResourceAccessException e) {
+                if (System.currentTimeMillis() + 3000 > deadline) {
+                    throw new ApiException(HttpStatus.SERVICE_UNAVAILABLE,
+                            "Chatbot đang khởi động (máy chủ miễn phí ngủ khi lâu không dùng). Bạn gửi lại sau khoảng 30 giây nhé.");
+                }
+                try {
+                    Thread.sleep(Math.min(2000L * attempt, 6000L));
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    throw new ApiException(HttpStatus.SERVICE_UNAVAILABLE, "Chatbot chưa sẵn sàng, bạn gửi lại nhé.");
+                }
+            }
+        }
+    }
+
+    private <T> T postOnce(String uri, Object request, Class<T> type) {
+        return http.post()
+                .uri(uri)
+                .body(request)
+                .retrieve()
+                .onStatus(HttpStatusCode::isError, (req, res) -> {
+                    int code = res.getStatusCode().value();
+                    String detail = null;
+                    try {
+                        Object d = json.readValue(res.getBody(), Map.class).get("detail");
+                        if (d instanceof String s) detail = s;
+                    } catch (Exception ignored) {
+                        // không phải JSON của chatbot (trang lỗi của Render khi đang khởi động...)
+                    }
+                    if (detail == null && code >= 502 && code <= 504) throw new Waking();
+                    HttpStatus status = code == 400 ? HttpStatus.BAD_REQUEST : HttpStatus.BAD_GATEWAY;
+                    throw new ApiException(status, detail != null ? detail : "Chatbot gặp lỗi (HTTP " + code + "), bạn gửi lại tin nhắn nhé.");
+                })
+                .body(type);
     }
 }

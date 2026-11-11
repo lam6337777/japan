@@ -94,7 +94,15 @@ public class ChatController {
         GrammarFocus grammar = session.getGrammarPattern() == null ? null
                 : new GrammarFocus(session.getGrammarPattern(), session.getGrammarMeaning());
 
-        ChatbotClient.Reply reply = chatbot.chat(new ChatbotClient.Request(session.getLevel(), session.getTopic(), grammar, history));
+        ChatbotClient.Reply reply;
+        try {
+            reply = chatbot.chat(new ChatbotClient.Request(session.getLevel(), session.getTopic(), grammar, history));
+        } catch (RuntimeException e) {
+            // AI không trả lời được → bỏ câu vừa lưu (frontend trả lại câu vào ô nhập để gửi lại, tránh lưu trùng)
+            if (userMsg != null) messages.delete(userMsg);
+            if (req.sessionId() == null) sessions.delete(session);
+            throw e;
+        }
 
         List<Correction> corrections = reply.corrections() == null ? List.of() : reply.corrections();
         if (userMsg != null) {

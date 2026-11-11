@@ -65,6 +65,11 @@ export default function Home() {
           <Link href="/vocab/study" className="rounded-xl bg-surface px-4 py-2.5 text-sm font-semibold text-primary shadow-sm transition hover:opacity-90">
             Học flashcard →
           </Link>
+          {starredCount > 0 && (
+            <Link href="/vocab/study?starred=1" className="rounded-xl bg-warn px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90">
+              ★ Ôn {starredCount} từ có sao
+            </Link>
+          )}
           <Link href="/chat" className="rounded-xl border border-white/30 px-4 py-2.5 text-sm font-semibold transition hover:bg-white/10">
             Luyện nói với AI
           </Link>

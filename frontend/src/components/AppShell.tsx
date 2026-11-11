@@ -7,6 +7,7 @@ import { LEVELS, type Level } from "@/lib/data";
 import { api, clearSession, getStoredUser, getToken, setSession, type User } from "@/lib/api";
 import { load, save } from "@/lib/storage";
 import { syncAll } from "@/lib/sync";
+import { clearLocalUserData, startUserDataSync, syncUserData } from "@/lib/userdata";
 
 // ---------- Trình độ đang chọn (dùng chung toàn app) ----------
 const LevelContext = createContext<{ level: Level; setLevel: (l: Level) => void }>({
@@ -210,6 +211,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     const onWaking = (e: Event) => setWaking((e as CustomEvent<boolean>).detail);
     window.addEventListener("nihongo:waking", onWaking);
     api("/health").catch(() => {}); // đánh thức backend (và chatbot) ngay khi mở app
+    startUserDataSync();
     if (getToken()) {
       // Làm mới thông tin tài khoản + đồng bộ tiến độ mỗi lần mở app
       api<User>("/me")
@@ -219,6 +221,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         })
         .catch(() => {});
       syncAll().catch(() => {});
+      syncUserData().catch(() => {});
     }
     const onLogout = () => setUser(null);
     window.addEventListener("nihongo:logout", onLogout);
@@ -245,9 +248,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         save("nihongo.level", u.level);
       }
       syncAll().catch(() => {});
+      syncUserData().catch(() => {});
     },
     logout: () => {
       clearSession();
+      clearLocalUserData();
       setUser(null);
     },
   };

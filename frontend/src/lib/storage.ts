@@ -18,6 +18,8 @@ export function save<T>(key: string, value: T) {
   } catch {
     /* bỏ qua */
   }
+  // Báo cho bộ đồng bộ theo tài khoản (lib/userdata.ts) biết dữ liệu vừa đổi
+  window.dispatchEvent(new CustomEvent("nihongo:localchange", { detail: key }));
 }
 
 export const todayKey = () => new Date().toLocaleDateString("sv-SE"); // YYYY-MM-DD theo giờ máy

@@ -127,6 +127,7 @@ export default function FlashcardPage() {
   }
 
   const starred = card ? stars.has(card.id) : false;
+  const starredInSource = source?.filter((v) => stars.has(v.id)).length ?? 0;
 
   return (
     <div className="mx-auto flex max-w-xl flex-col gap-4">
@@ -143,9 +144,23 @@ export default function FlashcardPage() {
           {title}
           {params.starredOnly && <span className="ml-2 rounded-full bg-warn-soft px-2 py-0.5 text-xs text-warn">★ Thẻ có sao</span>}
         </span>
+        <span className="flex items-center gap-2">
+          {/* Chuyển giữa "tất cả thẻ" và "thẻ có sao" (thẻ <a> để tải lại với tham số mới) */}
+          {params.starredOnly ? (
+            <a href={params.deckId ? `/vocab/study?deck=${params.deckId}` : "/vocab/study"} className="rounded-lg border border-line bg-surface px-2.5 py-1 text-xs text-muted hover:text-ink">
+              Tất cả thẻ
+            </a>
+          ) : (
+            starredInSource > 0 && (
+              <a href={`/vocab/study?${params.deckId ? `deck=${params.deckId}&` : ""}starred=1`} className="rounded-lg border border-warn/50 bg-warn-soft px-2.5 py-1 text-xs font-medium text-warn">
+                ★ Có sao ({starredInSource})
+              </a>
+            )
+          )}
         <button onClick={toggleShuffle} className={`rounded-lg border px-2.5 py-1 text-xs ${shuffled ? "border-primary bg-primary-soft text-primary" : "border-line bg-surface text-muted hover:text-ink"}`}>
           🔀 {shuffled ? "Đang trộn" : "Trộn thẻ"}
         </button>
+        </span>
       </div>
 
       {/* Thẻ lật */}

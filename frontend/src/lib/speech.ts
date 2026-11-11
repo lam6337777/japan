@@ -144,91 +144,123 @@ export function listenOnce(opts: {
 
   let resolveFn: (r: ListenResult) => void = () => {};
   const result = new Promise<ListenResult>((r) => (resolveFn = r));
-  const rec: Recognition = new SR();
+  let rec: Recognition = null;
   let settled = false;
   let gotText = false;
   let lastInterim = "";
+  let ready = false;
+  let deadline = 0; // thời điểm hết giờ chờ (tính từ lúc micro mở lần đầu)
   let silenceTimer: ReturnType<typeof setTimeout> | null = null;
   const timers: ReturnType<typeof setTimeout>[] = [];
 
+  const detach = (r: Recognition) => {
+    if (!r) return;
+    r.onresult = r.onend = r.onerror = r.onstart = r.onaudiostart = r.onspeechstart = null;
+    try {
+      r.abort();
+    } catch {
+      /* bỏ qua */
+    }
+  };
   const finish = (r: ListenResult) => {
     if (settled) return;
     settled = true;
     if (silenceTimer) clearTimeout(silenceTimer);
     timers.forEach(clearTimeout);
-    rec.onresult = rec.onend = rec.onerror = rec.onstart = rec.onaudiostart = rec.onspeechstart = null;
-    try {
-      rec.abort();
-    } catch {
-      /* bỏ qua */
-    }
+    detach(rec);
+    rec = null;
     resolveFn(r);
   };
-  const armSilence = () => {
+  const armSilence = (ms: number) => {
     if (gotText) return;
     if (silenceTimer) clearTimeout(silenceTimer);
-    silenceTimer = setTimeout(() => finish({ kind: "silence" }), opts.silenceMs);
+    silenceTimer = setTimeout(() => finish({ kind: "silence" }), ms);
   };
 
-  rec.lang = "ja-JP";
-  rec.interimResults = true;
-  rec.continuous = false;
-  rec.maxAlternatives = 1;
-  let ready = false;
-  const onReady = () => {
-    if (ready) return;
-    ready = true;
-    opts.onPhase?.("ready");
-    armSilence();
+  /**
+   * Trình duyệt (nhất là trên điện thoại) thường tự tắt micro sau ~5–8 giây im lặng, sớm hơn silenceMs.
+   * Khi đó, nếu chưa hết giờ và chưa nghe được gì → âm thầm mở phiên nhận dạng mới để chờ tiếp.
+   */
+  const endedQuietly = () => {
+    if (settled) return;
+    if (lastInterim) return finish({ kind: "text", text: lastInterim });
+    if (ready && Date.now() < deadline - 500) return startRec();
+    finish({ kind: "silence" });
   };
-  rec.onstart = onReady;
-  rec.onaudiostart = onReady;
-  rec.onspeechstart = () => {
-    opts.onPhase?.("hearing");
-    armSilence(); // có tiếng → cho thêm thời gian để ra chữ
-  };
-  rec.onresult = (e: any) => {
-    let finalText = "";
-    let interimText = "";
-    for (let i = e.resultIndex; i < e.results.length; i++) {
-      const r = e.results[i];
-      if (r.isFinal) finalText += r[0].transcript;
-      else interimText += r[0].transcript;
-    }
-    if (finalText.trim()) return finish({ kind: "text", text: finalText.trim() });
-    if (interimText.trim()) {
-      gotText = true;
-      lastInterim = interimText.trim();
-      if (silenceTimer) clearTimeout(silenceTimer);
+
+  const startRec = () => {
+    detach(rec);
+    const r: Recognition = new SR();
+    rec = r;
+    const mine = () => rec === r && !settled;
+    r.lang = "ja-JP";
+    r.interimResults = true;
+    r.continuous = false;
+    r.maxAlternatives = 1;
+    const onReady = () => {
+      if (!mine() || ready) return;
+      ready = true;
+      deadline = Date.now() + opts.silenceMs;
+      opts.onPhase?.("ready");
+      armSilence(opts.silenceMs);
+    };
+    r.onstart = onReady;
+    r.onaudiostart = onReady;
+    r.onspeechstart = () => {
+      if (!mine()) return;
       opts.onPhase?.("hearing");
-      opts.onInterim?.(interimText);
+      // có tiếng → cho thêm thời gian để ra chữ
+      deadline = Math.max(deadline, Date.now() + opts.silenceMs);
+      armSilence(opts.silenceMs);
+    };
+    r.onresult = (e: any) => {
+      if (!mine()) return;
+      let finalText = "";
+      let interimText = "";
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const x = e.results[i];
+        if (x.isFinal) finalText += x[0].transcript;
+        else interimText += x[0].transcript;
+      }
+      if (finalText.trim()) return finish({ kind: "text", text: finalText.trim() });
+      if (interimText.trim()) {
+        gotText = true;
+        lastInterim = interimText.trim();
+        if (silenceTimer) clearTimeout(silenceTimer);
+        opts.onPhase?.("hearing");
+        opts.onInterim?.(interimText);
+      }
+    };
+    // Một số máy kết thúc mà không gửi kết quả "cuối" → dùng phần chữ tạm đã nghe được
+    r.onend = () => mine() && endedQuietly();
+    r.onerror = (e: any) => {
+      if (!mine()) return;
+      const code = e?.error;
+      if (code === "no-speech" || code === "aborted") return endedQuietly();
+      finish({ kind: "error", message: MIC_ERRORS[code] ?? `Không nhận được giọng nói (${code ?? "lỗi lạ"}).` });
+    };
+    try {
+      r.start();
+    } catch {
+      if (ready) finish({ kind: "silence" });
+      else finish({ kind: "error", message: "Không bật được micro. Hãy thử lại hoặc tải lại trang." });
     }
-  };
-  // Một số máy kết thúc mà không gửi kết quả "cuối" → dùng phần chữ tạm đã nghe được
-  rec.onend = () => finish(lastInterim ? { kind: "text", text: lastInterim } : { kind: "silence" });
-  rec.onerror = (e: any) => {
-    const code = e?.error;
-    if (code === "no-speech" || code === "aborted") return finish({ kind: "silence" });
-    finish({ kind: "error", message: MIC_ERRORS[code] ?? `Không nhận được giọng nói (${code ?? "lỗi lạ"}).` });
   };
 
   opts.onPhase?.("starting");
-  // Micro không mở được trong 8 giây → báo lỗi; một câu nói tối đa 30 giây
+  // Micro không mở được trong 8 giây → báo lỗi; mỗi lượt nghe tối đa 40 giây
   timers.push(setTimeout(() => !ready && finish({ kind: "error", message: "Micro không phản hồi. Hãy thử lại hoặc tải lại trang." }), 8000));
   timers.push(
     setTimeout(() => {
       try {
-        rec.stop();
+        rec?.stop();
       } catch {
-        finish({ kind: "silence" });
+        /* bỏ qua */
       }
-    }, 30000),
+      setTimeout(() => finish(lastInterim ? { kind: "text", text: lastInterim } : { kind: "silence" }), 1500);
+    }, 40000),
   );
-  try {
-    rec.start();
-  } catch {
-    finish({ kind: "error", message: "Không bật được micro. Hãy thử lại hoặc tải lại trang." });
-  }
+  startRec();
   return { result, abort: () => finish({ kind: "aborted" }) };
 }
 

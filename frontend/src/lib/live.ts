@@ -8,7 +8,7 @@ import { listenOnce, speakAsync, stopSpeaking, type ListenResult } from "./speec
  * - Micro tạm tắt trong lúc AI đọc để không thu lại giọng của AI (nhất là khi dùng loa ngoài).
  * - Người dùng im lặng SILENCE_MS (tính từ lúc micro mở) → AI hỏi lại; sau MAX_PROMPTS lần → AI chào và kết thúc.
  */
-export const SILENCE_MS = 4000;
+export const SILENCE_MS = 9000;
 export const MAX_PROMPTS = 2;
 
 export type LiveLine = { ja: string; kana: string; vi: string };

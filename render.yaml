@@ -5,7 +5,11 @@ services:
     name: nihongo-chatbot
     runtime: docker
     plan: free
-    rootDir: chatbot
+    dockerfilePath: ./chatbot/Dockerfile
+    dockerContext: ./chatbot
+    buildFilter:
+      paths:
+        - chatbot/**
     healthCheckPath: /health
     envVars:
       - key: DEEPSEEK_API_KEY
@@ -19,7 +23,11 @@ services:
     name: nihongo-backend
     runtime: docker
     plan: free
-    rootDir: backend
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    buildFilter:
+      paths:
+        - backend/**
     healthCheckPath: /api/health
     envVars:
       # Lấy từ Neon (xem README phần "Đưa lên mạng")

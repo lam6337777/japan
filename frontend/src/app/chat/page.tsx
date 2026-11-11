@@ -100,8 +100,18 @@ export default function ChatPage() {
     autoSendRef.current = settings.autoSend;
   });
 
+  const loadingRef = useRef(loading);
+  const inputRef = useRef(input);
+  useEffect(() => {
+    loadingRef.current = loading;
+    inputRef.current = input;
+  });
   const mic = useSpeechRecognition((text) => {
-    if (autoSendRef.current) sendRef.current(text);
+    // Đang chờ AI trả lời thì không gửi được → để câu trong ô nhập, gửi sau.
+    // Nếu ô nhập đang có chữ (câu nói trước đó chưa gửi) thì gửi gộp cả hai.
+    const prev = inputRef.current.trim();
+    const joined = prev ? (/[。！？!?、]$/.test(prev) ? prev : prev + "。") + text : text;
+    if (autoSendRef.current && !loadingRef.current) sendRef.current(joined);
     else setInput((prev) => prev + text);
   });
 

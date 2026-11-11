@@ -85,6 +85,16 @@ const MIC_ERRORS: Record<string, string> = {
 
 export type MicPhase = "idle" | "starting" | "ready" | "hearing";
 
+const getSR = () => {
+  if (typeof window === "undefined") return null;
+  const w = window as any;
+  return w.SpeechRecognition || w.webkitSpeechRecognition || null;
+};
+
+/**
+ * Nhận dạng giọng nói. Mỗi lần bấm mic tạo một phiên nhận dạng MỚI — trên điện thoại
+ * (Safari iOS, một số máy Android) dùng lại phiên cũ thường chỉ chạy được lần đầu.
+ */
 export function useSpeechRecognition(onFinal: (text: string) => void) {
   const [supported, setSupported] = useState(false);
   const [phase, setPhase] = useState<MicPhase>("idle");
@@ -92,50 +102,40 @@ export function useSpeechRecognition(onFinal: (text: string) => void) {
   const [error, setError] = useState<string | null>(null);
   const [captured, setCaptured] = useState<{ text: string; at: number } | null>(null);
   const recRef = useRef<Recognition>(null);
+  const watchdogRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const onFinalRef = useRef(onFinal);
   useEffect(() => {
     onFinalRef.current = onFinal;
   });
 
   useEffect(() => {
-    const w = window as any;
-    const SR = w.SpeechRecognition || w.webkitSpeechRecognition;
-    if (!SR) return;
-    setSupported(true);
-    const rec: Recognition = new SR();
-    rec.lang = "ja-JP";
-    rec.interimResults = true;
-    rec.continuous = false;
-    // starting → (micro mở) ready → (nghe thấy tiếng) hearing → kết thúc
-    rec.onaudiostart = () => setPhase((p) => (p === "starting" ? "ready" : p));
-    rec.onsoundstart = () => setPhase((p) => (p === "idle" ? p : "hearing"));
-    rec.onspeechstart = () => setPhase((p) => (p === "idle" ? p : "hearing"));
-    rec.onresult = (e: any) => {
-      let finalText = "";
-      let interimText = "";
-      for (let i = e.resultIndex; i < e.results.length; i++) {
-        const r = e.results[i];
-        if (r.isFinal) finalText += r[0].transcript;
-        else interimText += r[0].transcript;
+    setSupported(!!getSR());
+    return () => {
+      recRef.current?.abort();
+      if (watchdogRef.current) clearTimeout(watchdogRef.current);
+    };
+  }, []);
+
+  const clearWatchdog = () => {
+    if (watchdogRef.current) clearTimeout(watchdogRef.current);
+    watchdogRef.current = null;
+  };
+
+  /** Bỏ phiên hiện tại (nếu có) và đưa nút về trạng thái nghỉ */
+  const reset = useCallback(() => {
+    clearWatchdog();
+    const old = recRef.current;
+    recRef.current = null;
+    if (old) {
+      old.onresult = old.onend = old.onerror = old.onaudiostart = old.onsoundstart = old.onspeechstart = null;
+      try {
+        old.abort();
+      } catch {
+        /* bỏ qua */
       }
-      setPhase((p) => (p === "idle" ? p : "hearing"));
-      setInterim(interimText);
-      if (finalText) {
-        setCaptured({ text: finalText, at: Date.now() });
-        onFinalRef.current(finalText);
-      }
-    };
-    rec.onend = () => {
-      setPhase("idle");
-      setInterim("");
-    };
-    rec.onerror = (e: any) => {
-      setPhase("idle");
-      if (e?.error === "aborted") return; // tự dừng, không phải lỗi
-      setError(MIC_ERRORS[e?.error] ?? `Không nhận được giọng nói (${e?.error ?? "lỗi lạ"}). Hãy thử lại.`);
-    };
-    recRef.current = rec;
-    return () => rec.abort();
+    }
+    setPhase("idle");
+    setInterim("");
   }, []);
 
   // Ẩn dòng "Đã ghi lại" sau vài giây
@@ -146,19 +146,92 @@ export function useSpeechRecognition(onFinal: (text: string) => void) {
   }, [captured]);
 
   const start = useCallback(() => {
-    if (!recRef.current) return;
+    const SR = getSR();
+    if (!SR) return;
+    reset();
     stopSpeaking();
     setError(null);
     setCaptured(null);
-    try {
-      recRef.current.start();
-      setPhase("starting");
-    } catch {
-      /* đã đang nghe */
-    }
-  }, []);
 
-  const stop = useCallback(() => recRef.current?.stop(), []);
+    const rec: Recognition = new SR();
+    rec.lang = "ja-JP";
+    rec.interimResults = true;
+    rec.continuous = false;
+    rec.maxAlternatives = 1;
+    let done = false; // mỗi phiên chỉ nhận 1 câu (một số máy Android trả kết quả cuối 2 lần)
+    const mine = () => recRef.current === rec;
+
+    rec.onaudiostart = () => {
+      if (!mine()) return;
+      clearWatchdog();
+      setPhase((p) => (p === "starting" ? "ready" : p));
+    };
+    rec.onsoundstart = rec.onspeechstart = () => mine() && setPhase("hearing");
+    rec.onresult = (e: any) => {
+      if (!mine() || done) return;
+      let finalText = "";
+      let interimText = "";
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const r = e.results[i];
+        if (r.isFinal) finalText += r[0].transcript;
+        else interimText += r[0].transcript;
+      }
+      clearWatchdog();
+      setPhase("hearing");
+      setInterim(interimText);
+      if (finalText.trim()) {
+        done = true;
+        setCaptured({ text: finalText.trim(), at: Date.now() });
+        onFinalRef.current(finalText.trim());
+        try {
+          rec.stop();
+        } catch {
+          /* bỏ qua */
+        }
+      }
+    };
+    rec.onend = () => {
+      if (!mine()) return;
+      clearWatchdog();
+      recRef.current = null;
+      setPhase("idle");
+      setInterim("");
+    };
+    rec.onerror = (e: any) => {
+      if (!mine()) return;
+      reset();
+      if (e?.error === "aborted") return; // tự dừng, không phải lỗi
+      setError(MIC_ERRORS[e?.error] ?? `Không nhận được giọng nói (${e?.error ?? "lỗi lạ"}). Hãy thử lại.`);
+    };
+
+    recRef.current = rec;
+    setPhase("starting");
+    // Nếu micro không mở được trong 8 giây (máy bị treo phiên cũ…) thì nhả nút và báo lỗi
+    watchdogRef.current = setTimeout(() => {
+      if (!mine()) return;
+      reset();
+      setError("Micro không phản hồi. Hãy bấm lại nút mic; nếu vẫn không được, tải lại trang.");
+    }, 8000);
+    try {
+      rec.start();
+    } catch {
+      reset();
+      setError("Không bật được micro. Hãy bấm lại nút mic; nếu vẫn không được, tải lại trang.");
+    }
+  }, [reset]);
+
+  /** Dừng nghe: giữ phần đã nói được; nếu máy không báo kết thúc trong 1,5 giây thì tự nhả nút */
+  const stop = useCallback(() => {
+    const rec = recRef.current;
+    if (!rec) return reset();
+    try {
+      rec.stop();
+    } catch {
+      return reset();
+    }
+    clearWatchdog();
+    watchdogRef.current = setTimeout(() => recRef.current === rec && reset(), 1500);
+  }, [reset]);
 
   return { supported, listening: phase !== "idle", phase, interim, error, captured, start, stop };
 }

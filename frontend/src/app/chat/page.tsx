@@ -8,6 +8,7 @@ import { SpeakButton } from "@/components/ui";
 import { api } from "@/lib/api";
 import { findGrammar } from "@/lib/grammar";
 import { speak, stopSpeaking, useSpeechRecognition } from "@/lib/speech";
+import { MAX_PROMPTS, useLiveConversation, type LivePhase } from "@/lib/live";
 import { load, save } from "@/lib/storage";
 import { bumpActivity } from "@/lib/activity";
 import { TOPICS } from "@/lib/topics";
@@ -56,8 +57,8 @@ export default function ChatPage() {
   }, [messages, loading, pendingText]);
 
   const send = useCallback(
-    async (text: string | null) => {
-      if (loading) return;
+    async (text: string | null, opts: { live?: boolean } = {}): Promise<string | null> => {
+      if (loading) return null;
       const content = text?.trim() || null;
       const grammar = grammarId ? findGrammar(grammarId)?.point : null;
       setInput("");
@@ -80,11 +81,13 @@ export default function ChatPage() {
         setMessages((prev) => [...prev, ...(res.userMessage ? [res.userMessage] : []), res.assistantMessage]);
         setSuggestions(res.suggestions);
         setHistory(null); // tải lại danh sách khi mở lịch sử
-        if (settings.autoSpeak) speak(res.assistantMessage.content);
+        if (settings.autoSpeak && !opts.live) speak(res.assistantMessage.content);
         if (content) bumpActivity("chat");
+        return res.assistantMessage.content;
       } catch (e) {
         setError(e instanceof Error ? e.message : "Có lỗi xảy ra");
         if (content) setInput(content); // trả lại nội dung để gửi lại
+        return null;
       } finally {
         setLoading(false);
         setPendingText(null);
@@ -115,7 +118,23 @@ export default function ChatPage() {
     else setInput((prev) => prev + text);
   });
 
+  // Chế độ trò chuyện trực tiếp (nói liên tục, micro không tự đóng)
+  const messagesRef = useRef(messages);
+  useEffect(() => {
+    messagesRef.current = messages;
+  });
+  const localId = useRef(-1000);
+  const live = useLiveConversation({
+    send: (text) => sendRef.current(text, { live: true }),
+    onLocalLine: (line) => setMessages((prev) => [...prev, { id: localId.current--, role: "assistant", content: line.ja, kana: line.kana, vi: line.vi }]),
+    hasMessages: () => messagesRef.current.length > 0,
+  });
+  useEffect(() => {
+    if (live.notice) bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [live.notice]);
+
   const reset = () => {
+    live.end();
     stopSpeaking();
     setSessionId(null);
     setMessages([]);
@@ -137,6 +156,7 @@ export default function ChatPage() {
   const loadSession = async (id: number) => {
     try {
       const res = await api<{ session: SessionInfo; messages: Msg[] }>(`/chat/sessions/${id}`);
+      live.end();
       stopSpeaking();
       setSessionId(id);
       setTopic(res.session.topic in TOPICS ? res.session.topic : "free");
@@ -171,7 +191,7 @@ export default function ChatPage() {
   }
 
   const grammar = grammarId ? findGrammar(grammarId)?.point : null;
-  const started = messages.length > 0 || loading;
+  const started = messages.length > 0 || loading || live.active;
 
   return (
     <div className="flex flex-col">
@@ -270,9 +290,17 @@ export default function ChatPage() {
                 Cô sẽ trò chuyện với bạn bằng tiếng Nhật trình độ {level.toUpperCase()}, sửa lỗi và gợi ý câu trả lời. Bạn có thể gõ phím hoặc bấm micro để nói. Bấm vào bất kỳ từ nào trong câu của cô để xem nghĩa.
               </p>
             </div>
-            <button onClick={() => send(null)} className="rounded-xl bg-primary px-5 py-2.5 font-semibold text-primary-ink shadow-sm transition hover:opacity-90">
-              Bắt đầu hội thoại
-            </button>
+            <div className="flex w-full max-w-xs flex-col gap-2">
+              <button onClick={() => send(null)} className="rounded-xl bg-primary px-5 py-2.5 font-semibold text-primary-ink shadow-sm transition hover:opacity-90">
+                Bắt đầu hội thoại
+              </button>
+              {mic.supported && (
+                <button onClick={live.start} className="flex items-center justify-center gap-2 rounded-xl border border-accent/40 bg-accent-soft px-5 py-2.5 font-semibold text-accent transition hover:bg-accent hover:text-white">
+                  <LiveIcon /> Trò chuyện bằng giọng nói
+                </button>
+              )}
+            </div>
+            {mic.supported && <p className="max-w-sm text-xs text-muted">Trò chuyện bằng giọng nói: cứ nói tự nhiên như gọi điện, micro tự bật lại sau mỗi câu của cô. Bấm “Kết thúc” khi muốn dừng.</p>}
           </div>
         )}
 
@@ -313,7 +341,13 @@ export default function ChatPage() {
         )}
 
         {error && <div className="rounded-xl bg-accent-soft px-4 py-3 text-sm text-accent">{error}</div>}
-        <div ref={bottomRef} />
+        {live.notice && !live.active && (
+          <div className="pop-in flex items-start justify-between gap-3 rounded-xl border border-line bg-surface-2 px-4 py-2.5 text-sm text-muted">
+            <span>{live.notice}</span>
+            <button onClick={live.clearNotice} aria-label="Đóng thông báo" className="px-1">✕</button>
+          </div>
+        )}
+        <div ref={bottomRef} className="scroll-mb-44 md:scroll-mb-28" />
       </div>
 
       {/* Gợi ý câu trả lời */}
@@ -328,8 +362,11 @@ export default function ChatPage() {
         </div>
       )}
 
+      {/* Trò chuyện trực tiếp: thay cho ô nhập */}
+      {live.active && <LivePanel phase={live.phase} interim={live.interim} misses={live.misses} onEnd={() => live.end()} />}
+
       {/* Ô nhập */}
-      {started && (
+      {started && !live.active && (
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -364,17 +401,90 @@ export default function ChatPage() {
             }}
             rows={1}
             maxLength={1000}
-            placeholder={mic.listening ? "" : "Nhập câu trả lời bằng tiếng Nhật (Enter để gửi)"}
+            placeholder={mic.listening ? "" : "Nhập tiếng Nhật…"}
             className="jp max-h-32 min-h-11 flex-1 resize-none bg-transparent px-2 py-2.5 outline-none placeholder:font-sans placeholder:text-muted"
           />
-          <button type="submit" disabled={!input.trim() || loading} className="h-11 shrink-0 rounded-xl bg-primary px-4 font-semibold text-primary-ink transition hover:opacity-90 disabled:opacity-40">
-            Gửi
+          <button type="submit" disabled={!input.trim() || loading} aria-label="Gửi" className="flex h-11 shrink-0 items-center justify-center rounded-xl bg-primary px-3 font-semibold text-primary-ink transition hover:opacity-90 disabled:opacity-40 sm:px-4">
+            <svg className="sm:hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z" />
+            </svg>
+            <span className="hidden sm:inline">Gửi</span>
           </button>
+          {mic.supported && (
+            <button
+              type="button"
+              onClick={() => {
+                mic.stop();
+                live.start();
+              }}
+              disabled={loading}
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-accent/40 text-accent transition hover:bg-accent hover:text-white disabled:opacity-40"
+              aria-label="Trò chuyện trực tiếp bằng giọng nói"
+              title="Trò chuyện trực tiếp: nói liên tục, bấm Kết thúc để dừng"
+            >
+              <LiveIcon />
+            </button>
+          )}
         </form>
       )}
       {started && !mic.supported && (
         <p className="mt-2 text-center text-xs text-muted">Trình duyệt này chưa hỗ trợ nhận dạng giọng nói. Hãy dùng Chrome hoặc Edge để nói chuyện bằng giọng.</p>
       )}
+    </div>
+  );
+}
+
+function LiveIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+      <path d="M3 11v2M7 8v8M11 5v14M15 8v8M19 10v4" />
+    </svg>
+  );
+}
+
+const LIVE_TEXT: Record<Exclude<LivePhase, "off">, string> = {
+  starting: "Đang bắt đầu…",
+  listening: "Mời bạn nói — Sakura đang nghe",
+  hearing: "Đang nghe bạn nói…",
+  thinking: "Sakura đang nghĩ…",
+  speaking: "Sakura đang nói (micro tạm tắt)",
+  prompting: "Sakura đang hỏi lại…",
+};
+
+// Bảng điều khiển khi đang trò chuyện trực tiếp
+function LivePanel({ phase, interim, misses, onEnd }: { phase: LivePhase; interim: string; misses: number; onEnd: () => void }) {
+  if (phase === "off") return null;
+  const micOn = phase === "listening" || phase === "hearing";
+  const bars = phase === "hearing" ? "hearing" : micOn ? "ready" : phase === "speaking" || phase === "prompting" ? "hearing" : "idle";
+  return (
+    <div role="status" aria-live="polite" className="pop-in sticky bottom-[68px] mt-3 rounded-2xl border border-accent/40 bg-surface p-3 shadow-md md:bottom-4">
+      <div className="flex items-center gap-3">
+        <span className={`relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${micOn ? "bg-accent text-white" : "bg-surface-2 text-muted"}`}>
+          {micOn && <span className="absolute inset-0 animate-ping rounded-full bg-accent opacity-25" />}
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+            <rect x="9" y="2" width="6" height="12" rx="3" />
+            <path d="M5 10a7 7 0 0 0 14 0M12 17v5" />
+            {!micOn && <path d="M3 3l18 18" />}
+          </svg>
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className={`text-sm font-semibold ${micOn ? "text-accent" : "text-ink"}`}>{LIVE_TEXT[phase]}</p>
+          <div className="mt-1 flex items-center gap-2">
+            <div className={`mic-bars flex h-5 items-center gap-[3px] ${micOn ? "text-accent" : "text-muted"}`} data-phase={bars}>
+              <span />
+              <span />
+              <span />
+              <span />
+              <span />
+            </div>
+            {misses > 0 && phase === "listening" && <span className="text-xs text-muted">Chưa nghe thấy bạn ({misses}/{MAX_PROMPTS})</span>}
+          </div>
+        </div>
+        <button type="button" onClick={onEnd} className="shrink-0 rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90">
+          Kết thúc
+        </button>
+      </div>
+      {interim && (phase === "hearing" || phase === "thinking") && <p className="jp mt-2 break-words rounded-xl bg-surface-2 px-3 py-2 text-base leading-snug">{interim}</p>}
     </div>
   );
 }

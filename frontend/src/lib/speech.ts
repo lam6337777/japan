@@ -70,6 +70,35 @@ export function stopSpeaking() {
   if (typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
 }
 
+/**
+ * Đọc to và chờ đọc xong. Luôn kết thúc: có hẹn giờ dự phòng vì một số trình duyệt
+ * (Chrome với câu dài, Safari iOS) đôi khi không báo sự kiện "đọc xong".
+ */
+export function speakAsync(text: string): Promise<void> {
+  if (!hasTTS() || !text.trim()) return Promise.resolve();
+  return new Promise((resolve) => {
+    let finished = false;
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(fallback);
+      resolve();
+    };
+    const rate = getSettings().speechRate || 1;
+    const fallback = setTimeout(finish, (text.length * 260) / rate + 3000);
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "ja-JP";
+    const voice = currentVoice();
+    if (voice) u.voice = voice;
+    u.rate = rate;
+    u.pitch = getSettings().pitch;
+    u.onend = finish;
+    u.onerror = finish;
+    window.speechSynthesis.speak(u);
+  });
+}
+
 // ---------- Nhận dạng giọng nói (STT) ----------
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Recognition = any;
@@ -90,6 +119,118 @@ const getSR = () => {
   const w = window as any;
   return w.SpeechRecognition || w.webkitSpeechRecognition || null;
 };
+
+export const speechRecognitionSupported = () => !!getSR();
+
+export type ListenResult =
+  | { kind: "text"; text: string }
+  | { kind: "silence" } // không nghe được câu nào trong thời gian chờ
+  | { kind: "aborted" }
+  | { kind: "error"; message: string };
+
+/**
+ * Nghe MỘT câu rồi trả kết quả (dùng cho chế độ trò chuyện liên tục).
+ * - silenceMs: tính từ lúc micro mở; nếu người dùng chưa nói gì thì trả "silence".
+ *   Có tiếng nói thì gia hạn thêm, đã ra chữ thì chờ đến hết câu.
+ * - Gọi handle.abort() để dừng ngay (trả "aborted").
+ */
+export function listenOnce(opts: {
+  silenceMs: number;
+  onPhase?: (p: Exclude<MicPhase, "idle">) => void;
+  onInterim?: (text: string) => void;
+}): { result: Promise<ListenResult>; abort: () => void } {
+  const SR = getSR();
+  if (!SR) return { result: Promise.resolve({ kind: "error", message: MIC_ERRORS["service-not-allowed"] }), abort: () => {} };
+
+  let resolveFn: (r: ListenResult) => void = () => {};
+  const result = new Promise<ListenResult>((r) => (resolveFn = r));
+  const rec: Recognition = new SR();
+  let settled = false;
+  let gotText = false;
+  let lastInterim = "";
+  let silenceTimer: ReturnType<typeof setTimeout> | null = null;
+  const timers: ReturnType<typeof setTimeout>[] = [];
+
+  const finish = (r: ListenResult) => {
+    if (settled) return;
+    settled = true;
+    if (silenceTimer) clearTimeout(silenceTimer);
+    timers.forEach(clearTimeout);
+    rec.onresult = rec.onend = rec.onerror = rec.onstart = rec.onaudiostart = rec.onspeechstart = null;
+    try {
+      rec.abort();
+    } catch {
+      /* bỏ qua */
+    }
+    resolveFn(r);
+  };
+  const armSilence = () => {
+    if (gotText) return;
+    if (silenceTimer) clearTimeout(silenceTimer);
+    silenceTimer = setTimeout(() => finish({ kind: "silence" }), opts.silenceMs);
+  };
+
+  rec.lang = "ja-JP";
+  rec.interimResults = true;
+  rec.continuous = false;
+  rec.maxAlternatives = 1;
+  let ready = false;
+  const onReady = () => {
+    if (ready) return;
+    ready = true;
+    opts.onPhase?.("ready");
+    armSilence();
+  };
+  rec.onstart = onReady;
+  rec.onaudiostart = onReady;
+  rec.onspeechstart = () => {
+    opts.onPhase?.("hearing");
+    armSilence(); // có tiếng → cho thêm thời gian để ra chữ
+  };
+  rec.onresult = (e: any) => {
+    let finalText = "";
+    let interimText = "";
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const r = e.results[i];
+      if (r.isFinal) finalText += r[0].transcript;
+      else interimText += r[0].transcript;
+    }
+    if (finalText.trim()) return finish({ kind: "text", text: finalText.trim() });
+    if (interimText.trim()) {
+      gotText = true;
+      lastInterim = interimText.trim();
+      if (silenceTimer) clearTimeout(silenceTimer);
+      opts.onPhase?.("hearing");
+      opts.onInterim?.(interimText);
+    }
+  };
+  // Một số máy kết thúc mà không gửi kết quả "cuối" → dùng phần chữ tạm đã nghe được
+  rec.onend = () => finish(lastInterim ? { kind: "text", text: lastInterim } : { kind: "silence" });
+  rec.onerror = (e: any) => {
+    const code = e?.error;
+    if (code === "no-speech" || code === "aborted") return finish({ kind: "silence" });
+    finish({ kind: "error", message: MIC_ERRORS[code] ?? `Không nhận được giọng nói (${code ?? "lỗi lạ"}).` });
+  };
+
+  opts.onPhase?.("starting");
+  // Micro không mở được trong 8 giây → báo lỗi; một câu nói tối đa 30 giây
+  timers.push(setTimeout(() => !ready && finish({ kind: "error", message: "Micro không phản hồi. Hãy thử lại hoặc tải lại trang." }), 8000));
+  timers.push(
+    setTimeout(() => {
+      try {
+        rec.stop();
+      } catch {
+        finish({ kind: "silence" });
+      }
+    }, 30000),
+  );
+  try {
+    rec.start();
+  } catch {
+    finish({ kind: "error", message: "Không bật được micro. Hãy thử lại hoặc tải lại trang." });
+  }
+  return { result, abort: () => finish({ kind: "aborted" }) };
+}
 
 /**
  * Nhận dạng giọng nói. Mỗi lần bấm mic tạo một phiên nhận dạng MỚI — trên điện thoại

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { listenOnce, speakAsync, stopSpeaking, type ListenResult } from "./speech";
+import { MIC_MUTED, listenOnce, micIsSilent, speakAsync, stopSpeaking, type ListenResult } from "./speech";
 
 /**
  * Chế độ "trò chuyện trực tiếp": nghe → gửi AI → AI đọc → nghe tiếp… cho đến khi người dùng bấm Kết thúc.
@@ -112,7 +112,9 @@ export function useLiveConversation(opts: {
       if (missed > MAX_PROMPTS) {
         optsRef.current.onLocalLine(GOODBYE);
         await say(GOODBYE.ja);
-        if (alive()) end("Cuộc trò chuyện đã kết thúc vì Sakura không nghe thấy bạn.");
+        if (!alive()) return;
+        const muted = await micIsSilent();
+        if (alive()) end(muted ? MIC_MUTED : "Cuộc trò chuyện đã kết thúc vì Sakura không nghe thấy bạn.");
         return;
       }
       const prompt = PROMPTS[(missed - 1) % PROMPTS.length];

@@ -122,6 +122,49 @@ const getSR = () => {
 
 export const speechRecognitionSupported = () => !!getSR();
 
+export const MIC_MUTED =
+  "Micro của máy đang bị tắt tiếng (mute) nên không thu được âm thanh nào. Trên laptop Windows: bấm phím tắt micro (thường là F9 hoặc phím có hình micro), hoặc vào Cài đặt → Hệ thống → Âm thanh → Đầu vào → bỏ tắt tiếng / kéo âm lượng micro lên.";
+export const MIC_NOT_OPENED =
+  "Micro không mở được. Nếu bạn đang mở trang trong Zalo, Messenger, Facebook… hãy mở bằng Chrome (Android) hoặc Safari (iPhone). Nếu đang dùng Chrome: kiểm tra đã cho phép micro chưa (ổ khóa cạnh thanh địa chỉ).";
+
+/**
+ * Kiểm tra micro có thu được tín hiệu không (đo ~0,8 giây).
+ * Trả về true nếu micro bị tắt tiếng / tắt phần cứng (trình duyệt báo "muted", hoặc tín hiệu
+ * gần như bằng 0 — micro thật luôn có chút tiếng ồn nền ~1e-4 trở lên). Không đo được thì trả về false.
+ */
+export async function micIsSilent(): Promise<boolean> {
+  if (typeof navigator === "undefined" || !navigator.mediaDevices?.getUserMedia) return false;
+  let stream: MediaStream | null = null;
+  let ctx: AudioContext | null = null;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } });
+    const track = stream.getAudioTracks()[0];
+    const AC = window.AudioContext || (window as any).webkitAudioContext;
+    ctx = new AC() as AudioContext;
+    await ctx.resume().catch(() => {});
+    const an = ctx.createAnalyser();
+    an.fftSize = 2048;
+    ctx.createMediaStreamSource(stream).connect(an);
+    const buf = new Float32Array(an.fftSize);
+    let peak = 0;
+    const t0 = Date.now();
+    while (Date.now() - t0 < 800) {
+      await new Promise((r) => setTimeout(r, 50));
+      an.getFloatTimeDomainData(buf);
+      for (const v of buf) peak = Math.max(peak, Math.abs(v));
+    }
+    // Micro bị tắt tiếng: trình duyệt báo track "muted", hoặc tín hiệu gần như bằng 0 (~1e-10).
+    // AudioContext bị trình duyệt treo (chưa chạy) thì không kết luận theo mức tín hiệu.
+    if (track?.muted) return true;
+    return ctx.state === "running" && peak < 1e-6;
+  } catch {
+    return false;
+  } finally {
+    stream?.getTracks().forEach((t) => t.stop());
+    ctx?.close().catch(() => {});
+  }
+}
+
 export type ListenResult =
   | { kind: "text"; text: string }
   | { kind: "silence" } // không nghe được câu nào trong thời gian chờ
@@ -276,6 +319,7 @@ export function useSpeechRecognition(onFinal: (text: string) => void) {
   const [captured, setCaptured] = useState<{ text: string; at: number } | null>(null);
   const recRef = useRef<Recognition>(null);
   const watchdogRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const stopRequested = useRef(false); // người dùng tự bấm dừng
   const onFinalRef = useRef(onFinal);
   useEffect(() => {
     onFinalRef.current = onFinal;
@@ -332,10 +376,12 @@ export function useSpeechRecognition(onFinal: (text: string) => void) {
     rec.continuous = false;
     rec.maxAlternatives = 1;
     let done = false; // mỗi phiên chỉ nhận 1 câu (một số máy Android trả kết quả cuối 2 lần)
+    let opened = false; // micro đã thực sự mở chưa
     const mine = () => recRef.current === rec;
 
     rec.onaudiostart = () => {
       if (!mine()) return;
+      opened = true;
       clearWatchdog();
       setPhase((p) => (p === "starting" ? "ready" : p));
     };
@@ -369,15 +415,21 @@ export function useSpeechRecognition(onFinal: (text: string) => void) {
       recRef.current = null;
       setPhase("idle");
       setInterim("");
+      // Tắt ngay mà micro chưa từng mở, cũng không báo lỗi (thường gặp ở trình duyệt trong Zalo/Messenger…)
+      if (!opened && !done && !stopRequested.current) setError(MIC_NOT_OPENED);
     };
     rec.onerror = (e: any) => {
       if (!mine()) return;
       reset();
-      if (e?.error === "aborted") return; // tự dừng, không phải lỗi
-      setError(MIC_ERRORS[e?.error] ?? `Không nhận được giọng nói (${e?.error ?? "lỗi lạ"}). Hãy thử lại.`);
+      const code = e?.error;
+      if (code === "aborted") return; // tự dừng, không phải lỗi
+      setError(MIC_ERRORS[code] ?? `Không nhận được giọng nói (${code ?? "lỗi lạ"}). Hãy thử lại.`);
+      // "Không nghe thấy gì" → xem có phải micro đang bị tắt tiếng không
+      if (code === "no-speech") micIsSilent().then((silent) => silent && setError(MIC_MUTED));
     };
 
     recRef.current = rec;
+    stopRequested.current = false;
     setPhase("starting");
     // Nếu micro không mở được trong 8 giây (máy bị treo phiên cũ…) thì nhả nút và báo lỗi
     watchdogRef.current = setTimeout(() => {
@@ -395,6 +447,7 @@ export function useSpeechRecognition(onFinal: (text: string) => void) {
 
   /** Dừng nghe: giữ phần đã nói được; nếu máy không báo kết thúc trong 1,5 giây thì tự nhả nút */
   const stop = useCallback(() => {
+    stopRequested.current = true;
     const rec = recRef.current;
     if (!rec) return reset();
     try {

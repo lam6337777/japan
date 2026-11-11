@@ -241,6 +241,64 @@ const DIALOGUES = {
   ],
 };
 
+const TEXT = {
+  desu: {
+    notWhen: ["Không đặt です sau động từ: ✗ 私は行きますです → ✓ 私は行きます.", "Nói thân mật thì thay です bằng だ hoặc bỏ hẳn: 学生だ / 学生。"],
+    compare: [{ pattern: "N が います / あります", difference: "です dùng để nói \"A là B\". Muốn nói ở đâu có ai, có cái gì thì dùng います/あります: 教室に先生がいます." }],
+  },
+  "ni-time": {
+    when: ["Thời điểm có con số: 6時に, 3月に, 2025年に, 15日に.", "Thứ trong tuần và các dịp: 日曜日に, 誕生日に, 週末に, 夏休みに."],
+    tip: "Có con số (giờ, ngày, tháng, năm) hoặc thứ → thêm に. Không có (きょう, あした, まいにち, いま, 朝) → không thêm.",
+  },
+  "de-means": { notWhen: ["Đi bộ nói 歩いて, không dùng で.", "Không dùng で để chỉ nơi tồn tại (dùng に): 部屋にいます."] },
+  "to-with": { notWhen: ["Làm một mình thì dùng 一人で: 一人で行きます (không dùng と)."] },
+  "ka-or": { notWhen: ["Chọn giữa hai hành động thì nói cả hai câu hỏi: 行きますか、行きませんか。"] },
+  counters: {
+    compare: [
+      { pattern: "〜つ vs số + 個", difference: "〜つ đếm đồ vật nói chung nhưng chỉ đến 10 (ひとつ…とお). Từ 11 trở lên dùng 〜個 (じゅういっこ) hoặc chỉ nói số." },
+      { pattern: "〜人 vs 〜名", difference: "〜人 là cách đếm người thông thường; 〜名 lịch sự hơn, hay gặp ở nhà hàng, khách sạn (何名様ですか)." },
+    ],
+  },
+  "gurai-goro": {
+    compare: [{ pattern: "ぐらい vs ごろ", difference: "ぐらい: khoảng bao nhiêu (số lượng, độ dài thời gian): 3時間ぐらい, 1000円ぐらい. ごろ: khoảng lúc nào (thời điểm): 3時ごろ, 5月ごろ." }],
+  },
+  "mada-mou": {
+    notWhen: ["もう + phủ định nghĩa là \"không… nữa\": もう食べません (tôi không ăn nữa), khác hẳn \"đã… rồi\".", "\"Vẫn chưa làm\" không nói まだ〜ませんでした mà nói まだ〜ていません."],
+  },
+  "dict-form": {
+    structure: "Nhóm I: đổi âm trước ます từ hàng い sang hàng う (書きます → 書く, 飲みます → 飲む). Nhóm II: bỏ ます, thêm る (食べます → 食べる). Nhóm III: します → する, 来ます → 来る.",
+    tip: "Nhóm I đổi い → う (書き → 書く), nhóm II thêm る (食べ → 食べる), nhóm III học thuộc する, 来る.",
+  },
+  "ta-form": {
+    when: ["Kể việc đã làm trong hội thoại thân mật: 昨日、映画を見た.", "Hỏi hoặc trả lời về việc đã làm với bạn bè: 宿題、した？", "Dùng trong các mẫu câu khác: 〜たあとで, 〜たほうがいい."],
+    tip: "Thể た chia giống hệt thể て, chỉ đổi て → た, で → だ (書いて → 書いた, 飲んで → 飲んだ). Ngoại lệ: 行く → 行った.",
+  },
+  tai: { notWhen: ["Không nói trực tiếp mong muốn của người khác: ✗ 彼は行きたいです → ✓ 彼は行きたがっています (học kỹ ở N4)."] },
+  mashouka: { notWhen: ["Rủ người khác cùng làm thì dùng ませんか / ましょう, không dùng ましょうか với nghĩa mời."] },
+  "ni-iku": { notWhen: ["Không dùng thể từ điển trước に: ✗ 見るに行きます → ✓ 見に行きます."] },
+  "te-kudasai": {
+    summary: "Mẫu câu dùng để nhờ hoặc yêu cầu ai đó làm gì một cách lịch sự. Tương đương \"hãy… / xin hãy…\" trong tiếng Việt. Dùng được với hầu hết mọi người; khi nhờ người trên làm việc gì phiền hà, nói 〜てくださいませんか sẽ nhã nhặn hơn.",
+    when: ["Nhờ ai làm gì: ちょっと待ってください.", "Hướng dẫn, chỉ dẫn: ここに名前を書いてください.", "Mời: どうぞ、入ってください."],
+    notWhen: ["Khi nhờ người trên làm việc phiền hà, nên dùng 〜てくださいませんか cho nhã nhặn.", "Muốn nói \"đừng làm\" thì dùng 〜ないでください."],
+    tip: "てください = \"hãy\"; muốn mềm mỏng hơn thì thêm ませんか: 〜てくださいませんか.",
+  },
+  "nai-de-kudasai": { compare: [{ pattern: "V ないで (thân mật)", difference: "Bỏ ください thì thành cách nói thân mật với bạn bè, người nhà: 心配しないで." }] },
+  toki: { notWhen: ["Danh từ phải có の (子どものとき), tính từ な phải giữ な (ひまなとき).", "Không dùng thể ます trước とき: ✗ 行きますとき → ✓ 行くとき."] },
+  "i-adjective": {
+    notWhen: ["Tính từ な (きれい, 静か…) chia khác: きれいじゃないです.", "Ngoại lệ: いい → よくないです / よかったです (không nói いくない, いかった)."],
+    tip: "い → くない, い → かった, い → くなかった. Ngoại lệ cần nhớ: いい → よくない, よかった.",
+  },
+  "adj-noun": {
+    summary: "Tính từ đứng ngay trước danh từ để bổ nghĩa, giống \"núi cao\" trong tiếng Việt nhưng đảo thứ tự: 高い山. Tính từ い giữ nguyên い (高い山); tính từ な phải giữ な (静かな町, きれいな花). Dạng phủ định, quá khứ cũng đứng trước danh từ được: 高くない山.",
+    structure: "Tính từ い + N (高い山) · Tính từ な + な + N (静かな町)",
+    tip: "い giữ い, な giữ な: 高い山, 静かな町. Không bao giờ chen の vào giữa tính từ và danh từ.",
+  },
+  suki: { notWhen: ["Không dùng を với 好き・きらい・上手・下手・わかる: ✗ 日本語を好きです → ✓ 日本語が好きです."] },
+};
+
+// Gộp phần sửa chữ vào FIXES
+for (const [id, v] of Object.entries(TEXT)) FIXES[id] = { ...(FIXES[id] ?? {}), ...v };
+
 const data = JSON.parse(await readFile(FILE, "utf8"));
 for (const [id, lines] of Object.entries(DIALOGUES)) {
   const g = data.find((x) => x.id === id);
@@ -258,7 +316,7 @@ for (const [id, fix] of Object.entries(FIXES)) {
     console.log(`! không thấy ${id}`);
     continue;
   }
-  for (const k of ["summary", "when", "notWhen", "compare", "tip"]) if (fix[k]) g[k] = fix[k];
+  for (const k of ["summary", "structure", "when", "notWhen", "compare", "tip"]) if (fix[k]) g[k] = fix[k];
   if (fix.summary) g.explanation = fix.summary;
   if (fix.mistakes) g.mistakes = fix.mistakes;
   if (fix.conjugation) g.conjugation = fix.conjugation;

@@ -13,7 +13,8 @@
       "Nói về quốc tịch, xuất thân"
     ],
     "notWhen": [
-      "Với tính từ い, không dùng です như copula của danh từ; おいしいです chỉ là đuôi lịch sự, không phải mẫu N は N です."
+      "Không đặt です sau động từ: ✗ 私は行きますです → ✓ 私は行きます.",
+      "Nói thân mật thì thay です bằng だ hoặc bỏ hẳn: 学生だ / 学生。"
     ],
     "conjugation": [
       {
@@ -104,12 +105,8 @@
     ],
     "compare": [
       {
-        "pattern": "N は N が います",
-        "difference": "います dùng để nói sự tồn tại của người/động vật, không dùng để định nghĩa."
-      },
-      {
-        "pattern": "N は N があります",
-        "difference": "あります dùng cho vật, không dùng cho người."
+        "pattern": "N が います / あります",
+        "difference": "です dùng để nói \"A là B\". Muốn nói ở đâu có ai, có cái gì thì dùng います/あります: 教室に先生がいます."
       }
     ],
     "tip": "Nhớ は đọc là 'wa', です đọc là 'desu', dùng để nối hai danh từ."
@@ -1806,8 +1803,8 @@
     "structure": "Thời gian cụ thể + に + V",
     "explanation": "Trợ từ に được dùng sau các từ chỉ thời gian cụ thể để nói hành động xảy ra vào lúc nào. Tương đương với 'vào lúc…' trong tiếng Việt. Không dùng に với các từ chỉ thời gian tương đối như 今日, 明日, 毎日.",
     "when": [
-      "Khi muốn nói hành động xảy ra vào một thời điểm cụ thể (giờ, ngày, tháng, năm).",
-      "Khi muốn nói 'vào lúc' với các từ như 朝, 昼, 夜, 週末, 誕生日."
+      "Thời điểm có con số: 6時に, 3月に, 2025年に, 15日に.",
+      "Thứ trong tuần và các dịp: 日曜日に, 誕生日に, 週末に, 夏休みに."
     ],
     "notWhen": [
       "Không dùng に với các từ chỉ thời gian tương đối như 今日, 明日, 昨日, 毎日, 今朝, 今週, 来月, 去年.",
@@ -1888,7 +1885,7 @@
         "difference": "に nhấn mạnh thời điểm cụ thể; は nhấn mạnh chủ đề (thường dùng khi so sánh: 日曜日は 休みます)."
       }
     ],
-    "tip": "Nhớ に là 'nhị' – như cái kim đồng hồ chỉ đúng giờ nào đó."
+    "tip": "Có con số (giờ, ngày, tháng, năm) hoặc thứ → thêm に. Không có (きょう, あした, まいにち, いま, 朝) → không thêm."
   },
   {
     "id": "ni-target",
@@ -2219,9 +2216,8 @@
       "Khi nói nói/viết bằng ngôn ngữ nào đó."
     ],
     "notWhen": [
-      "Khi đi bộ thì dùng 歩いて (hoặc 徒歩で), không dùng で với phương tiện.",
-      "Không dùng で để chỉ địa điểm tồn tại (dùng に).",
-      "Không dùng で để chỉ nguyên nhân (dùng で được nhưng nghĩa khác)."
+      "Đi bộ nói 歩いて, không dùng で.",
+      "Không dùng で để chỉ nơi tồn tại (dùng に): 部屋にいます."
     ],
     "conjugation": [],
     "variants": [
@@ -2324,8 +2320,7 @@
       "Khi muốn nói 'với' trong các cụm như 'nói chuyện với', 'gặp với'."
     ],
     "notWhen": [
-      "Không dùng と với nghĩa 'cùng với' khi đối tượng không phải người/động vật, trừ trường hợp đặc biệt (ví dụ: 会社と交渉する là 'đàm phán với công ty' vẫn dùng được).",
-      "Không dùng と khi muốn nói 'cùng với' một cách chung chung mà không có đối tác cụ thể (dùng と không phù hợp)."
+      "Làm một mình thì dùng 一人で: 一人で行きます (không dùng と)."
     ],
     "conjugation": [],
     "variants": [
@@ -2816,7 +2811,7 @@
       "Khi đề nghị ai đó làm gì với một trong hai đối tượng."
     ],
     "notWhen": [
-      "Không dùng trong câu khẳng định đơn thuần để nói 'đây là A hoặc B' khi không có ngữ cảnh lựa chọn, vì dễ gây hiểu nhầm là 'một cái gì đó không xác định'."
+      "Chọn giữa hai hành động thì nói cả hai câu hỏi: 行きますか、行きませんか。"
     ],
     "conjugation": [],
     "variants": [
@@ -3277,12 +3272,12 @@
     ],
     "compare": [
       {
-        "pattern": "〜つ vs 〜個",
-        "difference": "〜つ dùng cho vật nhỏ, hình dạng không xác định (1-9), 〜個 dùng cho vật nhỏ hình khối (1-9 cũng dùng được)."
+        "pattern": "〜つ vs số + 個",
+        "difference": "〜つ đếm đồ vật nói chung nhưng chỉ đến 10 (ひとつ…とお). Từ 11 trở lên dùng 〜個 (じゅういっこ) hoặc chỉ nói số."
       },
       {
         "pattern": "〜人 vs 〜名",
-        "difference": "〜人 là cách đếm người thông thường, 〜名 lịch sự hơn, dùng trong ngữ cảnh trang trọng."
+        "difference": "〜人 là cách đếm người thông thường; 〜名 lịch sự hơn, hay gặp ở nhà hàng, khách sạn (何名様ですか)."
       }
     ],
     "tip": "Học thuộc bảng trợ từ đếm cơ bản: 〜つ (vật chung), 〜人 (người), 〜枚 (tờ/mỏng), 〜本 (cây/dài), 〜台 (máy/móc), 〜回 (lần)."
@@ -3483,12 +3478,8 @@
     ],
     "compare": [
       {
-        "pattern": "〜ぐらい và 〜ほど",
-        "difference": "〜ほど thường dùng trong văn viết, mang tính trang trọng hơn, và thường đi với số lượng lớn hoặc so sánh."
-      },
-      {
-        "pattern": "〜ごろ và 〜ころ",
-        "difference": "Đều có nghĩa là \"khoảng thời gian\", nhưng ごろ thường dùng khi nói về thời điểm cụ thể (ví dụ: 3時ごろ), còn ころ thường dùng khi nói về khoảng thời gian dài hơn hoặc trong ngữ cảnh trang trọng (ví dụ: 子どものころ). Cách viết khác nhau tùy ngữ cảnh, không phải độ lớn thời gian."
+        "pattern": "ぐらい vs ごろ",
+        "difference": "ぐらい: khoảng bao nhiêu (số lượng, độ dài thời gian): 3時間ぐらい, 1000円ぐらい. ごろ: khoảng lúc nào (thời điểm): 3時ごろ, 5月ごろ."
       }
     ],
     "tip": "Nhớ: ぐらい đi với số lượng, ごろ đi với thời điểm. Khi nghi ngờ, dùng ぐらい cho số lượng và ごろ cho thời gian."
@@ -3507,8 +3498,8 @@
       "Dùng trong hội thoại hàng ngày để hỏi hoặc trả lời về tiến độ."
     ],
     "notWhen": [
-      "Không dùng もう với động từ ở thể phủ định để nói \"không còn nữa\" (dùng もう + V-ない).",
-      "Không dùng まだ với động từ ở thể khẳng định để nói \"vẫn đang làm gì\" trong mẫu này, mà dùng まだ + V-ています."
+      "もう + phủ định nghĩa là \"không… nữa\": もう食べません (tôi không ăn nữa), khác hẳn \"đã… rồi\".",
+      "\"Vẫn chưa làm\" không nói まだ〜ませんでした mà nói まだ〜ていません."
     ],
     "conjugation": [],
     "variants": [
@@ -4237,7 +4228,7 @@
     "pattern": "Thể từ điển",
     "meaning": "dạng gốc của động từ",
     "summary": "Thể từ điển là dạng cơ bản nhất của động từ, thường được dùng trong từ điển và khi động từ không chia. Trong câu, thể từ điển thường dùng trong văn nói thân mật, hoặc trong các cấu trúc như 'Vることができます' (có thể làm gì), 'Vる前に' (trước khi làm gì).",
-    "structure": "Động từ nhóm I: giữ nguyên đuôi -u. Nhóm II: bỏ ます thêm る. Nhóm III: します → する, 来ます → 来る.",
+    "structure": "Nhóm I: đổi âm trước ます từ hàng い sang hàng う (書きます → 書く, 飲みます → 飲む). Nhóm II: bỏ ます, thêm る (食べます → 食べる). Nhóm III: します → する, 来ます → 来る.",
     "explanation": "Thể từ điển là dạng cơ bản nhất của động từ, thường được dùng trong từ điển và khi động từ không chia. Trong câu, thể từ điển thường dùng trong văn nói thân mật, hoặc trong các cấu trúc như 'Vることができます' (có thể làm gì), 'Vる前に' (trước khi làm gì).",
     "when": [
       "Dùng trong từ điển, danh sách động từ",
@@ -4349,7 +4340,7 @@
         "difference": "ている diễn tả hành động đang diễn ra hoặc trạng thái, được tạo từ thể て + いる, không phải thể từ điển."
       }
     ],
-    "tip": "Thể từ điển là dạng gốc của động từ, nhóm I giữ nguyên đuôi -u, nhóm II bỏ ます thêm る, nhóm III nhớ する và 来る."
+    "tip": "Nhóm I đổi い → う (書き → 書く), nhóm II thêm る (食べ → 食べる), nhóm III học thuộc する, 来る."
   },
   {
     "id": "ta-form",
@@ -4360,9 +4351,9 @@
     "structure": "Động từ chia theo nhóm:\n- Nhóm I: đổi đuôi う→った, つ→った, る→った, む→んだ, ぶ→んだ, ぬ→んだ, く→いた, ぐ→いだ, す→した\n- Nhóm II: bỏ る + た\n- Nhóm III: する→した, くる→きた",
     "explanation": "Thể た là dạng quá khứ của động từ ở thể thông thường (không lịch sự). Nó tương đương với 'đã ~' trong tiếng Việt. Dùng để diễn tả hành động đã xảy ra trong quá khứ, hoặc hoàn thành. Thể た thường dùng trong văn nói thân mật, với bạn bè, gia đình.",
     "when": [
-      "Kể về hành động đã xảy ra trong quá khứ",
-      "Hỏi hoặc trả lời về việc đã làm",
-      "Diễn tả kinh nghiệm đã trải qua"
+      "Kể việc đã làm trong hội thoại thân mật: 昨日、映画を見た.",
+      "Hỏi hoặc trả lời về việc đã làm với bạn bè: 宿題、した？",
+      "Dùng trong các mẫu câu khác: 〜たあとで, 〜たほうがいい."
     ],
     "notWhen": [
       "Không dùng trong câu lịch sự (dùng ました thay thế)",
@@ -4478,7 +4469,7 @@
         "difference": "ました là dạng lịch sự của thể た, dùng trong giao tiếp trang trọng hoặc với người không thân."
       }
     ],
-    "tip": "Nhớ quy tắc: nhóm I đổi đuôi (う→った, く→いた, す→した...), nhóm II bỏ る thêm た, nhóm III học thuộc した và 来た."
+    "tip": "Thể た chia giống hệt thể て, chỉ đổi て → た, で → だ (書いて → 書いた, 飲んで → 飲んだ). Ngoại lệ: 行く → 行った."
   },
   {
     "id": "plain-form",
@@ -4613,8 +4604,7 @@
       "Khi bày tỏ nguyện vọng trong một tình huống cụ thể: 今日は早く帰りたいです。"
     ],
     "notWhen": [
-      "Không dùng trực tiếp cho mong muốn của người thứ ba (anh ấy, cô ấy...) mà không có dấu hiệu như と言っています, と思っています, ようです. Thay vào đó dùng たがっています.",
-      "Không dùng với động từ chỉ khả năng như できます, hoặc động từ chỉ trạng thái tồn tại như あります, います vì nghĩa không tự nhiên."
+      "Không nói trực tiếp mong muốn của người khác: ✗ 彼は行きたいです → ✓ 彼は行きたがっています (học kỹ ở N4)."
     ],
     "conjugation": [
       {
@@ -4889,6 +4879,16 @@
         "label": "Mời lịch sự hơn",
         "pattern": "V ませんか",
         "example": "一緒に昼ご飯を食べませんか。"
+      },
+      {
+        "label": "Mời lịch sự hơn",
+        "pattern": "V ませんか",
+        "example": "一緒に昼ご飯を食べませんか。"
+      },
+      {
+        "label": "Mời lịch sự hơn",
+        "pattern": "V ませんか",
+        "example": "一緒に昼ご飯を食べませんか。"
       }
     ],
     "examples": [
@@ -4974,8 +4974,7 @@
       "Khi bạn muốn rủ ai đó cùng làm gì đó một cách lịch sự (nhưng thường dùng ませんか sẽ tự nhiên hơn)."
     ],
     "notWhen": [
-      "Không dùng để rủ rê đơn thuần (nên dùng ませんか).",
-      "Không dùng với người trên khi chưa thân thiết, vì có thể bị coi là thiếu lịch sự (nên dùng ましょうか với thái độ khiêm nhường hoặc dùng お〜しましょうか)."
+      "Rủ người khác cùng làm thì dùng ませんか / ましょう, không dùng ましょうか với nghĩa mời."
     ],
     "conjugation": [
       {
@@ -5074,7 +5073,7 @@
       "Khi trả lời câu hỏi 'đi đâu để làm gì?'"
     ],
     "notWhen": [
-      "Không dùng khi mục đích không phải là hành động (ví dụ: đi để gặp người thì dùng 人に会いに行きます, nhưng không dùng với danh từ không phải hành động)"
+      "Không dùng thể từ điển trước に: ✗ 見るに行きます → ✓ 見に行きます."
     ],
     "conjugation": [
       {
@@ -5294,17 +5293,17 @@
     "group": "Mẫu câu với thể て",
     "pattern": "V て ください",
     "meaning": "hãy làm V",
-    "summary": "Mẫu câu dùng để yêu cầu hoặc đề nghị ai đó làm việc gì một cách lịch sự. Tương đương với \"hãy ...\" trong tiếng Việt. Thường dùng với người ngang hàng hoặc người dưới, không dùng với người trên trong tình huống trang trọng.",
+    "summary": "Mẫu câu dùng để nhờ hoặc yêu cầu ai đó làm gì một cách lịch sự. Tương đương \"hãy… / xin hãy…\" trong tiếng Việt. Dùng được với hầu hết mọi người; khi nhờ người trên làm việc gì phiền hà, nói 〜てくださいませんか sẽ nhã nhặn hơn.",
     "structure": "Động từ thể て + ください",
-    "explanation": "Mẫu câu dùng để yêu cầu hoặc đề nghị ai đó làm việc gì một cách lịch sự. Tương đương với \"hãy ...\" trong tiếng Việt. Thường dùng với người ngang hàng hoặc người dưới, không dùng với người trên trong tình huống trang trọng.",
+    "explanation": "Mẫu câu dùng để nhờ hoặc yêu cầu ai đó làm gì một cách lịch sự. Tương đương \"hãy… / xin hãy…\" trong tiếng Việt. Dùng được với hầu hết mọi người; khi nhờ người trên làm việc gì phiền hà, nói 〜てくださいませんか sẽ nhã nhặn hơn.",
     "when": [
-      "Khi muốn nhờ ai đó làm một việc gì đó (người ngang hàng hoặc người dưới)",
-      "Khi đưa ra chỉ dẫn hoặc hướng dẫn cho ai đó",
-      "Khi muốn yêu cầu một cách lịch sự trong giao tiếp hàng ngày"
+      "Nhờ ai làm gì: ちょっと待ってください.",
+      "Hướng dẫn, chỉ dẫn: ここに名前を書いてください.",
+      "Mời: どうぞ、入ってください."
     ],
     "notWhen": [
-      "Không dùng với người trên (thầy cô, cấp trên, người lớn tuổi) trong tình huống trang trọng vì có thể bị coi là thiếu lịch sự. Khi đó nên dùng ～てくださいませんか hoặc ～ていただけませんか.",
-      "Không dùng khi muốn ra lệnh mạnh mẽ (dùng thể mệnh lệnh hoặc ～なさい)."
+      "Khi nhờ người trên làm việc phiền hà, nên dùng 〜てくださいませんか cho nhã nhặn.",
+      "Muốn nói \"đừng làm\" thì dùng 〜ないでください."
     ],
     "conjugation": [
       {
@@ -5407,7 +5406,7 @@
         "difference": "Là dạng phủ định của ～てください, có nghĩa \"đừng làm V\"."
       }
     ],
-    "tip": "Hãy nhớ ～てください là câu yêu cầu lịch sự nhưng không dùng với người trên trong tình huống trang trọng; khi cần lịch sự hơn, thêm ませんか."
+    "tip": "てください = \"hãy\"; muốn mềm mỏng hơn thì thêm ませんか: 〜てくださいませんか."
   },
   {
     "id": "te-imasu",
@@ -6072,12 +6071,8 @@
     ],
     "compare": [
       {
-        "pattern": "V ないで",
-        "difference": "V ないでください là câu yêu cầu lịch sự, còn V ないで (không có ください) thường dùng trong văn nói thân mật hoặc nối câu."
-      },
-      {
-        "pattern": "V ないで ください và V ない でください",
-        "difference": "Cách viết đúng là V ないで ください (liền nhau), không tách rời ない và で."
+        "pattern": "V ないで (thân mật)",
+        "difference": "Bỏ ください thì thành cách nói thân mật với bạn bè, người nhà: 心配しないで."
       }
     ],
     "tip": "Hãy nhớ ないで ください giống như câu \"xin đừng\" trong tiếng Việt, chỉ cần chia động từ về thể ない rồi thêm で ください."
@@ -6458,8 +6453,8 @@
       "Khi muốn nói “khi đi Nhật”: 日本へ行くとき、お土産を買います。"
     ],
     "notWhen": [
-      "Không dùng とき với ý “trong lúc đang làm gì” (dùng 〜ながら hoặc 〜ているあいだに).",
-      "Không dùng とき để nói “trước khi” hay “sau khi” (dùng まえに, あとで)."
+      "Danh từ phải có の (子どものとき), tính từ な phải giữ な (ひまなとき).",
+      "Không dùng thể ます trước とき: ✗ 行きますとき → ✓ 行くとき."
     ],
     "conjugation": [
       {
@@ -6689,8 +6684,8 @@
       "Khi phủ định tính chất trong quá khứ: 高くなかったです (đã không cao)"
     ],
     "notWhen": [
-      "Không dùng cho tính từ な (như きれい, 静か) vì chúng có cách chia khác.",
-      "Không dùng để bổ nghĩa cho danh từ khi chưa chia (phải dùng dạng 高い + N, không phải 高いです + N)."
+      "Tính từ な (きれい, 静か…) chia khác: きれいじゃないです.",
+      "Ngoại lệ: いい → よくないです / よかったです (không nói いくない, いかった)."
     ],
     "conjugation": [
       {
@@ -6794,7 +6789,7 @@
         "difference": "Tính từ な (như きれい, 静か) chia khác: phủ định dùng じゃない, quá khứ dùng だった. Ví dụ: きれいじゃない, きれいだった."
       }
     ],
-    "tip": "Nhớ quy tắc: い → くない (phủ định), い → かった (quá khứ), い → くなかった (quá khứ phủ định)."
+    "tip": "い → くない, い → かった, い → くなかった. Ngoại lệ cần nhớ: いい → よくない, よかった."
   },
   {
     "id": "na-adjective",
@@ -6921,9 +6916,9 @@
     "group": "Tính từ",
     "pattern": "Tính từ + N",
     "meaning": "tính từ bổ nghĩa cho danh từ",
-    "summary": "Trong tiếng Nhật, tính từ có thể đứng ngay trước danh từ để bổ nghĩa, giống như 'cao' trong 'ngọn núi cao' tiếng Việt. Tính từ い giữ nguyên đuôi い, tính từ な bỏ な khi bổ nghĩa (nhưng giữ な khi đứng sau danh từ). Các dạng phủ định và quá khứ của tính từ cũng có thể bổ nghĩa danh từ một cách tự nhiên.",
-    "structure": "Tính từ い + Danh từ\nTính từ な (bỏ な) + Danh từ\nTính từ い (phủ định: 〜くない) + Danh từ\nTính từ い (quá khứ: 〜かった) + Danh từ\nTính từ な (phủ định: 〜じゃない) + Danh từ\nTính từ な (quá khứ: 〜だった) + Danh từ",
-    "explanation": "Trong tiếng Nhật, tính từ có thể đứng ngay trước danh từ để bổ nghĩa, giống như 'cao' trong 'ngọn núi cao' tiếng Việt. Tính từ い giữ nguyên đuôi い, tính từ な bỏ な khi bổ nghĩa (nhưng giữ な khi đứng sau danh từ). Các dạng phủ định và quá khứ của tính từ cũng có thể bổ nghĩa danh từ một cách tự nhiên.",
+    "summary": "Tính từ đứng ngay trước danh từ để bổ nghĩa, giống \"núi cao\" trong tiếng Việt nhưng đảo thứ tự: 高い山. Tính từ い giữ nguyên い (高い山); tính từ な phải giữ な (静かな町, きれいな花). Dạng phủ định, quá khứ cũng đứng trước danh từ được: 高くない山.",
+    "structure": "Tính từ い + N (高い山) · Tính từ な + な + N (静かな町)",
+    "explanation": "Tính từ đứng ngay trước danh từ để bổ nghĩa, giống \"núi cao\" trong tiếng Việt nhưng đảo thứ tự: 高い山. Tính từ い giữ nguyên い (高い山); tính từ な phải giữ な (静かな町, きれいな花). Dạng phủ định, quá khứ cũng đứng trước danh từ được: 高くない山.",
     "when": [
       "Khi muốn miêu tả danh từ bằng tính từ: 高い山 (núi cao)",
       "Khi danh từ được bổ nghĩa bởi tính từ ở dạng phủ định: 高くない山 (núi không cao)",
@@ -7034,7 +7029,7 @@
         "difference": "Danh từ bổ nghĩa cho danh từ phải dùng の (vd: 日本の車), còn tính từ thì không dùng の."
       }
     ],
-    "tip": "Tính từ い + N (giữ nguyên), tính từ な + N (bỏ な)."
+    "tip": "い giữ い, な giữ な: 高い山, 静かな町. Không bao giờ chen の vào giữa tính từ và danh từ."
   },
   {
     "id": "kute-de",
@@ -7472,7 +7467,7 @@
       "Khi muốn nói mình hiểu một điều gì đó."
     ],
     "notWhen": [
-      "Không dùng を với các từ này khi muốn nói 'thích/ghét/giỏi/kém/hiểu cái gì'. Tuy nhiên, khi dùng dạng 〜ことが好き thì vẫn dùng が cho こと, nhưng không nói 〜を好き."
+      "Không dùng を với 好き・きらい・上手・下手・わかる: ✗ 日本語を好きです → ✓ 日本語が好きです."
     ],
     "conjugation": [],
     "variants": [
